@@ -10,6 +10,8 @@ This application is built with [Electron](https://electronjs.org), and works on 
 
 **Note**: This is currently a beta release: please refer to the document [CHANGES.md](CHANGES.md) for more details.
 
+<img src="screenshots/color-ramps-formulator.png" width="1080px" alt="Color Ramps Formulator screenshot">
+
 ## Building
 
 You'll need [Node.js](https://nodejs.org) installed on your computer in order to build this app.
