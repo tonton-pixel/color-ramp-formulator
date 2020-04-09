@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Exotic Bird (XYZ)",
+        "formula": "xyz_t\n(\n    pow (t, 2),\n    t,\n    cos (t * PI / 2)\n)"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Artichoke Flower",
+        "formula": "xyz_t\n(\n    t / E,\n    (t ** 2) / 2,\n    t\n)"
+    }
+}

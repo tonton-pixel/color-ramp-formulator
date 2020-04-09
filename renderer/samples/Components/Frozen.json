@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Frozen",
+        "formula": "hsl_t\n(\n    7/9 - (t / 2),\n    1/2,\n    1 - pow (1 - t, 3/2)\n)"
+    }
+}

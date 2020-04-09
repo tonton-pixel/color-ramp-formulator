@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="custom.css">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <section class="section">
+            <div class="formula-panel">
+                <div class="options">
+                    <span class="option-group">
+                        <button class="clear-button" type="button">Clear</button>
+                        <button class="pull-down-menu samples-button" type="button">Samples</button>
+                    </span>
+                    <span class="option-group">
+                        <button class="load-button" type="button">Load...</button>
+                        <button class="save-button" type="button">Save...</button>
+                    </span>
+                </div>
+                <label>Name:<input class="formula-name" type="text" size="80"></label>
+                <label>Formula:<textarea class="formula-string" cols="80" rows="12"></textarea></label>
+                <button class="calculate-button" type="button">Calculate</button>
+                <label>Color Ramp:<textarea class="result-string" cols="80" rows="12" readonly></textarea></label>
+            </div>
+            <div class="color-ramp-panel">
+                <div class="preview-area">
+                    <div class="curves-map-preview"></div>
+                    <div class="linear-gradient-preview"></div>
+                    <div class="color-table-preview"></div>
+                </div>
+                <div class="import-export">
+                    <button class="import-button" type="button" disabled>Import...</button>
+                    <button class="export-button" type="button" disabled>Export...</button>
+                </div>
+            </div>
+        </section>
+        <script>require ('./renderer.js');</script>
+    </body>
+</html>

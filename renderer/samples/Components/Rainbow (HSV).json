@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Rainbow (HSV)",
+        "formula": "hsv_t (t, 1, 1)"
+    }
+}

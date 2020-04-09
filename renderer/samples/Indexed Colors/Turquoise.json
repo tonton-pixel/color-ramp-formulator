@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Turquoise",
+        "formula": "distributeColors\n(\n    [\n        [ 0, 0, 0 ],\n        [ 0, 209, 232 ],\n        [ 0, 0, 0 ]\n    ],\n    [ 0, 255 ], x,\n    \"rgb\", 100\n)"
+    }
+}

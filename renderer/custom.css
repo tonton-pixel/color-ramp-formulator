@@ -1,0 +1,149 @@
+@charset "utf-8";
+
+:root
+{
+    --color:           hsl(0, 0%, 22%);
+    --color-subtle:    hsl(0, 0%, 44%);
+    --color-strong:    hsl(0, 0%, 11%);
+    --color-strongest: hsl(0, 0%, 0%);
+    --color-border:    hsl(31, 5%, 88%);
+    --color-bg:        hsl(31, 5%, 96%);
+    --color-accent:    hsl(196, 66%, 37%);
+    --color-hover:     hsl(270, 100%, 50%);
+    --color-error:     hsl(0, 100%, 40%);
+    --color-highlight: hsl(55, 100%, 50%);
+    --color-selection: hsl(255, 75%, 60%);
+}
+
+body
+{
+    overflow: auto;
+}
+
+.section
+{
+    display: none;
+    flex-direction: row;
+    margin: auto auto;
+    padding: 12px 1em 8px 1em;
+}
+
+.section.is-shown
+{
+    display: flex;
+}
+
+.formula-panel,
+.color-ramp-panel
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 1em;
+}
+
+.options
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.option-group
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.option-group + .option-group
+{
+    margin-left: 1em;
+}
+
+.option-group .samples-button
+{
+    margin-left: 0.75em;
+}
+
+.option-group .save-button
+{
+    margin-left: 1em;
+}
+
+.formula-panel label
+{
+    width: 100%;
+    margin-top: 6px;
+}
+
+.formula-name,
+.formula-string,
+.result-string
+{
+    width: 100%;
+    margin: 3px 0 4px 0;
+}
+
+.formula-name
+{
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    padding: 0.125em 0.25em;
+}
+
+.formula-string,
+.result-string
+{
+    font-family: Monaco, "Noto Mono", monospace;
+    font-size: 13px;
+    line-height: 1.333em;
+    padding: 2px 4px;
+    white-space: pre;
+    tab-size : 4;
+    resize: vertical;
+    overscroll-behavior: contain;
+}
+
+.result-string.error
+{
+    white-space: normal;
+    color: var(--color-error);
+}
+
+.calculate-button
+{
+    margin: 12px 0 -9px 0;
+}
+
+.preview-area
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.preview-area div
+{
+    margin-bottom: -5px;
+    padding: 0;
+}
+
+.preview-area svg
+{
+    margin: 8px 0;
+    box-shadow: 1px 1px 4px #AAAAAA;
+}
+
+.import-export
+{
+    margin: 12px 0;
+}
+
+.import-export button + button
+{
+    margin-left: 2em;
+}

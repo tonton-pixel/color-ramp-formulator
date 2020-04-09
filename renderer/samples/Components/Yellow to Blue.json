@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Yellow to Blue",
+        "formula": "hcl_t\n(\n    1/9 + 1/6 + (t / 2),\n    0.5,\n    1 - pow (t, 1.5)\n)"
+    }
+}

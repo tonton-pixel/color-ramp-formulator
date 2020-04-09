@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Red to Green (Soft)",
+        "formula": "rgb_t\n(\n    sqrt (cos (t * PI / 2)),\n    sqrt (sin (t * PI / 2)),\n    0\n)"
+    }
+}

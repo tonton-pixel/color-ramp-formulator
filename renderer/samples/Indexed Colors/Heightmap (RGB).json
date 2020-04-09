@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Heightmap (RGB)",
+        "formula": "interpolateColors\n(\n    [\n        [ 15, \"#D7191C\" ],\n        [ 35, \"#FFFFBF\" ],\n        [ 132, \"#2C7BB6\" ]\n    ],\n    x,\n    \"rgb\"\n)"
+    }
+}

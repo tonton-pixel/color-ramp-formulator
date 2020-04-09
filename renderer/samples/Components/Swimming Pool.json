@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Swimming Pool",
+        "formula": "rgb_t\n(\n    bias (t, 0.25),\n    gain (t, 0.25),\n    bias (t, 0.75)\n)"
+    }
+}

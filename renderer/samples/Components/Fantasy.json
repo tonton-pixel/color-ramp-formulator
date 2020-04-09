@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Fantasy",
+        "formula": "hcl\n(\n    lerp (-20, 90, t),\n    128,\n    100\n)"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Linear Grayscale (HCL)",
+        "formula": "hcl_t (0, 0, t)"
+    }
+}

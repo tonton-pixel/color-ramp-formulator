@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Dark Red to Light Cyan",
+        "formula": "rgb_t\n(\n    acos (1 - (2 * t)) / PI,\n    (1 - cos (t * PI)) / 2,\n    (1 - cos (t * PI)) / 2\n)"
+    }
+}

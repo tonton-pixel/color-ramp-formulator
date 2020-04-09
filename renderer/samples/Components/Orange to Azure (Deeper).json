@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Orange to Azure (Deeper)",
+        "formula": "rgb_t\n(\n    1 + log (1 - t),\n    cos (lerp (-1, 1, t)) * 0.92,\n    1 + log (t)\n)"
+    }
+}

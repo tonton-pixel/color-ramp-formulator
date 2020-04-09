@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Diverging",
+        "formula": "rgb_t\n(\n    cos ((t - 2/6) * PI),\n    cos ((t - 3/6) * PI),\n    cos ((t - 4/6) * PI)\n)"
+    }
+}

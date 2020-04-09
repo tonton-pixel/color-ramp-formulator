@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Dark Magenta to Light Red",
+        "formula": "rgb_t\n(\n    sin (t * PI / 2),\n    1 - sin ((1 - t) * PI / 2),\n    ((tan ((t - 0.5) * PI / 2)) / 2) + 0.5\n)"
+    }
+}

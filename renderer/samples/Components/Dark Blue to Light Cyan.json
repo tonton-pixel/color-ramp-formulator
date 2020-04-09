@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Dark Blue to Light Cyan",
+        "formula": "rgb_t\n(\n    1 - sin ((1 - t) * PI / 2),\n    (1 - cos (t * PI)) / 2,\n    sin (t * PI / 2)\n)"
+    }
+}

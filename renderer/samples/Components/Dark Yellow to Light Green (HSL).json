@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Dark Yellow to Light Green (HSL)",
+        "formula": "hsl\n(\n    lerp (60, 120, t),\n    (t < 0.5 ? 1 - t : t) * 80,\n    t * 100\n)"
+    }
+}

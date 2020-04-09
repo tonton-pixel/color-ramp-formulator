@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Red to Green (HSL)",
+        "formula": "hsl\n(\n    lerp (0, 120, t),\n    100,\n    50\n)"
+    }
+}

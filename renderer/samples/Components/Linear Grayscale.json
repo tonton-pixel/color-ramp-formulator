@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Linear Grayscale",
+        "formula": "grayscale_t (t)"
+    }
+}

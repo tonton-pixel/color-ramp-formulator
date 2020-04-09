@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Fancy (Interpolate)",
+        "formula": "rgb\n(\n    interpolate ([ [ 0, 255 ], [ 127.5, 0 ], [ 255, 255 ] ], x, 0),\n    interpolate ([ [ 0, 0 ], [ 127.5, 191.25 ], [ 255, 255 ] ], x, 0),\n    interpolate ([ [ 0, 255 ], [ 127.5, 191.25 ], [ 255, 0 ] ], x, 0)\n)"
+    }
+}

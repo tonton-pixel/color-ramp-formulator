@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Hot Metal",
+        "formula": "rgb_t\n(\n    cos (1 - (t * SQRT2)),\n    1 + log (t),\n    1 + log (1 - t)\n)"
+    }
+}

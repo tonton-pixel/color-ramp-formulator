@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Smoothie",
+        "formula": "rgb_t\n(\n    smootherstep (1, 0, t),\n    coserp (0.05, 0.95, t),\n    smoothstep (0.5, 1, t)\n)"
+    }
+}

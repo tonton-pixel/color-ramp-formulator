@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Deep Pink to Spring Green",
+        "formula": "rgb_t\n(\n    cos ((t - 0) * PI / 2) ** 2,\n    cos ((t - 1) * PI / 2) ** 2,\n    cos ((t - 0.5) * PI / 2) ** 2\n)"
+    }
+}

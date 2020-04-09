@@ -1,0 +1,41 @@
+{
+    "accelerated": true,
+    "hotKey": null,
+    "escapeExitsFullScreen": true,
+    "developerFeatures": false,
+    "smartZoom": false,
+    "minZoomLevel": -2,
+    "maxZoomLevel": 4,
+    "window":
+    {
+        "largerDefaultWidth": 1280,
+        "largerDefaultHeight": 800,
+        "defaultWidth": 1080,
+        "defaultHeight": 720,
+        "minWidth": 720,
+        "minHeight": 720,
+        "backgroundColor": "#F5F5F5",
+        "titleTemplate": "{{app}}",
+        "zoomSuffixTemplate": " ({{zoom}}%)",
+        "deferredShow": true
+    },
+    "shortAppName": "App",
+    "description": "Algorithmically-defined color ramps generator.",
+    "copyright": "© 2020 Michel MARIANI.",
+    "electronApp":
+    {
+        "label": "Color Ramps Formulator | Apps | Electron",
+        "URL": "https://electronjs.org/apps/color-ramps-formulator"
+    },
+    "repository":
+    {
+        "label": "Repository",
+        "URL": "https://github.com/tonton-pixel/color-ramps-formulator"
+    },
+    "releases":
+    {
+        "label": "Latest Releases",
+        "URL": "https://github.com/tonton-pixel/color-ramps-formulator/releases"
+    },
+    "defaultFolder": "documents"
+}

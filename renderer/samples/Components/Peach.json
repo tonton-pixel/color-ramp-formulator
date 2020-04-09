@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Peach",
+        "formula": "hcl\n(\n    lerp (0, 60, t),\n    64,\n    lerp (0, 100, t)\n)"
+    }
+}

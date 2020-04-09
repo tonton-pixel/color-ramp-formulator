@@ -1,0 +1,40 @@
+{
+    "name": "color-ramps-formulator",
+    "productName": "Color Ramps Formulator",
+    "version": "1.0.0-beta.1",
+    "description": "Algorithmically-defined color ramps generator.",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "build-darwin": "electron-packager . --asar --out=build --platform=darwin --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.icns --overwrite",
+        "build-linux": "electron-packager . --asar --out=build --platform=linux --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.png --overwrite",
+        "build-mas": "electron-packager . --asar --out=build --platform=mas --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.icns --overwrite",
+        "build-win32": "electron-packager . --asar --out=build --platform=win32 --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.ico --overwrite"
+    },
+    "keywords": [
+        "algorithmic",
+        "application",
+        "color ramp",
+        "desktop",
+        "electron",
+        "formula",
+        "generator",
+        "modular",
+        "palette",
+        "utility"
+    ],
+    "author": {
+        "name": "Michel MARIANI",
+        "url": "https://github.com/tonton-pixel"
+    },
+    "homepage": "https://github.com/tonton-pixel/color-ramps-formulator",
+    "license": "MIT",
+    "private": false,
+    "dependencies": {
+        "esprima": "^4.0.1"
+    },
+    "devDependencies": {
+        "electron": "^8.2.1",
+        "electron-packager": "^14.2.1"
+    }
+}

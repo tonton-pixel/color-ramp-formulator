@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Pistachio",
+        "formula": "hcl_t\n(\n    t / 2.5,\n    t / 2,\n    bias (t, 0.55)\n)"
+    }
+}

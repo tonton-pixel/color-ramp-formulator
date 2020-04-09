@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Fairy Dust",
+        "formula": "rgb_t\n(\n    2 * t,\n    sin (t * PI / 2),\n    3 * t\n)"
+    }
+}

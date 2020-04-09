@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Cupcake Icing",
+        "formula": "rgb_t\n(\n    sin (t * PI),\n    sin (t * PI / 2),\n    lerp (0.5, 1.5, t) ** 0.25\n)"
+    }
+}

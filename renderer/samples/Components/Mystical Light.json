@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Mystical Light",
+        "formula": "hcl\n(\n    lerp (280, 110, t),\n    lerp (15, 26, t),\n    lerp (19, 99, t)\n)"
+    }
+}

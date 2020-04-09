@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Primary Colors (Sunny)",
+        "formula": "rgb_t\n(\n    cos ((t - 1/6) * PI / 1.5),\n    cos ((t - 3/6) * PI / 1.5),\n    cos ((t - 5/6) * PI / 1.5)\n)"
+   }
+}

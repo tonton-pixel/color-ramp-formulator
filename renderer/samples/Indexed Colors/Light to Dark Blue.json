@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Light to Dark Blue",
+        "formula": "distributeColors\n(\n    [\n        rgb (173, 216, 230),\n        rgb (0, 0, 139)\n    ],\n    [ 0, 255 ], x,\n    \"hcl\"\n)"
+    }
+}

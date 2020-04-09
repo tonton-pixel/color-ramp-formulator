@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Nature in Spring",
+        "formula": "rgb_t\n(\n    1 + log (t),\n    cos (1 - t),\n    1 + log (1 - t)\n)"
+    }
+}

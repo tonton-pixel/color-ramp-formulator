@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Natural Splines",
+        "formula": "rgb\n(\n    spline\n    (\n        [\n            [ 0, 215 ],\n            [ 35, 245 ],\n            [ 162, 44 ],\n            [ 191, 100 ]\n        ],\n        x\n    ),\n    spline\n    (\n        [\n            [ 0, 0 ],\n            [ 35, 167 ],\n            [ 132, 154 ],\n            [ 191, 30 ],\n            [ 255, 0 ]\n        ],\n        x\n    ),\n    spline\n    (\n        [\n            [ 0, 64 ],\n            [ 35, 127 ],\n            [ 191, 160 ],\n            [ 255, 220 ]\n        ],\n        x\n    )\n)"
+    }
+}

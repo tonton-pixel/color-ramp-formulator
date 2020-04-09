@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Dawn (XYZ)",
+        "formula": "xyz_t\n(\n    t ** 2,\n    t ** 2,\n    t ** SQRT1_2\n)"
+    }
+}
