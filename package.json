@@ -15,13 +15,13 @@
         "algorithmic",
         "application",
         "color ramp",
+        "color table",
+        "curves map",
         "desktop",
         "electron",
         "formula",
         "generator",
-        "modular",
-        "palette",
-        "utility"
+        "linear gradient"
     ],
     "author": {
         "name": "Michel MARIANI",
