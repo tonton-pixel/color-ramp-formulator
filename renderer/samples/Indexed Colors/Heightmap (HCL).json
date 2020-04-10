@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Heightmap (HCL)",
-        "formula": "interpolateColors\n(\n    [\n        [ 15, \"#D7191C\" ],\n        [ 35, \"#FFFFBF\" ],\n        [ 132, \"#2C7BB6\" ]\n    ],\n    x,\n    \"hcl\"\n)"
+        "formula": "interpolate_colors\n(\n    [\n        [ 15, \"#D7191C\" ],\n        [ 35, \"#FFFFBF\" ],\n        [ 132, \"#2C7BB6\" ]\n    ],\n    x,\n    \"hcl\"\n)"
     }
 }

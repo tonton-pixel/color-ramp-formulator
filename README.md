@@ -26,7 +26,7 @@ npm start
 If you don't wish to clone, you can [download the source code](https://github.com/tonton-pixel/color-ramps-formulator/archive/master.zip).
 
 Several scripts are also defined in the `package.json` file to build OS-specific bundles of the app, using the simple yet powerful [Electron Packager](https://github.com/electron-userland/electron-packager) Node module.\
-For instance, running the following command will create a `Color Ramps Formulator` version for macOS:
+For instance, running the following command will create a `Color Ramps Formulator.app` version for macOS:
 
 ```bash
 npm run build-darwin

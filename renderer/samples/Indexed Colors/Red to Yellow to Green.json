@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Red to Yellow to Green",
-        "formula": "distributeColors\n(\n    [ \"x11/red\", \"x11/yellow\", \"x11/green\" ],\n    [ 0, 255 ], x,\n    \"rgb\", 100\n)"
+        "formula": "distribute_colors\n(\n    [ \"x11/red\", \"x11/yellow\", \"x11/green\" ],\n    [ 0, 255 ], x,\n    \"rgb\", 100\n)"
     }
 }

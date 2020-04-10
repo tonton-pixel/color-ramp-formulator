@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Dracula Fluo",
-        "formula": "distributeColors\n(\n    [ \"#2B2926\", \"#47B3A0\", \"#C0FF18\", \"#47B3A0\", \"#2B2926\" ],\n    [ 31, 255 - 31 ], x,\n    \"rgb\", 100\n)"
+        "formula": "distribute_colors\n(\n    [ \"#2B2926\", \"#47B3A0\", \"#C0FF18\", \"#47B3A0\", \"#2B2926\" ],\n    [ 31, 255 - 31 ], x,\n    \"rgb\", 100\n)"
     }
 }

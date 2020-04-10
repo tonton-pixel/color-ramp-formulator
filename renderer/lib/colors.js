@@ -850,7 +850,7 @@ let namedColorsSets =
 function getNamedColorsSet (setName)
 {
     let namedColorsSet;
-    setName = setName.replace (/\s/g, "").toLowerCase ();
+    setName = setName.replace (/[\s_]/g, "").toLowerCase ();
     if (setName in namedColorsSets)
     {
         namedColorsSet = namedColorsSets[setName];
@@ -888,7 +888,7 @@ module.exports.nameToColor = function (setName, colorName, strict)
 {
     let namedColorsSet = getNamedColorsSet (setName);
     let colorNames = namedColorsSet["colorNames"];
-    colorName = colorName.replace (/\s/g, "").toLowerCase ();
+    colorName = colorName.replace (/[\s_]/g, "").toLowerCase ();
     if (!(colorName in colorNames))
     {
         if ((!strict) && ("fallbackColor" in namedColorsSet))

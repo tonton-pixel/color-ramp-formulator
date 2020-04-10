@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Romantic",
-        "formula": "interpolateColors\n(\n    [\n        [ 45 , \"hot pink\" ],\n        [ 255, \"white\" ]\n    ],\n    x,\n    \"hcl\", \"near\"\n)"
+        "formula": "interpolate_colors\n(\n    [\n        [ 45 , \"hot pink\" ],\n        [ 255, \"white\" ]\n    ],\n    x,\n    \"hcl\", \"near\"\n)"
     }
 }

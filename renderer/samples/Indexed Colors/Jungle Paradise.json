@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Jungle Paradise",
-        "formula": "distributeColors\n(\n    [ \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\" ],\n    [ 0, 1 ], t,\n    \"hcl\"\n)"
+        "formula": "distribute_colors\n(\n    [ \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\" ],\n    [ 0, 1 ], t,\n    \"hcl\"\n)"
     }
 }

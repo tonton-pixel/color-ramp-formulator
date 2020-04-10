@@ -2,6 +2,17 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.2
+
+- Renamed the indexed colors functions `distributeColors ()` and `interpolateColors ()` to `distribute_colors ()` and `interpolate_colors ()` respectively.
+- Updated sample formulas accordingly.
+- Allowed underscore characters in named color strings.
+- Improved styling of disabled preview areas.
+- Disabled resizing of text areas.
+- Updated keywords in `package.json`.
+- Updated screenshot in `README.md`.
+- Updated release notes.
+
 ## 1.0.0-beta.1
 
 - Initial beta release:

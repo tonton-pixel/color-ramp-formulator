@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Flare",
-        "formula": "distributeColors\n(\n    [ \"blue\", \"magenta\", \"red\", \"yellow\" ],\n    [ 0, 255 ], x,\n    \"rgb\", 0\n)"
+        "formula": "distribute_colors\n(\n    [ \"blue\", \"magenta\", \"red\", \"yellow\" ],\n    [ 0, 255 ], x,\n    \"rgb\", 0\n)"
     }
 }

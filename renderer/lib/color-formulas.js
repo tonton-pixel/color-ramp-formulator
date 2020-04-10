@@ -514,21 +514,21 @@ function polynomial (coeffs, x)
     return sum;
 }
 //
-function interpolateColors (stops, location, colorModel, option)
+function interpolate_colors (stops, location, color_model, option)
 {
     let rgb;
     let stopsCount = stops.length;
     if (stopsCount > 1)
     {
-        if (colorModel)
+        if (color_model)
         {
-            colorModel = colorModel.toLowerCase ();
+            color_model = color_model.toLowerCase ();
         }
         else
         {
-            throw new Error ("interpolateColors: missing interpolation color model");
+            throw new Error ("interpolate_colors: missing interpolation color model");
         }
-        if (colorModel === "rgb")
+        if (color_model === "rgb")
         {
             let redPoints = [ ];
             let greenPoints = [ ];
@@ -553,14 +553,14 @@ function interpolateColors (stops, location, colorModel, option)
             }
             else
             {
-                throw new Error ("interpolateColors: invalid option: " + option);
+                throw new Error ("interpolate_colors: invalid option: " + option);
             }
         }
         else
         {
             let rgbTo;
             let toRgb;
-            switch (colorModel)
+            switch (color_model)
             {
                 case "hsb":
                 case "hsv":
@@ -577,7 +577,7 @@ function interpolateColors (stops, location, colorModel, option)
                     toRgb = colors.hclToRgb;
                     break;
                 default:
-                    throw new Error ("interpolateColors: invalid interpolation color model: " + colorModel);
+                    throw new Error ("interpolate_colors: invalid interpolation color model: " + color_model);
                     break;
             }
             for (let startIndex = 0; startIndex < (stopsCount - 1); startIndex++)
@@ -589,7 +589,7 @@ function interpolateColors (stops, location, colorModel, option)
                 let endLocation = endStop[0];
                 if (startLocation > endLocation)
                 {
-                    throw new Error ("interpolateColors: locations must be in ascending order");
+                    throw new Error ("interpolate_colors: locations must be in ascending order");
                 }
                 else
                 {
@@ -668,13 +668,13 @@ function interpolateColors (stops, location, colorModel, option)
                                     case "none":    // Do nothing
                                         break;
                                     default:
-                                        throw new Error ("interpolateColors: invalid option: " + option);
+                                        throw new Error ("interpolate_colors: invalid option: " + option);
                                         break;
                                 }
                             }
                             else
                             {
-                                throw new Error ("interpolateColors: invalid option: " + option);
+                                throw new Error ("interpolate_colors: invalid option: " + option);
                             }
                         }
                         let t = (location - startLocation) / (endLocation - startLocation);
@@ -693,12 +693,12 @@ function interpolateColors (stops, location, colorModel, option)
     }
     else
     {
-        throw new Error ("interpolateColors: two stops or more are required");
+        throw new Error ("interpolate_colors: two stops or more are required");
     }
     return rgb;
 }
 //
-function distributeColors (colors, bounds, location, colorModel, option)
+function distribute_colors (colors, bounds, location, color_model, option)
 {
     let rgb;
     let count = colors.length;
@@ -711,11 +711,11 @@ function distributeColors (colors, bounds, location, colorModel, option)
         {
             stops.push ([ min + ((max - min) * stopIndex / (count - 1)), colors[stopIndex] ]);
         }
-        rgb = interpolateColors (stops, location, colorModel, option);
+        rgb = interpolate_colors (stops, location, color_model, option);
     }
     else
     {
-        throw new Error ("distributeColors: invalid number of colors: " + count);
+        throw new Error ("distribute_colors: invalid number of colors: " + count);
     }
     return rgb;
 }
@@ -875,8 +875,8 @@ const functions =
     "smoothstep",
     "spline",
     //
-    "interpolateColors",
-    "distributeColors",
+    "interpolate_colors",
+    "distribute_colors",
     //
     "grayscale",
     "rgb",
@@ -1007,8 +1007,8 @@ module.exports.evaluate = function (x, formula)
             smoothstep,
             spline,
             //
-            interpolateColors,
-            distributeColors,
+            interpolate_colors,
+            distribute_colors,
             //
             grayscale,
             rgb,

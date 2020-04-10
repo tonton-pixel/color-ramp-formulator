@@ -49,6 +49,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
     //
     if (colorRamp)
     {
+        svg.classList.remove ('disabled');
         let curves =
         { 
             red: [ ], 
@@ -168,6 +169,10 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
             }
         }
     }
+    else
+    {
+        svg.classList.add ('disabled');
+    }
     //
     return svg;
 };
@@ -200,6 +205,7 @@ module.exports.createLinearGradient = function (colorRamp)
     //
     if (colorRamp)
     {
+        svg.classList.remove ('disabled');
         let colors = [ ];
         if (Array.isArray (colorRamp) && (colorRamp.length === 3)) // curves
         {
@@ -261,6 +267,10 @@ module.exports.createLinearGradient = function (colorRamp)
         rect.setAttributeNS (null, 'fill', `url(#${id})`);
         svg.appendChild (rect);
     }
+    else
+    {
+        svg.classList.add ('disabled');
+    }
     //
     return svg;
 };
@@ -295,6 +305,7 @@ module.exports.createColorTable = function (colorRamp)
     //
     if (colorRamp)
     {
+        svg.classList.remove ('disabled');
         let colors = [ ];
         if (Array.isArray (colorRamp) && (colorRamp.length === 3)) // curves
         {
@@ -350,6 +361,10 @@ module.exports.createColorTable = function (colorRamp)
                 colorIndex++;
             }
         }
+    }
+    else
+    {
+        svg.classList.add ('disabled');
     }
     //
     return svg;

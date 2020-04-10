@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Soft Primary",
-        "formula": "distributeColors\n(\n    [\n        hsl (0, 100, 50),\n        hsl (240, 100, 75),\n        hsl (120, 100, 50)\n    ],\n    [ 0, 255 ], x,\n    \"rgb\", 100\n)"
+        "formula": "distribute_colors\n(\n    [\n        hsl (0, 100, 50),\n        hsl (240, 100, 75),\n        hsl (120, 100, 50)\n    ],\n    [ 0, 255 ], x,\n    \"rgb\", 100\n)"
     }
 }

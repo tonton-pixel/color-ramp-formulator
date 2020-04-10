@@ -104,7 +104,7 @@ body
     padding: 2px 4px;
     white-space: pre;
     tab-size : 4;
-    resize: vertical;
+    resize: none;
     overscroll-behavior: contain;
 }
 
@@ -136,6 +136,16 @@ body
 {
     margin: 8px 0;
     box-shadow: 1px 1px 4px #AAAAAA;
+}
+
+.preview-area svg.disabled
+{
+    box-shadow: none;
+}
+
+.preview-area svg.disabled > rect
+{
+    stroke: lightgray;
 }
 
 .import-export
