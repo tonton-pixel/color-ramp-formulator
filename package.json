@@ -1,7 +1,7 @@
 {
     "name": "color-ramps-formulator",
     "productName": "Color Ramps Formulator",
-    "version": "1.0.0-beta.2",
+    "version": "1.0.0-beta.3",
     "description": "Algorithmically-defined color ramps generator.",
     "main": "main.js",
     "scripts": {
@@ -21,7 +21,17 @@
         "electron",
         "formula",
         "generator",
-        "linear gradient"
+        "grayscale",
+        "hsl",
+        "hsv",
+        "hwb",
+        "interpolation",
+        "lab",
+        "lch",
+        "linear gradient",
+        "rgb",
+        "xyz",
+        "ycbcr"
     ],
     "author": {
         "name": "Michel MARIANI",

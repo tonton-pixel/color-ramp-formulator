@@ -562,10 +562,14 @@ function interpolate_colors (stops, location, color_model, option)
             let toRgb;
             switch (color_model)
             {
-                case "hsb":
                 case "hsv":
+                case "hsb":
                     rgbTo = colors.rgbToHsv;
                     toRgb = colors.hsvToRgb;
+                    break;
+                case "hwb":
+                    rgbTo = colors.rgbToHwb;
+                    toRgb = colors.hwbToRgb;
                     break;
                 case "hsl":
                     rgbTo = colors.rgbToHsl;
@@ -720,6 +724,83 @@ function distribute_colors (colors, bounds, location, color_model, option)
     return rgb;
 }
 //
+function wavelength_color (w)
+{
+    let red_t;
+    let green_t;
+    let blue_t;
+    //
+    if ((w >= 380) && (w <= 440))
+    {
+        red_t = (440 - w) / (440 - 380);
+        green_t = 0;
+        blue_t = 1;
+    }
+    else if ((w >= 440) && (w <= 490))
+    {
+        red_t = 0;
+        green_t = (w - 440) / (490 - 440);
+        blue_t = 1;
+    }
+    else if ((w >= 490) && (w <= 510))
+    {
+        red_t = 0;
+        green_t = 1;
+        blue_t = (510 - w) / (510 - 490);
+    }
+    else if ((w >= 510) && (w <= 580))
+    {
+        red_t = (w - 510) / (580 - 510);
+        green_t = 1;
+        blue_t = 0;
+    }
+    else if ((w >= 580) && (w <= 645))
+    {
+        red_t = 1;
+        green_t = (645 - w) / (645 - 580);
+        blue_t = 0;
+    }
+    else if ((w >= 645) && (w <= 780))
+    {
+        red_t = 1;
+        green_t = 0;
+        blue_t = 0;
+    }
+    else
+    {
+        red_t = 0;
+        green_t = 0;
+        blue_t = 0;
+    }
+    //
+    let factor;
+    //
+    if ((w >= 380) && (w <= 420))
+    {
+        factor = 0.3 + (0.7 * (w - 380) / (420 - 380));
+    }
+    else if ((w >= 420) && (w <= 700))
+    {
+        factor = 1;
+    }
+    else if ((w >= 700) && (w <= 780))
+    {
+        factor = 0.3 + (0.7 * (780 - w) / (780 - 700));
+    }
+    else
+    {
+        factor = 0;
+    }
+    //
+    let gamma = 0.8;
+    //
+    let red = (red_t > 0) ? Math.pow (red_t * factor, gamma) * 255 : 0;
+    let green = (green_t > 0) ? Math.pow (green_t * factor, gamma) * 255 : 0;
+    let blue = (blue_t > 0) ? Math.pow (blue_t * factor, gamma) * 255 : 0;
+    //
+    return [ red, green, blue ];
+}
+//
 function grayscale (gray)
 {
     return [ gray, gray, gray ];
@@ -738,6 +819,11 @@ function hsb (hue, saturation, brightness)
 function hsv (hue, saturation, value)
 {
     return colors.hsvToRgb ([ hue, saturation, value ]);
+}
+//
+function hwb (hue, white, black)
+{
+    return colors.hwbToRgb ([ hue, white, black ]);
 }
 //
 function hsl (hue, saturation, lightness)
@@ -772,53 +858,57 @@ function ycbcr (y, cb, cr)
 //
 function grayscale_t (gray_t)
 {
-    let gray = lerp (0, 255, gray_t);
-    return [ gray, gray, gray ];
+    return [ gray_t * 255, gray_t * 255, gray_t * 255 ];
 }
 //
 function rgb_t (red_t, green_t, blue_t)
 {
-    return rgb (lerp (0, 255, red_t), lerp (0, 255, green_t), lerp (0, 255, blue_t));
+    return rgb (red_t * 255, green_t * 255, blue_t * 255);
 }
 //
 function hsb_t (hue_t, saturation_t, brightness_t)
 {
-    return hsb (lerp (0, 360, hue_t), lerp (0, 100, saturation_t), lerp (0, 100, brightness_t));
+    return colors.hsvToRgb ([ hue_t, saturation_t, brightness_t ], true);
 }
 //
 function hsv_t (hue_t, saturation_t, value_t)
 {
-    return hsv (lerp (0, 360, hue_t), lerp (0, 100, saturation_t), lerp (0, 100, value_t));
+    return colors.hsvToRgb ([ hue_t, saturation_t, value_t ], true);
+}
+//
+function hwb_t (hue_t, white_t, black_t)
+{
+    return colors.hwbToRgb ([ hue_t, white_t, black_t ], true);
 }
 //
 function hsl_t (hue_t, saturation_t, lightness_t)
 {
-    return hsl (lerp (0, 360, hue_t), lerp (0, 100, saturation_t), lerp (0, 100, lightness_t));
+    return colors.hslToRgb ([ hue_t, saturation_t, lightness_t ], true);
 }
 //
 function hcl_t (hue_t, chroma_t, luminance_t)
 {
-    return hcl (lerp (0, 360, hue_t), lerp (0, 128, chroma_t), lerp (0, 100, luminance_t));
+    return colors.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
 }
 //
 function lch_t (luminance_t, chroma_t, hue_t)
 {
-    return lch (lerp (0, 100, luminance_t), lerp (0, 128, chroma_t), lerp (0, 360, hue_t));
+    return colors.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
 }
 //
 function lab_t (luminance_t, a_t, b_t)
 {
-    return lab (lerp (0, 100, luminance_t), lerp (-128, 128, a_t), lerp (-128, 128, b_t));
+    return colors.labToRgb ([ luminance_t, a_t, b_t ], true);
 }
 //
 function xyz_t (x_t, y_t, z_t)
 {
-    return xyz (lerp (0, 100, x_t), lerp (0, 100, y_t), lerp (0, 100, z_t));
+    return colors.xyzToRgb ([ x_t, y_t, z_t ], true);
 }
 //
 function ycbcr_t (y_t, cb_t, cr_t)
 {
-    return ycbcr (lerp (0, 255, y_t), lerp (0, 255, cb_t), lerp (0, 255, cr_t));
+    return colors.ycbcrToRgb ([ y_t, cb_t, cr_t ], true);
 }
 //
 const variables =
@@ -877,11 +967,13 @@ const functions =
     //
     "interpolate_colors",
     "distribute_colors",
+    "wavelength_color",
     //
     "grayscale",
     "rgb",
     "hsb",
     "hsv",
+    "hwb",
     "hsl",
     "hcl",
     "lch",
@@ -893,6 +985,7 @@ const functions =
     "rgb_t",
     "hsb_t",
     "hsv_t",
+    "hwb_t",
     "hsl_t",
     "hcl_t",
     "lch_t",
@@ -906,14 +999,16 @@ let forbiddenNodeTypes =
     'AssignmentExpression',
     'MemberExpression',
     'ObjectExpression',
-    'SequenceExpression'
+    'SequenceExpression',
+    'LineComment',
+    'BlockComment'
 ];
 //
 function traverseNodes (node, meta)
 {
     if (forbiddenNodeTypes.includes (node.type))
     {
-        throw new Error (`Forbidden expression from [Line\xA0${meta.start.line},\xA0Col.\xA0${meta.start.column}] to [Line\xA0${meta.end.line},\xA0Col.\xA0${meta.end.column}]:\n${node.type}`);
+        throw new Error (`[Line\xA0${meta.start.line},\xA0Col.\xA0${meta.start.column}] to [Line\xA0${meta.end.line},\xA0Col.\xA0${meta.end.column}]: Forbidden expression: ${node.type}`);
     }
 }
 //
@@ -941,7 +1036,7 @@ module.exports.validate = function (formula)
             }
         }
         //
-        parseScript (formula, { }, traverseNodes);
+        parseScript (formula, { comment: true }, traverseNodes);
     }
     catch (error)
     {
@@ -1009,11 +1104,13 @@ module.exports.evaluate = function (x, formula)
             //
             interpolate_colors,
             distribute_colors,
+            wavelength_color,
             //
             grayscale,
             rgb,
             hsb,
             hsv,
+            hwb,
             hsl,
             hcl,
             lch,
@@ -1025,6 +1122,7 @@ module.exports.evaluate = function (x, formula)
             rgb_t,
             hsb_t,
             hsv_t,
+            hwb_t,
             hsl_t,
             hcl_t,
             lch_t,

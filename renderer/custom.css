@@ -74,7 +74,7 @@ body
     margin-left: 1em;
 }
 
-.formula-panel label
+.formula-panel .labelled
 {
     width: 100%;
     margin-top: 6px;
@@ -110,7 +110,7 @@ body
 
 .result-string.error
 {
-    white-space: normal;
+    white-space: pre-wrap;
     color: var(--color-error);
 }
 

@@ -224,7 +224,7 @@ calculateButton.addEventListener
         resultString.classList.remove ('error');
         currentColorRamp = null;
         updatePreview ();
-        let formula = formulaString.value;
+        let formula = formulaString.value.trim ();
         if (formula)
         {
             let error = colorFormulas.validate (formula);

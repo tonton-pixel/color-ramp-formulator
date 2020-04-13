@@ -30,7 +30,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
     const gap = 1;
     const containerWidth = border + gap + curvesWidth + gap + border;
     const containerHeight = border + gap + curvesHeight + gap + border;
-    const gridColor = "#E8E8E8";
+    const gridColor = "#EBEBEB";
     //
     const xmlns = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS (xmlns, 'svg');    

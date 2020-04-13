@@ -866,7 +866,7 @@ function getNamedColorsSet (setName)
     return namedColorsSet;
 }
 //
-module.exports.enumerateNamedColors = function (setName, excludeVariants)
+function enumerateNamedColors (setName, excludeVariants)
 {
     let namedColorsSet = getNamedColorsSet (setName);
     let colorNames = namedColorsSet["colorNames"];
@@ -882,9 +882,9 @@ module.exports.enumerateNamedColors = function (setName, excludeVariants)
         }
     }
     return names;
-};
+}
 //
-module.exports.nameToColor = function (setName, colorName, strict)
+function nameToColor (setName, colorName, strict)
 {
     let namedColorsSet = getNamedColorsSet (setName);
     let colorNames = namedColorsSet["colorNames"];
@@ -902,9 +902,9 @@ module.exports.nameToColor = function (setName, colorName, strict)
     }
     let colorComponents = colorNames[colorName];
     return [ namedColorsSet["colorClass"], (typeof colorComponents === 'string') ? colorNames[colorComponents] : colorComponents ];
-};
+}
 //
-module.exports.hexToRgb = function (hexColorString)
+function hexToRgb (hexColorString)
 {
     let color;
     let result = hexColorString.match (/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
@@ -927,9 +927,9 @@ module.exports.hexToRgb = function (hexColorString)
         throw new Error ("Invalid HTML/CSS hexadecimal string: " + hexColorString);
     }
     return color;
-};
+}
 //
-module.exports.rgbToHex = function (rgbColor, noSign, lowercase)
+function rgbToHex (rgbColor, noSign, lowercase)
 {
     let hexColorString = (noSign) ? "" : "#";
     if (Array.isArray (rgbColor) && (rgbColor.length === 3))
@@ -951,9 +951,9 @@ module.exports.rgbToHex = function (rgbColor, noSign, lowercase)
         throw new Error ("Invalid RGB color array");
     }
     return hexColorString;
-};
+}
 //
-module.exports.colorToRgb = function (color)
+function colorToRgb (color)
 {
     let rgb = null;
     if (typeof color === 'string')
@@ -961,7 +961,7 @@ module.exports.colorToRgb = function (color)
         color = color.trim ();
         if (color[0] === '#')
         {
-            rgb = this.hexToRgb (color);
+            rgb = hexToRgb (color);
         }
         else
         {
@@ -979,7 +979,7 @@ module.exports.colorToRgb = function (color)
                 setName = defaultSetName;
                 colorName = names[0];
             }
-            color = this.nameToColor (setName, colorName, true);
+            color = nameToColor (setName, colorName, true);
             if (color[0] === "RGBColor")
             {
                 rgb = color[1];
@@ -999,14 +999,114 @@ module.exports.colorToRgb = function (color)
         throw new Error ("Invalid color syntax");
     }
     return rgb;
-};
+}
 //
 function limit (value, min, max)
 {
     return Math.min (Math.max (min, value), max);
 }
 //
-module.exports.hsvToRgb = function (hsvColor, hsvFloatRange, rgbFloatRange)
+function hslToRgb (hslColor, hslFloatRange, rgbFloatRange)
+{
+    let hue = hslColor[0];
+    let saturation = hslColor[1];
+    let lightness = hslColor[2];
+    if (!hslFloatRange)
+    {
+        hue /= 360;
+        saturation /= 100;
+        lightness /= 100;
+    }
+    hue -= Math.floor (hue);
+    saturation = limit (saturation, 0.0, 1.0);
+    lightness = limit (lightness, 0.0, 1.0);
+    let red;
+    let green;
+    let blue;
+    if (saturation === 0)
+    {
+        red = green = blue = lightness; // achromatic
+    }
+    else
+    {
+        function hue2rgb (p, q, t)
+        {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + ((q - p) * t * 6);
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + ((q - p) * (2/3 - t) * 6);
+            return p;
+        }
+        let q = (lightness < 0.5) ? lightness * (1 + saturation) : lightness + saturation - (lightness * saturation);
+        let p = (2 * lightness) - q;
+        red = hue2rgb (p, q, hue + 1/3);
+        green = hue2rgb (p, q, hue);
+        blue = hue2rgb (p, q, hue - 1/3);
+    }
+    if (!rgbFloatRange)
+    {
+        red *= 255;
+        green *= 255;
+        blue *= 255;
+    }
+    return [ red, green, blue ];
+}
+//
+function rgbToHsl (rgbColor, rgbFloatRange, hslFloatRange)
+{
+    let red = rgbColor[0];
+    let green = rgbColor[1];
+    let blue = rgbColor[2];
+    if (!rgbFloatRange)
+    {
+        red /= 255;
+        green /= 255;
+        blue /= 255;
+    }
+    red = limit (red, 0.0, 1.0);
+    green = limit (green, 0.0, 1.0);
+    blue = limit (blue, 0.0, 1.0);
+    let min = Math.min (red, green, blue);
+    let max = Math.max (red, green, blue);
+    let delta = max - min;
+    let hue = 0;
+    let saturation = 0;
+    let lightness = (max + min) / 2;
+    if (delta !== 0)
+    {
+        saturation = (lightness < 0.5) ? delta / (max + min) : delta / (2 - (max + min));
+        if (max === red)    // Between magenta and yellow
+        {
+            hue = (0 + ((green - blue) / delta)) / 6;
+        }
+        else if (max === green) // Between yellow and cyan
+        {
+            hue = (2 + ((blue - red) / delta)) / 6;
+        }
+        else if (max === blue)  // Between cyan and magenta
+        {
+            hue = (4 + ((red - green) / delta)) / 6;
+        }
+        if (hue < 0)
+        {
+            hue += 1;
+        }
+        if (hue > 1)
+        {
+            hue -= 1;
+        }
+    }
+    if (!hslFloatRange)
+    {
+        hue *= 360;
+        saturation *= 100;
+        lightness *= 100;
+    }
+    return [ hue, saturation, lightness ];
+}
+//
+function hsvToRgb (hsvColor, hsvFloatRange, rgbFloatRange)
 {
     let hue = hsvColor[0];
     let saturation = hsvColor[1];
@@ -1070,7 +1170,7 @@ module.exports.hsvToRgb = function (hsvColor, hsvFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 };
 //
-module.exports.rgbToHsv = function (rgbColor, rgbFloatRange, hsvFloatRange)
+function rgbToHsv (rgbColor, rgbFloatRange, hsvFloatRange)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
@@ -1084,8 +1184,8 @@ module.exports.rgbToHsv = function (rgbColor, rgbFloatRange, hsvFloatRange)
     red = limit (red, 0.0, 1.0);
     green = limit (green, 0.0, 1.0);
     blue = limit (blue, 0.0, 1.0);
-    let min = Math.min (Math.min (red, green), blue);
-    let max = Math.max (Math.max (red, green), blue);
+    let min = Math.min (red, green, blue);
+    let max = Math.max (red, green, blue);
     let delta = max - min;
     let hue = 0;
     let saturation = 0;
@@ -1121,46 +1221,29 @@ module.exports.rgbToHsv = function (rgbColor, rgbFloatRange, hsvFloatRange)
         value *= 100;
     }
     return [ hue, saturation, value ];
-};
+}
 //
-module.exports.hslToRgb = function (hslColor, hslFloatRange, rgbFloatRange)
+function hwbToRgb (hwbColor, hwbFloatRange, rgbFloatRange)
 {
-    let hue = hslColor[0];
-    let saturation = hslColor[1];
-    let lightness = hslColor[2];
-    if (!hslFloatRange)
+    let hue = hwbColor[0];
+    let white = hwbColor[1];
+    let black = hwbColor[2];
+    if (!hwbFloatRange)
     {
         hue /= 360;
-        saturation /= 100;
-        lightness /= 100;
+        white /= 100;
+        black /= 100;
     }
-    hue -= Math.floor (hue);
-    saturation = limit (saturation, 0.0, 1.0);
-    lightness = limit (lightness, 0.0, 1.0);
-    let red;
-    let green;
-    let blue;
-    if (saturation === 0)
+    let ratio = white + black;
+    if (ratio > 1)
     {
-        red = green = blue = lightness; // achromatic
+        white /= ratio;
+        black /= ratio;
     }
-    else
-    {
-        function hue2rgb (p, q, t)
-        {
-            if (t < 0) t += 1;
-            if (t > 1) t -= 1;
-            if (t < 1/6) return p + ((q - p) * t * 6);
-            if (t < 1/2) return q;
-            if (t < 2/3) return p + ((q - p) * (2/3 - t) * 6);
-            return p;
-        }
-        let q = (lightness < 0.5) ? lightness * (1 + saturation) : lightness + saturation - (lightness * saturation);
-        let p = (2 * lightness) - q;
-        red = hue2rgb (p, q, hue + 1/3);
-        green = hue2rgb (p, q, hue);
-        blue = hue2rgb (p, q, hue - 1/3);
-    }
+    let rgb = hslToRgb ([ hue, 1, 0.5 ], true, true);
+    let red = (rgb[0] * (1 - white - black)) + white;
+    let green = (rgb[1] * (1 - white - black)) + white;
+    let blue = (rgb[2] * (1 - white - black)) + white;
     if (!rgbFloatRange)
     {
         red *= 255;
@@ -1168,9 +1251,9 @@ module.exports.hslToRgb = function (hslColor, hslFloatRange, rgbFloatRange)
         blue *= 255;
     }
     return [ red, green, blue ];
-};
+}
 //
-module.exports.rgbToHsl = function (rgbColor, rgbFloatRange, hslFloatRange)
+function rgbToHwb (rgbColor, rgbFloatRange, hwbFloatRange)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
@@ -1181,47 +1264,17 @@ module.exports.rgbToHsl = function (rgbColor, rgbFloatRange, hslFloatRange)
         green /= 255;
         blue /= 255;
     }
-    red = limit (red, 0.0, 1.0);
-    green = limit (green, 0.0, 1.0);
-    blue = limit (blue, 0.0, 1.0);
-    let min = Math.min (Math.min (red, green), blue);
-    let max = Math.max (Math.max (red, green), blue);
-    let delta = max - min;
-    let hue = 0;
-    let saturation = 0;
-    let lightness = (max + min) / 2;
-    if (delta !== 0)
-    {
-        saturation = (lightness < 0.5) ? delta / (max + min) : delta / (2 - (max + min));
-        if (max === red)    // Between magenta and yellow
-        {
-            hue = (0 + ((green - blue) / delta)) / 6;
-        }
-        else if (max === green) // Between yellow and cyan
-        {
-            hue = (2 + ((blue - red) / delta)) / 6;
-        }
-        else if (max === blue)  // Between cyan and magenta
-        {
-            hue = (4 + ((red - green) / delta)) / 6;
-        }
-        if (hue < 0)
-        {
-            hue += 1;
-        }
-        if (hue > 1)
-        {
-            hue -= 1;
-        }
-    }
-    if (!hslFloatRange)
+    let hue = rgbToHsl ([ red, green, blue ], true, true)[0];
+    let white = Math.min (red, green, blue);
+    let black = 1 - Math.max (red, green, blue);
+    if (!hwbFloatRange)
     {
         hue *= 360;
-        saturation *= 100;
-        lightness *= 100;
+        white *= 100;
+        black *= 100;
     }
-    return [ hue, saturation, lightness ];
-};
+    return [ hue, white, black ];
+}
 //
 // http://www.brucelindbloom.com/index.html?WorkingSpaceInfo.html
 // http://www.easyrgb.com/index.php?X=CALC
@@ -1241,7 +1294,7 @@ const t1 = 6 / 29;    // 24 / 116
 const t2 = 3 * t1 * t1;
 const t3 = t1 * t1 * t1;
 //
-function rgbToXyz (rgbColor)
+function rgbToXyz_ (rgbColor)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
@@ -1267,7 +1320,7 @@ function rgbToXyz (rgbColor)
     return [ x, y, z ];
 }
 //
-function xyzToRgb (xyzColor)
+function xyzToRgb_ (xyzColor)
 {
     let x = xyzColor[0];
     let y = xyzColor[1];
@@ -1290,7 +1343,7 @@ function xyzToRgb (xyzColor)
     return [ red, green, blue ];
 }
 //
-function xyzToLab (xyzColor)
+function xyzToLab_ (xyzColor)
 {
     let x = xyzColor[0] / whiteReference[0];
     let y = xyzColor[1] / whiteReference[1];
@@ -1308,7 +1361,7 @@ function xyzToLab (xyzColor)
     return [ luminance, a, b ];
 }
 //
-function labToXyz (labColor)
+function labToXyz_ (labColor)
 {
     let luminance = labColor[0];
     let a = labColor[1];
@@ -1326,7 +1379,7 @@ function labToXyz (labColor)
     return [ x, y, z ];
 }
 //
-function labToHcl (labColor)
+function labToHcl_ (labColor)
 {
     let luminance = labColor[0];
     let a = labColor[1];
@@ -1341,7 +1394,7 @@ function labToHcl (labColor)
     return [ hue, chroma, luminance ];
 }
 //
-function hclToLab (hclColor)
+function hclToLab_ (hclColor)
 {
     let hue = hclColor[0];
     let chroma = hclColor[1];
@@ -1351,7 +1404,7 @@ function hclToLab (hclColor)
     return [ luminance, a , b ];
 }
 //
-module.exports.xyzToRgb = function (xyzColor, xyzFloatRange, rgbFloatRange)
+function xyzToRgb (xyzColor, xyzFloatRange, rgbFloatRange)
 {
     let x = xyzColor[0];
     let y = xyzColor[1];
@@ -1362,7 +1415,7 @@ module.exports.xyzToRgb = function (xyzColor, xyzFloatRange, rgbFloatRange)
         y *= 100;
         z *= 100;
     }
-    let rgbColor = xyzToRgb ([ x, y, z ]);
+    let rgbColor = xyzToRgb_ ([ x, y, z ]);
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
@@ -1373,9 +1426,9 @@ module.exports.xyzToRgb = function (xyzColor, xyzFloatRange, rgbFloatRange)
         blue /= 255;
     }
     return [ red, green, blue ];
-};
+}
 //
-module.exports.rgbToXyz = function (rgbColor, rgbFloatRange, xyzFloatRange)
+function rgbToXyz (rgbColor, rgbFloatRange, xyzFloatRange)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
@@ -1386,7 +1439,7 @@ module.exports.rgbToXyz = function (rgbColor, rgbFloatRange, xyzFloatRange)
         green *= 255;
         blue *= 255;
     }
-    let xyzColor = rgbToXyz ([ red, green, blue ]);
+    let xyzColor = rgbToXyz_ ([ red, green, blue ]);
     let x = xyzColor[0];
     let y = xyzColor[1];
     let z = xyzColor[2];
@@ -1397,9 +1450,9 @@ module.exports.rgbToXyz = function (rgbColor, rgbFloatRange, xyzFloatRange)
         z /= 100;
     }
     return [ x, y, z ];
-};
+}
 //
-module.exports.labToRgb = function (labColor, labFloatRange, rgbFloatRange)
+function labToRgb (labColor, labFloatRange, rgbFloatRange)
 {
     let luminance = labColor[0];
     let a = labColor[1];
@@ -1410,7 +1463,7 @@ module.exports.labToRgb = function (labColor, labFloatRange, rgbFloatRange)
         a *= 256; a -= 128;
         b *= 256; b -= 128;
     }
-    let rgbColor = xyzToRgb (labToXyz ([ luminance, a, b ]));
+    let rgbColor = xyzToRgb_ (labToXyz_ ([ luminance, a, b ]));
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
@@ -1421,9 +1474,9 @@ module.exports.labToRgb = function (labColor, labFloatRange, rgbFloatRange)
         blue /= 255;
     }
     return [ red, green, blue ];
-};
+}
 //
-module.exports.rgbToLab = function (rgbColor, rgbFloatRange, labFloatRange)
+function rgbToLab (rgbColor, rgbFloatRange, labFloatRange)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
@@ -1434,7 +1487,7 @@ module.exports.rgbToLab = function (rgbColor, rgbFloatRange, labFloatRange)
         green *= 255;
         blue *= 255;
     }
-    let labColor = xyzToLab (rgbToXyz ([ red, green, blue ]));
+    let labColor = xyzToLab_ (rgbToXyz_ ([ red, green, blue ]));
     let luminance = labColor[0];
     let a = labColor[1];
     let b = labColor[2];
@@ -1445,9 +1498,9 @@ module.exports.rgbToLab = function (rgbColor, rgbFloatRange, labFloatRange)
         b += 128; b /= 256;
     }
     return [ luminance, a, b ];
-};
+}
 //
-module.exports.hclToRgb = function (hclColor, hclFloatRange, rgbFloatRange)
+function hclToRgb (hclColor, hclFloatRange, rgbFloatRange)
 {
     let hue = hclColor[0];
     let chroma = hclColor[1];
@@ -1458,7 +1511,7 @@ module.exports.hclToRgb = function (hclColor, hclFloatRange, rgbFloatRange)
         chroma *= 128;
         luminance *= 100;
     }
-    let rgbColor = xyzToRgb (labToXyz (hclToLab ([ hue, chroma, luminance ])));
+    let rgbColor = xyzToRgb_ (labToXyz_ (hclToLab_ ([ hue, chroma, luminance ])));
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
@@ -1469,9 +1522,9 @@ module.exports.hclToRgb = function (hclColor, hclFloatRange, rgbFloatRange)
         blue /= 255;
     }
     return [ red, green, blue ];
-};
+}
 //
-module.exports.rgbToHcl = function (rgbColor, rgbFloatRange, hclFloatRange)
+function rgbToHcl (rgbColor, rgbFloatRange, hclFloatRange)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
@@ -1482,7 +1535,7 @@ module.exports.rgbToHcl = function (rgbColor, rgbFloatRange, hclFloatRange)
         green *= 255;
         blue *= 255;
     }
-    let hclColor = labToHcl (xyzToLab (rgbToXyz ([ red, green, blue ])));
+    let hclColor = labToHcl_ (xyzToLab_ (rgbToXyz_ ([ red, green, blue ])));
     let hue = hclColor[0];
     let chroma = hclColor[1];
     let luminance = hclColor[2];
@@ -1493,13 +1546,13 @@ module.exports.rgbToHcl = function (rgbColor, rgbFloatRange, hclFloatRange)
         luminance /= 100;
     }
     return [ hue, chroma, luminance ];
-};
+}
 //
 // YCbCr <https://en.wikipedia.org/wiki/YCbCr>
 // Intuitive Colorization of Temperature in Thermal Cameras <http://www.diva-portal.org/smash/get/diva2:797457/FULLTEXT01.pdf>
 // Color Conversion <http://www.equasys.de/colorconversion.html>
 //
-module.exports.ycbcrToRgb = function (ycbcrColor, ycbcrFloatRange, rgbFloatRange)
+function ycbcrToRgb (ycbcrColor, ycbcrFloatRange, rgbFloatRange)
 {
     let y = ycbcrColor[0];
     let cb = ycbcrColor[1];
@@ -1520,9 +1573,9 @@ module.exports.ycbcrToRgb = function (ycbcrColor, ycbcrFloatRange, rgbFloatRange
         blue /= 255;
     }
     return [ red, green, blue ];
-};
+}
 //
-module.exports.rgbToYcbcr = function (rgbColor, rgbFloatRange, ycbcrFloatRange)
+function rgbToYcbcr (rgbColor, rgbFloatRange, ycbcrFloatRange)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
@@ -1543,5 +1596,28 @@ module.exports.rgbToYcbcr = function (rgbColor, rgbFloatRange, ycbcrFloatRange)
         cr /= 255;
     }
     return [ y, cb, cr ];
+};
+//
+module.exports =
+{
+    enumerateNamedColors,
+    nameToColor,
+    hexToRgb,
+    rgbToHex,
+    colorToRgb,
+    hslToRgb,
+    rgbToHsl,
+    hsvToRgb,
+    rgbToHsv,
+    hwbToRgb,
+    rgbToHwb,
+    xyzToRgb,
+    rgbToXyz,
+    labToRgb,
+    rgbToLab,
+    hclToRgb,
+    rgbToHcl,
+    ycbcrToRgb,
+    rgbToYcbcr
 };
 //

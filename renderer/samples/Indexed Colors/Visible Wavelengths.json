@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Visible Wavelengths",
+        "formula": "wavelength_color (lerp (380, 780, t))"
+    }
+}

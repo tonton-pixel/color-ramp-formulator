@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Rainbow (HWB)",
+        "formula": "hwb_t (t, 0, 0)"
+    }
+}

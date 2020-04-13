@@ -2,6 +2,15 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.3
+
+- Added support for `HWB` (Hue, White, Black) and `Grayscale` color models.
+- Added indexed colors helper function: `wavelength_color ()`.
+- Improved performance of color conversions.
+- Disallowed comments in formulas.
+- Updated formula samples.
+- Updated package keywords.
+
 ## 1.0.0-beta.2
 
 - Renamed the indexed colors functions `distributeColors ()` and `interpolateColors ()` to `distribute_colors ()` and `interpolate_colors ()` respectively.
