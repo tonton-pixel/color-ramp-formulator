@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Hue to Gray (HWB)",
-        "formula": "hwb_t\n(\n    t,\n    t / 2,\n    t / 2,\n)"
+        "formula": "hwb_t\n(\n    t,\n    t / 2,\n    t / 2\n)"
     }
 }

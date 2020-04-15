@@ -911,6 +911,16 @@ function ycbcr_t (y_t, cb_t, cr_t)
     return colors.ycbcrToRgb ([ y_t, cb_t, cr_t ], true);
 }
 //
+function rgb_color_t (rgb_t)
+{
+    return rgb_t.map (component => component * 255);
+}
+//
+function rgb_colors_t (colors_t)
+{
+    return colors_t.map (color => rgb_color_t (color));
+}
+//
 const variables =
 [
     "x",
@@ -991,7 +1001,10 @@ const functions =
     "lch_t",
     "lab_t",
     "xyz_t",
-    "ycbcr_t"
+    "ycbcr_t",
+    //
+    "rgb_color_t",
+    "rgb_colors_t"
 ];
 //
 let forbiddenNodeTypes =
@@ -1012,129 +1025,147 @@ function traverseNodes (node, meta)
     }
 }
 //
-module.exports.validate = function (formula)
+module.exports = function (formula)
 {
-    let strictFormula = "'use strict';\n" + formula;
-    let result = "";
-    try
+    let evaluateFunction = null;
+    //
+    this.validate = function ()
     {
-        let tokens = tokenize (formula);
-        for (let token of tokens)
+        let result = "";
+        try
         {
-            if
-            (
-                (token.type === "Identifier")
-                &&
-                (!([...variables, ...constants, ...functions].includes (token.value)))
-            )
+            let tokens = tokenize (formula);
+            for (let token of tokens)
             {
-                throw new Error (`Unknown identifier: ${token.value}`);
+                if
+                (
+                    (token.type === "Identifier")
+                    &&
+                    (!([...variables, ...constants, ...functions].includes (token.value)))
+                )
+                {
+                    throw new Error (`Unknown identifier: ${token.value}`);
+                }
+                else if (token.type === "Keyword")
+                {
+                    throw new Error (`Unexpected keyword: ${token.value}`);
+                }
             }
-            else if (token.type === "Keyword")
+            //
+            parseScript (formula, { comment: true }, traverseNodes);
+        }
+        catch (error)
+        {
+            result = error.toString ();
+        }
+        if (!result)
+        {
+            try
             {
-                throw new Error (`Unexpected keyword: ${token.value}`);
+                evaluateFunction = new Function (variables, constants, functions, `'use strict';\nreturn (${formula});`);
+            }
+            catch (error)
+            {
+                result = error.toString ();
             }
         }
-        //
-        parseScript (formula, { comment: true }, traverseNodes);
-    }
-    catch (error)
+        return result;
+    };
+    //
+    this.evaluate = function (x)
     {
-        result = error.toString ();
-    }
-    return result;
-};
-//
-module.exports.evaluate = function (x, formula)
-{
-    let result;
-    try
-    {
-        result = (new Function (variables, constants, functions, `'use strict';\nreturn (${formula});`)) // IIFE
-        (
-            x,
-            x / 255,
-            //
-            // Math properties
-            Math.E,       // Euler's constant and the base of natural logarithms, approximately 2.718.
-            Math.LN2,     // Natural logarithm of 2, approximately 0.693.
-            Math.LN10,    // Natural logarithm of 10, approximately 2.303.
-            Math.LOG2E,   // Base 2 logarithm of E, approximately 1.443.
-            Math.LOG10E,  // Base 10 logarithm of E, approximately 0.434.
-            Math.PI,      // Ratio of the circumference of a circle to its diameter, approximately 3.14159.
-            Math.SQRT1_2, // Square root of 1/2; equivalently, 1 over the square root of 2, approximately 0.707.
-            Math.SQRT2,   // Square root of 2, approximately 1.414.
-            //
-            // Math methods
-            Math.abs,     // Returns the absolute value of a number.
-            Math.acos,    // Returns the arccosine of a number.
-            Math.asin,    // Returns the arcsine of a number.
-            Math.atan,    // Returns the arctangent of a number.
-            Math.atan2,   // Returns the arctangent of the quotient of its arguments.
-            Math.ceil,    // Returns the smallest integer greater than or equal to a number.
-            Math.cos,     // Returns the cosine of a number.
-            Math.exp,     // Returns E^x, where x is the argument, and E is Euler's constant (2.718...), the base of the natural logarithm.
-            Math.floor,   // Returns the largest integer less than or equal to a number.
-            Math.log,     // Returns the natural logarithm of a number.
-            Math.max,     // Returns the largest value from the numbers provided as parameters.
-            Math.min,     // Returns the smallest value from the numbers provided as parameters.
-            Math.pow,     // Returns base to the exponent power, that is, base^exponent.
-            Math.random,  // Returns a pseudo-random number between 0 and 1.
-            Math.round,   // Returns the value of a number rounded to the nearest integer.
-            Math.sin,     // Returns the sine of a number.
-            Math.sqrt,    // Returns the positive square root of a number.
-            Math.tan,     // Returns the tangent of a number.
-            //
-            // Built-in functions
-            //
-            bias,
-            coserp,
-            cubic,
-            distribute,
-            gain,
-            interpolate,
-            lerp,
-            linear,
-            pchip,
-            polynomial,
-            quadratic,
-            smootherstep,
-            smoothstep,
-            spline,
-            //
-            interpolate_colors,
-            distribute_colors,
-            wavelength_color,
-            //
-            grayscale,
-            rgb,
-            hsb,
-            hsv,
-            hwb,
-            hsl,
-            hcl,
-            lch,
-            lab,
-            xyz,
-            ycbcr,
-            //
-            grayscale_t,
-            rgb_t,
-            hsb_t,
-            hsv_t,
-            hwb_t,
-            hsl_t,
-            hcl_t,
-            lch_t,
-            lab_t,
-            xyz_t,
-            ycbcr_t
-        );
-    }
-    catch (error)
-    {
-        result = error.toString ();
-    }
-    return result;
-};
+        let result;
+        try
+        {
+            result = evaluateFunction
+            (
+                x,
+                x / 255,
+                //
+                // Math properties
+                Math.E,       // Euler's constant and the base of natural logarithms, approximately 2.718.
+                Math.LN2,     // Natural logarithm of 2, approximately 0.693.
+                Math.LN10,    // Natural logarithm of 10, approximately 2.303.
+                Math.LOG2E,   // Base 2 logarithm of E, approximately 1.443.
+                Math.LOG10E,  // Base 10 logarithm of E, approximately 0.434.
+                Math.PI,      // Ratio of the circumference of a circle to its diameter, approximately 3.14159.
+                Math.SQRT1_2, // Square root of 1/2; equivalently, 1 over the square root of 2, approximately 0.707.
+                Math.SQRT2,   // Square root of 2, approximately 1.414.
+                //
+                // Math methods
+                Math.abs,     // Returns the absolute value of a number.
+                Math.acos,    // Returns the arccosine of a number.
+                Math.asin,    // Returns the arcsine of a number.
+                Math.atan,    // Returns the arctangent of a number.
+                Math.atan2,   // Returns the arctangent of the quotient of its arguments.
+                Math.ceil,    // Returns the smallest integer greater than or equal to a number.
+                Math.cos,     // Returns the cosine of a number.
+                Math.exp,     // Returns E^x, where x is the argument, and E is Euler's constant (2.718...), the base of the natural logarithm.
+                Math.floor,   // Returns the largest integer less than or equal to a number.
+                Math.log,     // Returns the natural logarithm of a number.
+                Math.max,     // Returns the largest value from the numbers provided as parameters.
+                Math.min,     // Returns the smallest value from the numbers provided as parameters.
+                Math.pow,     // Returns base to the exponent power, that is, base^exponent.
+                Math.random,  // Returns a pseudo-random number between 0 and 1.
+                Math.round,   // Returns the value of a number rounded to the nearest integer.
+                Math.sin,     // Returns the sine of a number.
+                Math.sqrt,    // Returns the positive square root of a number.
+                Math.tan,     // Returns the tangent of a number.
+                //
+                // Built-in functions
+                //
+                bias,
+                coserp,
+                cubic,
+                distribute,
+                gain,
+                interpolate,
+                lerp,
+                linear,
+                pchip,
+                polynomial,
+                quadratic,
+                smootherstep,
+                smoothstep,
+                spline,
+                //
+                interpolate_colors,
+                distribute_colors,
+                wavelength_color,
+                //
+                grayscale,
+                rgb,
+                hsb,
+                hsv,
+                hwb,
+                hsl,
+                hcl,
+                lch,
+                lab,
+                xyz,
+                ycbcr,
+                //
+                grayscale_t,
+                rgb_t,
+                hsb_t,
+                hsv_t,
+                hwb_t,
+                hsl_t,
+                hcl_t,
+                lch_t,
+                lab_t,
+                xyz_t,
+                ycbcr_t,
+                //
+                rgb_color_t,
+                rgb_colors_t
+            );
+        }
+        catch (error)
+        {
+            result = error.toString ();
+        }
+        return result;
+    };
+}
 //

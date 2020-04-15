@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.4
+
+- Added two new color helper functions: `rgb_color_t` and `rgb_colors_t` to convert RGB colors with components expressed in float range `[0, 1]` to standard `[0, 255]`.
+- Improved evaluation of formulas.
+- Updated formula samples.
+- Updated `Electron` to version `8.2.2`.
+
 ## 1.0.0-beta.3
 
 - Added support for `HWB` (Hue, White, Black) and `Grayscale` color models.

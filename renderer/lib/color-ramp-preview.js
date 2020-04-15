@@ -3,7 +3,7 @@ function normalize (value)
     return Math.min (Math.max (0, Math.round (value)), 255);
 }
 //
-function rgbRToHex (rgb)
+function rgbToHex (rgb)
 {
     let red = normalize (rgb[0]);
     let green = normalize (rgb[1]);
@@ -223,7 +223,7 @@ module.exports.createLinearGradient = function (colorRamp)
             {
                 for (let index = 0; index < 256; index++)
                 {
-                    colors.push (rgbRToHex ([ redCurve[index], greenCurve[index], blueCurve[index] ]));
+                    colors.push (rgbToHex ([ redCurve[index], greenCurve[index], blueCurve[index] ]));
                 }
             }
         }
@@ -237,7 +237,7 @@ module.exports.createLinearGradient = function (colorRamp)
                 }
                 else if (Array.isArray (color) && (color.length === 3))
                 {
-                    colors.push (rgbRToHex (color));
+                    colors.push (rgbToHex (color));
                 }
             }
         }
@@ -323,7 +323,7 @@ module.exports.createColorTable = function (colorRamp)
             {
                 for (let index = 0; index < 256; index++)
                 {
-                    colors.push (rgbRToHex ([ redCurve[index], greenCurve[index], blueCurve[index] ]));
+                    colors.push (rgbToHex ([ redCurve[index], greenCurve[index], blueCurve[index] ]));
                 }
             }
         }
@@ -337,7 +337,7 @@ module.exports.createColorTable = function (colorRamp)
                 }
                 else if (Array.isArray (color) && (color.length === 3))
                 {
-                    colors.push (rgbRToHex (color));
+                    colors.push (rgbToHex (color));
                 }
             }
         }

@@ -929,14 +929,19 @@ function hexToRgb (hexColorString)
     return color;
 }
 //
+function normalize (value)
+{
+    return Math.min (Math.max (0, Math.round (value)), 255);
+}
+//
 function rgbToHex (rgbColor, noSign, lowercase)
 {
     let hexColorString = (noSign) ? "" : "#";
     if (Array.isArray (rgbColor) && (rgbColor.length === 3))
     {
-        let red = Math.round (rgbColor[0]);
-        let green = Math.round (rgbColor[1]);
-        let blue = Math.round (rgbColor[2]);
+        let red = normalize (rgbColor[0]);
+        let green = normalize (rgbColor[1]);
+        let blue = normalize (rgbColor[2]);
         let hexaDigits = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" ];
         hexColorString += hexaDigits[(red & 0xF0) >> 4] + hexaDigits[red & 0x0F];
         hexColorString += hexaDigits[(green & 0xF0) >> 4] + hexaDigits[green & 0x0F];
@@ -996,7 +1001,7 @@ function colorToRgb (color)
     }
     else
     {
-        throw new Error ("Invalid color syntax");
+        throw new Error ("Invalid RGB color syntax");
     }
     return rgb;
 }

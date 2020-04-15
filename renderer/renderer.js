@@ -20,8 +20,9 @@ const sampleMenus = require ('./lib/sample-menus');
 const json = require ('./lib/json2.js');
 //
 const colorRamps = require ('./lib/color-ramps.js');
-const colorFormulas = require ('./lib/color-formulas.js');
 const { createCurvesMap, createLinearGradient, createColorTable } = require ('./lib/color-ramp-preview.js');
+//
+const ColorFormula = require ('./lib/color-formula.js');
 //
 const defaultPrefs =
 {
@@ -227,13 +228,14 @@ calculateButton.addEventListener
         let formula = formulaString.value.trim ();
         if (formula)
         {
-            let error = colorFormulas.validate (formula);
+            let colorFormula = new ColorFormula (formula);
+            let error = colorFormula.validate ();
             if (!error)
             {
                 let colorRamp = [ ];
                 for (let x = 0; x < 256; x++)
                 {
-                    let result = colorFormulas.evaluate (x, formula);
+                    let result = colorFormula.evaluate (x);
                     if (Array.isArray (result))
                     {
                         let rgbColor = result;
@@ -267,6 +269,7 @@ calculateButton.addEventListener
                 resultString.value = error;
                 resultString.classList.add ('error');
             }
+            colorFormula = null;
         }
     }
 );

@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Hue to Gray (HSL)",
+        "formula": "hsl_t\n(\n    t,\n    1 - t,\n    0.5\n)"
+    }
+}
