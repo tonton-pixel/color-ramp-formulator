@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Quantum Leap",
-        "formula": "rgb_t\n(\n    smootherstep\n    (\n        0, 1,\n        interpolate ([ [ 0, 0 ], [ 0.5, 0.75 ], [ 1, 0 ] ], t, 0)\n    ),\n    smootherstep\n    (\n        0, 1,\n        interpolate ([ [ 0, 0 ], [ 0.5, 0.75 ], [ 1, 0 ] ], t, 50)\n    ),\n    smootherstep\n    (\n        0, 1,\n        interpolate ([ [ 0, 0 ], [ 0.5, 0.75 ], [ 1, 0 ] ], t, 100)\n    )\n)"
+        "formula": "rgb_t\n(\n    smootherstep ( 0, 1, interpolate ([ [ 0, 0 ], [ 0.5, 0.75 ], [ 1, 0 ] ], t, 0) ),\n    smootherstep ( 0, 1, interpolate ([ [ 0, 0 ], [ 0.5, 0.75 ], [ 1, 0 ] ], t, 50) ),\n    smootherstep ( 0, 1, interpolate ([ [ 0, 0 ], [ 0.5, 0.75 ], [ 1, 0 ] ], t, 100) )\n)"
     }
 }

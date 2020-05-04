@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Iron (Cubics)",
-        "formula": "rgb_t\n(\n    linear\n    (\n        [ 1.1, 0.57 ],\n        cubic\n        (\n            [ 1, 0, -1, 0 ],\n            linear\n            (\n                [ 0.9, -1.225 ],\n                t\n            )\n        )\n    ),\n    linear\n    (\n        [ 1.204, 0.471 ],\n        cubic\n        (\n            [ -1, 0, 1, 0 ],\n            linear\n            (\n                [ 1.292, -0.806 ],\n                t\n            )\n        )\n    ),\n    linear\n    (\n        [ 0.943, 0.32 ],\n        cubic\n        (\n            [ 1, 0, -1, 0 ],\n            linear\n            (\n                [ 2.24, -1.081 ],\n                t\n            )\n        )\n    )\n)"
+        "formula": "rgb_t\n(\n    linear ( [ 1.1, 0.57 ], cubic ( [ 1, 0, -1, 0 ], linear ( [ 0.9, -1.225 ], t ) ) ),\n    linear ( [ 1.204, 0.471 ], cubic ( [ -1, 0, 1, 0 ], linear ( [ 1.292, -0.806 ], t ) ) ),\n    linear ( [ 0.943, 0.32 ], cubic ( [ 1, 0, -1, 0 ], linear ( [ 2.24, -1.081 ], t ) ) )\n)"
     }
 }

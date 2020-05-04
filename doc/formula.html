@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Formula Format | Color Ramps Formulator</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="wrapper">
+            <h1><img src="icon-256.png" width="64px" alt="Color Ramps Formulator icon">&nbsp;Color Ramps Formulator<br>&nbsp;v1.0.0-beta.5 [Draft]</h1>
+            <h2>Formula Format</h2>
+            <h3>Math constants</h3>
+            <table>
+            <tr>
+            <th>Constant</th>
+            <th>Value</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td><strong>E</strong></td>
+            <td>2.71828182845905</td>
+            <td>Euler's constant, base of natural logarithms.</td>
+            </tr>
+            <tr>
+            <td><strong>LN2</strong></td>
+            <td>0.69314718055995</td>
+            <td>Natural logarithm of 2.</td>
+            </tr>
+            <tr>
+            <td><strong>LN10</strong></td>
+            <td>2.30258509299405</td>
+            <td>Natural logarithm of 10.</td>
+            </tr>
+            <tr>
+            <td><strong>LOG2E</strong></td>
+            <td>1.44269504088869</td>
+            <td>Base 2 logarithm of E.</td>
+            </tr>
+            <tr>
+            <td><strong>LOG10E</strong></td>
+            <td>0.43429448190325</td>
+            <td>Base 10 logarithm of E.</td>
+            </tr>
+            <tr>
+            <td><strong>PI</strong></td>
+            <td>3.14159265358979</td>
+            <td>π, the ratio of the circumference of a circle to its diameter.</td>
+            </tr>
+            <tr>
+            <td><strong>SQRT1_2</strong></td>
+            <td>0.70710678118655</td>
+            <td>Square root of 1/2; equivalently, 1 over the square root of 2.</td>
+            </tr>
+            <tr>
+            <td><strong>SQRT2</strong></td>
+            <td>1.41421356237310</td>
+            <td>Square root of 2.</td>
+            </tr>
+            </table>
+            <h3>Math functions</h3>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>abs</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the absolute value of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>acos</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the arccosine of (a), from 0 to π.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>asin</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the arcsine of (a), from −π/2 to π/2.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>atan</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the arctangent of (a), from −π/2 to π/2.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>atan2</strong> (a, b)</td>
+            <td>a, b: numbers</td>
+            <td>Returns the arctangent of the quotient (a/b) of its arguments (a) and (b), from −π to π.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>ceil</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the smallest integer greater than or equal to (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>cos</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the cosine of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>exp</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns E<sup>a</sup>, where E is Euler's constant, the base of the natural logarithm.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>floor</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the largest integer less than or equal to (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>log</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the natural (base E) logarithm of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>max</strong> (a[, b[, …]])</td>
+            <td>a, b, …: numbers</td>
+            <td>Returns the largest value from the numbers (a), (b), ….</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>min</strong> (a[, b[, …]])</td>
+            <td>a, b, …: numbers</td>
+            <td>Returns the smallest value from the numbers (a), (b), ….</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>pow</strong> (a, b)</td>
+            <td>a, b: numbers</td>
+            <td>Returns base to the exponent power, that is, a<sup>b</sup>.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>random</strong> ( )</td>
+            <td>&nbsp;</td>
+            <td>Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>round</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the value of (a) rounded to the nearest integer.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>sin</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the sine of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>sqrt</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the positive square root of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>tan</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the tangent of (a).</td>
+            </tr>
+            </table>
+            <h3>Components helper functions</h3>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td><strong>bias</strong> (t, b)</td>
+            <td>t, b: numbers</td>
+            <td>Returns a value in the interval [0.0, 1.0] for a parameter (t) in the same interval.<br><em>bias</em> defines a kind of brightness curve controlled by the parameter (b) in the interval ]0.0, 1.0[.<br>For (b) equal to 0.5, <em>bias</em> is the identity function.</td>
+            </tr>
+            <tr>
+            <td><strong>coserp</strong> (a, b, t)</td>
+            <td>a, b, t: numbers</td>
+            <td>Returns a cosine interpolated value between two values (a) and (b) for a parameter (t) in the interval [0.0, 1.0].<br><em>coserp</em> is a common function name for cosine interpolation.</td>
+            </tr>
+            <tr>
+            <td><strong>cubic</strong> (coeffs, x)</td>
+            <td>coeffs: array of numbers [&nbsp;a, b, c, d&nbsp;]<br>x: number</td>
+            <td>Returns the value of the cubic function:<br>ax<sup>3</sup> + bx<sup>2</sup> + cx + d.</td>
+            </tr>
+            <tr>
+            <td><strong>distribute</strong><br>(values, bounds, position, smoothness)</td>
+            <td>values:&nbsp;array<br>bounds:&nbsp;array<br>position:&nbsp;number<br>smoothness:&nbsp;number</td>
+            <td>Returns an interpolated value at (position) from an array of (values) evenly distributed within (bounds).<br>The shape of the resulting interpolation curve is controlled by the optional parameter (smoothness) between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a smooth <em>pchip</em> interpolation.</td>
+            </tr>
+            <tr>
+            <td><strong>gain</strong> (t, g)</td>
+            <td>t, g: numbers</td>
+            <td>Returns a value in the interval [0.0, 1.0] for a parameter (t) in the same interval.<br><em>gain</em> defines a kind of contrast curve controlled by the parameter (g) in the interval ]0.0, 1.0[.<br>For (g) equal to 0.5, <em>gain</em> is the identity function.</td>
+            </tr>
+            <tr>
+            <td><strong>interpolate</strong><br>(points, position, smoothness)</td>
+            <td>points:&nbsp;array<br>position:&nbsp;number<br>smoothness:&nbsp;number</td>
+            <td>Returns an interpolated value at (position) from an array of (points) in ascending order, each point being defined as an array of two numbers: [&nbsp;position, value&nbsp;].<br>The shape of the resulting interpolation curve is controlled by the optional parameter (smoothness) between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a smooth <em>pchip</em> interpolation.</td>
+            </tr>
+            <tr>
+            <td><strong>lerp</strong> (a, b, t)</td>
+            <td>a, b, t: numbers</td>
+            <td>Returns a linearly interpolated value between two values (a) and (b) for a parameter (t) in the interval [0.0, 1.0].<br><em>lerp</em> is a common function name for <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a>.</td>
+            </tr>
+            <tr>
+            <td><strong>linear</strong> (coeffs, x)</td>
+            <td>coeffs: array of numbers [&nbsp;a, b&nbsp;]<br>x: number</td>
+            <td>Returns the value of the linear function:<br>ax + b.</td>
+            </tr>
+            <tr>
+            <td><strong>pchip</strong><br>(points, position)</td>
+            <td>points:&nbsp;array<br>position:&nbsp;number</td>
+            <td>Returns a shape-preserving interpolated value at (position) from an array of (points) in strict ascending order, each point being defined as an array of two numbers: [&nbsp;position, value&nbsp;].<br>PCHIP stands for &#8220;Piecewise Cubic Hermite Interpolation Polynomial&#8221;.</td>
+            </tr>
+            <tr>
+            <td><strong>polynomial</strong> (coeffs, x)</td>
+            <td>coeffs: array of n numbers<br>x: number</td>
+            <td>Returns the value of a generic polynomial function of degree n.</td>
+            </tr>
+            <tr>
+            <td><strong>quadratic</strong><br>(coeffs, x)</td>
+            <td>coeffs: array of numbers [&nbsp;a, b, c&nbsp;]<br>x: number</td>
+            <td>Returns the value of the quadratic function:<br>ax<sup>2</sup> + bx + c.</td>
+            </tr>
+            <tr>
+            <td><strong>smootherstep</strong><br>(a, b, t)</td>
+            <td>a, b, t: numbers</td>
+            <td>Returns a <a href="https://en.wikipedia.org/wiki/Smoothstep#Variations">smootherstep</a> interpolated value between two values (a) and (b) for a parameter (t) in the interval [0.0, 1.0].</td>
+            </tr>
+            <tr>
+            <td><strong>smoothstep</strong><br>(a, b, t)</td>
+            <td>a, b, t: numbers</td>
+            <td>Returns a <a href="https://en.wikipedia.org/wiki/Smoothstep">smoothstep</a> interpolated value between two values (a) and (b) for a parameter (t) in the interval [0.0, 1.0].</td>
+            </tr>
+            <tr>
+            <td><strong>spline</strong><br>(points, position, compatible)</td>
+            <td>points:&nbsp;array<br>position:&nbsp;number<br>compatible:&nbsp;boolean</td>
+            <td>Returns an interpolated value at (position) from a natural cubic spline passing through an array of (points) in ascending order, each point being defined as an array of two numbers: [&nbsp;position, value&nbsp;].<br>In Photoshop-compatible mode (true), extrapolated values are set to the endpoint values.</td>
+            </tr>
+            </table>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+            <li>The <em>bias</em> and <em>gain</em> functions were first described by Ken Perlin and Eric M. Hoffert (<a href="http://www.cs.jhu.edu/~subodh/458/p253-perlin.pdf">Hypertexture</a>). This script makes use of the faster alternative method designed by Christophe Schlick (<a href="http://dept-info.labri.fr/~schlick/DOC/gem2.html">Fast Alternatives to Perlin&#8217;s Bias and Gain Functions</a>).</li>
+            <li>The code for the shape-preserving <em>pchip</em> function is based on <a href="https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/moler/interp.pdf">Piecewise Cubic Hermite Interpolation</a> and <a href="http://en.wikipedia.org/wiki/Monotone_cubic_interpolation">Monotone cubic interpolation</a>.</li>
+            <li>The code for <em>spline</em> (<a href="http://en.wikipedia.org/wiki/Spline_interpolation">spline interpolation</a>) is adapted from <a href="http://www.ivank.net/blogspot/cspline/CSPL.js">CSPL.js</a> by <a href="http://blog.ivank.net/interpolation-with-cubic-splines.html">Ivan Kuckir</a>.</li>
+            </ul>
+            <h3>RGB colors helper functions</h3>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>grayscale</strong> (gray)</td>
+            <td class="no-wrap">gray:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>grayscale (127.5)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>rgb</strong><br>(red, green, blue)</td>
+            <td class="no-wrap">red:&nbsp;number<br>green:&nbsp;number<br>blue:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>rgb (0, 255, 0)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsb</strong><br>(hue, saturation, brightness)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>saturation:&nbsp;number<br>brightness:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsb (120, 100, 100)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsv</strong><br>(hue, saturation, value)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>saturation:&nbsp;number<br>value:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsv (120, 100, 100)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hwb</strong><br>(hue, whiteness, blackness)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>whiteness:&nbsp;number<br>blackness:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hwb (120, 0, 0)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsl</strong><br>(hue, saturation, lightness)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>saturation:&nbsp;number<br>lightness:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsl (120, 100, 50)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hcl</strong><br>(hue, chroma, luminance)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>chroma:&nbsp;number<br>luminance:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hcl (136, 119.8, 87.7)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>lch</strong><br>(luminance, chroma, hue)</td>
+            <td class="no-wrap">luminance:&nbsp;number<br>chroma:&nbsp;number<br>hue:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>lch (87.7, 119.8, 136)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>lab</strong><br>(luminance, a, b)</td>
+            <td class="no-wrap">luminance:&nbsp;number<br>a:&nbsp;number<br>b:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>lab (87.7, -86.2, 83.2)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>xyz</strong><br>(x, y, z)</td>
+            <td class="no-wrap">x:&nbsp;number<br>y:&nbsp;number<br>z:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>xyz (35.7, 71.5, 11.9)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>ycbcr</strong><br>(y, cb, cr)</td>
+            <td class="no-wrap">y:&nbsp;number<br>cb:&nbsp;number<br>cr:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>ycbcr (149.7, 43.5, 21.2)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>cubehelix</strong><br>(hue, saturation, lightness)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>saturation:&nbsp;number<br>lightness:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>cubehelix (120, 150, 80)</code></td>
+            </tr>
+            </table>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+            <li>The <em>hsb</em> and <em>hsv</em> functions are the same, only the name of the third parameter differs (<em>brightness</em> or <em>value</em>).</li>
+            <li>The <em>hcl</em> and <em>lch</em> functions are the same, except that their parameters are in reverse order.</li>
+            </ul>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>grayscale_t</strong> (gray_t)</td>
+            <td class="no-wrap">gray_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>grayscale_t (0.5)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>rgb_t</strong><br>(red_t, green_t, blue_t)</td>
+            <td class="no-wrap">red_t:&nbsp;number<br>green_t:&nbsp;number<br>blue_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>rgb_t (0, 1, 0)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsb_t</strong><br>(hue_t, saturation_t, brightness_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>saturation_t:&nbsp;number<br>brightness_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsb_t (1/3, 1, 1)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsv_t</strong><br>(hue_t, saturation_t, value_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>saturation_t:&nbsp;number<br>value_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsv_t (1/3, 1, 1)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hwb_t</strong><br>(hue_t, whiteness_t, blackness_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>whiteness_t:&nbsp;number<br>blackness_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hwb_t (1/3, 0, 0)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsl_t</strong><br>(hue_t, saturation_t, lightness_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>saturation_t:&nbsp;number<br>lightness_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsl_t (1/3, 1, 0.5)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hcl_t</strong><br>(hue_t, chroma_t luminance_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>chroma_t:&nbsp;number<br>luminance_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hcl_t (0.3778, 0.9359, 0.8770)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>lch_t</strong><br>(luminance_t, chroma_t, hue_t)</td>
+            <td class="no-wrap">luminance_t:&nbsp;number<br>chroma_t:&nbsp;number<br>hue_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>lch_t (0.8770, 0.9359, 0.3778)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>lab_t</strong><br>(luminance_t, a_t, b_t)</td>
+            <td class="no-wrap">luminance_t:&nbsp;number<br>a_t:&nbsp;number<br>b_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>lab_t (0.8770, -0.6734, 0.6500)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>xyz_t</strong><br>(x_t, y_t, z_t)</td>
+            <td class="no-wrap">x_t:&nbsp;number<br>y_t:&nbsp;number<br>z_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>xyz_t (0.357, 0.715, 0.119)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>ycbcr_t</strong><br>(y_t, cb_t, cr_t)</td>
+            <td class="no-wrap">y_t:&nbsp;number<br>cb_t:&nbsp;number<br>cr_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>ycbcr_t (0.59, 0.17, 0.00)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>cubehelix_t</strong><br>(hue_t, saturation_t, lightness_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>saturation_t:&nbsp;number<br>lightness_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>cubehelix_t (1/3, 1.5, 0.8)</code></td>
+            </tr>
+            </table>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+            <li>The <em>hsb_t</em> and <em>hsv_t</em> functions are the same, only the name of the third parameter differs (<em>brightness_t</em> or <em>value_t</em>).</li>
+            <li>The <em>hcl_t</em> and <em>lch_t</em> functions are the same, except that their parameters are in reverse order.</li>
+            </ul>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td><strong>interpolate_colors</strong><br>(stops, location, color_model, smoothness)</td>
+            <td>stops:&nbsp;array<br>location:&nbsp;number<br>color_model:&nbsp;string<br>smoothness:&nbsp;number (or array of 3 numbers)</td>
+            <td>Returns an interpolated color at (location) from an array of (stops) in ascending order, each stop being defined as an array of two elements: [&nbsp;position, color&nbsp;], according to (color_model) among: <code>"rgb"</code>, <code>"lab"</code>, <code>"xyz"</code>, <code>"ycbcr"</code>, <code>"hsv"</code>, <code>"hsb"</code>, <code>hwb"</code>, <code>"hsl"</code>, <code>"hcl"</code>, <code>"lch"</code>, or <code>"cubehelix"</code>.<br>A hue mode can also be appended as a suffix to the hue-based color models, among: <code>"-inc"</code> (or <code>"-asc"</code>), <code>"-dec"</code> (or <code>"-desc"</code>), <code>"-near"</code> (or <code>"-short"</code>), <code>"-far"</code> (or <code>"-long"</code>).<br>The (smoothness) parameter is an optional value between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a <em>pchip</em> interpolation; alternatively, an array of three such values can be passed to independently control the smoothness of each component of the color model.</td>
+            </tr>
+            <tr>
+            <td><strong>distribute_colors</strong><br>(colors, bounds, location, color_model, somoothness)</td>
+            <td>colors:&nbsp;array<br>bounds:&nbsp;array<br>location:&nbsp;number<br>color_model:&nbsp;string<br>smoothness:&nbsp;number (or array of 3 numbers)</td>
+            <td>Returns an interpolated color at (location) from an array of (colors) evenly distributed within (bounds), according to (color_model) among: <code>"rgb"</code>, <code>"lab"</code>, <code>"xyz"</code>, <code>"ycbcr"</code>, <code>"hsv"</code>, <code>"hsb"</code>, <code>hwb"</code>, <code>"hsl"</code>, <code>"hcl"</code>, <code>"lch"</code>, or <code>"cubehelix"</code>.<br>A hue mode can also be appended as a suffix to the hue-based color models, among: <code>"-inc"</code> (or <code>"-asc"</code>), <code>"-dec"</code> (or <code>"-desc"</code>), <code>"-near"</code> (or <code>"-short"</code>), <code>"-far"</code> (or <code>"-long"</code>).<br>The (smoothness) parameter is an optional value between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a <em>pchip</em> interpolation; alternatively, an array of three such values can be passed to independently control the smoothness of each component of the color model.</td>
+            </tr>
+            <tr>
+            <td><strong>cubehelix_color</strong><br>(t, start, rotations, saturation, gamma, lightness)</td>
+            <td>t:&nbsp;number<br>start:&nbsp;number<br>rotations:&nbsp;number<br>saturation:&nbsp;number<br>gamma:&nbsp;number<br>lightness:&nbsp;number (or array of 2 numbers)</td>
+            <td>Returns a "CubeHelix" color at position (t) in the interval [0.0, 1.0], according to the parameters: (start), (rotations), (saturation), and (gamma), as described in the document: <a href="https://astron-soc.in/bulletin/11June/289392011.pdf">A colour scheme for the display of astronomical intensity images</a>, by Dave Green. All parameters beyond (t) are optional, with default values provided: <code>0.5</code>, <code>-1.5</code>, <code>1</code>, and <code>1</code>, respectively.<br>An extra optional parameter (lightness), with default value: <code>[ 0, 1 ]</code>, can also be used to adjust the lightness range (black to white by default).</td>
+            </tr>
+            <tr>
+            <td><strong>wavelength_color</strong> (w)</td>
+            <td>w:&nbsp;number</td>
+            <td>Returns a color corresponding to the wavelength of light (w) expressed in nanometers, visible to the human eye from around <code>380</code> to <code>780</code>.</td>
+            </tr>
+            </table>
+            <p>When calling the functions <em>interpolate_colors</em> and <em>distribute_colors</em>, each RGB color can be defined in several ways:</p>
+            <ul>
+            <li>as a RGB color array; ex: <code>[&nbsp;0, 255, 0&nbsp;]</code>,</li>
+            <li>as a color string in HTML/CSS hexadecimal notation; ex: <code>"#00FF00"</code> or <code>"#0F0"</code>,</li>
+            <li>as a CSS/SVG/W3C or X11 color name; ex: <code>"lime"</code> or <code>"svg/lime"</code> or <code>"x11/green"</code>.</li>
+            </ul>
+            <!-- <p>See the <a href="http://www.tonton-pixel.com/goodies/color-names/index.html">Color Names</a> page for a list of available W3C and X11 color names, sorted alphabetically.</p> -->
+            <p>A RGB color can also be obtained by using one of the specialized color conversion functions: <em>grayscale</em>, <em>rgb</em>, <em>hsb</em>, etc., or <em>grayscale_t</em>, <em>rgb_t</em>, <em>hsb_t</em>, etc.</p>
+            <h3>Extra functions</h3>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>rgb_color_t</strong> (rgb_t)</td>
+            <td class="no-wrap">rgb_t:&nbsp;array</td>
+            <td>Returns a scaled ([0.0, 1.0] to [0, 255]) RGB color array.<br>Ex: <code>rgb_color_t ([ 0, 1, 0 ])</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>rgb_colors_t</strong> (colors_t)</td>
+            <td class="no-wrap">colors_t:&nbsp;array</td>
+            <td>Returns an array of scaled ([0.0, 1.0] to [0, 255]) RGB color arrays.<br>Ex: <code>rgb_colors_t ([ [ 0, 0, 0 ], [ 1, 1, 1 ] ])</code></td>
+            </tr>
+            </table>
+            <hr>
+            <p>© Copyright 2020 Michel MARIANI.</p>
+        </div>
+    </body>
+</html>

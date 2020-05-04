@@ -1,7 +1,7 @@
 {
     "colorRamp":
     {
-        "name": "Pastel Colors",
+        "name": "Acid Colors",
         "formula": "rgb_t\n(\n    2 * (1 - t),\n    2 * t,\n    (2 * t * t) - (2 * t) + 1\n)"
     }
 }

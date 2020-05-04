@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Rainbow (HWB)",
-        "formula": "hwb_t (t, 0, 0)"
+        "formula": "hwb_t\n(\n    t,\n    0,\n    0\n)"
     }
 }

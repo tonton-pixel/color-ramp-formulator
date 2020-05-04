@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Flare (2 Colors)",
+        "formula": "distribute_colors\n(\n    [ \"blue\", \"yellow\" ],\n    [ 0, 255 ], x,\n    \"hsl-inc\"\n)"
+    }
+}

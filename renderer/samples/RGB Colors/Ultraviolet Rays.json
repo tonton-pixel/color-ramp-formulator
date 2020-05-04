@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Ultraviolet Rays",
+        "formula": "distribute_colors\n(\n    [\n        [ 0, 0, 0 ],\n        [ 0, 209, 232 ],\n        [ 0, 0, 0 ]\n    ],\n    [ 0, 255 ], x,\n    \"cubehelix-far\", 100/3\n)"
+    }
+}

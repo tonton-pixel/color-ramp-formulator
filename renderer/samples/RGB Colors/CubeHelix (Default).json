@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "CubeHelix (Default)",
+        "formula": "cubehelix_color (t, 0.5, -1.5, 1, 1)"
+    }
+}

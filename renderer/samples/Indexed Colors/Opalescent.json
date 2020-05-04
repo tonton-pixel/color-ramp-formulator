@@ -1,7 +1,0 @@
-{
-    "colorRamp":
-    {
-        "name": "Opalescent",
-        "formula": "distribute_colors\n(\n    [ \"lavender\", \"pink\", \"lavender\" ],\n    [ 0, 255 ], x,\n    \"hcl\", \"inc\"\n)"
-    }
-}

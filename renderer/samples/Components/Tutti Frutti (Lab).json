@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Tutti Frutti (Lab)",
-        "formula": "lab_t\n(\n    0.75,\n    bias (t, 0.75),\n    1 - bias (t, 1 - 0.75)\n)"
+        "formula": "lab_t\n(\n    0.75,\n    lerp (-1, 1, bias (t, 0.75)),\n    lerp (-1, 1, 1 - bias (t, 1 - 0.75))\n)"
     }
 }

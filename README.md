@@ -14,7 +14,7 @@ This application is built with [Electron](https://electronjs.org), and works on 
 
 ## Building
 
-You'll need [Node.js](https://nodejs.org) installed on your computer in order to build this app.
+You'll need [Node.js](https://nodejs.org) installed on your computer in order to build this application.
 
 ```bash
 git clone https://github.com/tonton-pixel/color-ramps-formulator

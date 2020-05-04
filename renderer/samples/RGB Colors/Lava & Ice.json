@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Lava & Ice",
+        "formula": "interpolate_colors\n(\n    [\n        [ 45, \"hot pink\" ],\n        [ 255, \"white\" ]\n    ],\n    x,\n    \"hcl-far\"\n)"
+    }
+}

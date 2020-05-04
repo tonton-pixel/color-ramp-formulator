@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Documentation | Color Ramps Formulator</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="wrapper">
+            <h1><img src="icon-256.png" width="64px" alt="Color Ramps Formulator icon">&nbsp;Color Ramps Formulator<br>&nbsp;v1.0.0-beta.5 [Draft]</h1>
+            <h2>Documentation</h2>
+            <h3>Description</h3>
+            <p><strong>Color Ramps Formulator</strong> is a desktop application used to generate algorithmically-defined color ramps.</p>
+            <p>A <strong>color ramp</strong> is defined as an ordered set of 256 RGB colors, and the data it represents can be displayed (previewed) in three different ways:</p>
+            <ul>
+                <li>as a <strong>curves map,</strong></li>
+                <li>as a <strong>linear gradient,</strong></li>
+                <li>as a <strong>color table.</strong></li>
+            </ul>
+            <h3>Color models</h3>
+            <p>A color ramp can be calculated from a formula made of JavaScript expressions, with helper functions supporting several color models among:</p>
+            <ul>
+                <li><strong>Grayscale</strong>: Gray</li>
+                <li><strong>RGB</strong>: Red, Green, Blue</li>
+                <li><strong>HSV</strong>: Hue, Saturation, Value; or <strong>HSB</strong>: Hue, Saturation, Brightness</li>
+                <li><strong>HWB</strong>: Hue, Whiteness, Blackness</li>
+                <li><strong>HSL</strong>: Hue, Saturation, Lightness</li>
+                <li><strong>HCL</strong>: Hue, Chroma, Luminance; or <strong>Lch</strong>: Luminance, chroma, hue</li>
+                <li><strong>Lab</strong>: Luminance, a, b</li>
+                <li><strong>XYZ</strong>: X, Y, Z</li>
+                <li><strong>YCbCr</strong>: Y (Luma), Chroma blue, Chroma red</li>
+                <li><strong>CubeHelix HSL</strong>: Hue, Saturation, Lightness</li>
+            </ul>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+                <li><a href="https://en.wikipedia.org/wiki/RGB_color_model">RGB</a>, <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSL and HSV</a>, <a href="https://en.wikipedia.org/wiki/HWB_color_model">HWB</a>, are commonly used color models (HSV is also called HSB).</li>
+                <li>HCL stands for <a href="https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC">CIELCH</a> (<a href="https://www.colourphil.co.uk/lab_lch_colour_space.shtml">Lch</a>), which is a more intuitive color model than <a href="https://en.wikipedia.org/wiki/CIELAB_color_space">CIELAB</a> (<a href="https://www.colourphil.co.uk/lab_lch_colour_space.shtml">Lab</a>). It uses the standard, widely-documented algorithm which assumes a 2° observer angle and a D65 illuminant, and applies a sRGB gamma correction.</li>
+                <li>XYZ (<a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">CIEXYZ</a>) is an intermediate color model used to convert from RGB to Lab.</li>
+                <li><a href="https://en.wikipedia.org/wiki/YCbCr">YCbCr</a> makes use of the full-range format used for <a href="https://en.wikipedia.org/wiki/YCbCr#JPEG_conversion">JPEG</a> images.</li>
+                <li><a href="https://bl.ocks.org/mbostock/11413789">CubeHelix HSL</a> is a clever adaptation of the original <a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubetry.html">CubeHelix</a> algorithm by Dave Green, to make it usable as an alternate HSL color model, as identified by <a href="https://bost.ocks.org/mike/">Mike Bostock</a>.</li>
+                </ul>
+            <h3>Ranges</h3>
+            <p>[TBD]</p>
+            <h3>Examples</h3>
+            <p>[TBD]</p>
+            <hr>
+            <p>© Copyright 2020 Michel MARIANI.</p>
+        </div>
+    </body>
+</html>

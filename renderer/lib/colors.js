@@ -162,7 +162,6 @@ let namedColorsSets =
         [
             "http://www.w3.org/TR/css3-color/#svg-color",
             "https://www.w3.org/TR/css-color-4/#changes-from-3",
-            "http://www.w3.org/TR/SVG/types.html#ColorKeywords",
             "http://en.wikipedia.org/wiki/X11_color_names"
         ]
     },
@@ -1231,24 +1230,24 @@ function rgbToHsv (rgbColor, rgbFloatRange, hsvFloatRange)
 function hwbToRgb (hwbColor, hwbFloatRange, rgbFloatRange)
 {
     let hue = hwbColor[0];
-    let white = hwbColor[1];
-    let black = hwbColor[2];
+    let whiteness = hwbColor[1];
+    let blackness = hwbColor[2];
     if (!hwbFloatRange)
     {
         hue /= 360;
-        white /= 100;
-        black /= 100;
+        whiteness /= 100;
+        blackness /= 100;
     }
-    let ratio = white + black;
+    let ratio = whiteness + blackness;
     if (ratio > 1)
     {
-        white /= ratio;
-        black /= ratio;
+        whiteness /= ratio;
+        blackness /= ratio;
     }
     let rgb = hslToRgb ([ hue, 1, 0.5 ], true, true);
-    let red = (rgb[0] * (1 - white - black)) + white;
-    let green = (rgb[1] * (1 - white - black)) + white;
-    let blue = (rgb[2] * (1 - white - black)) + white;
+    let red = (rgb[0] * (1 - whiteness - blackness)) + whiteness;
+    let green = (rgb[1] * (1 - whiteness - blackness)) + whiteness;
+    let blue = (rgb[2] * (1 - whiteness - blackness)) + whiteness;
     if (!rgbFloatRange)
     {
         red *= 255;
@@ -1270,15 +1269,15 @@ function rgbToHwb (rgbColor, rgbFloatRange, hwbFloatRange)
         blue /= 255;
     }
     let hue = rgbToHsl ([ red, green, blue ], true, true)[0];
-    let white = Math.min (red, green, blue);
-    let black = 1 - Math.max (red, green, blue);
+    let whiteness = Math.min (red, green, blue);
+    let blackness = 1 - Math.max (red, green, blue);
     if (!hwbFloatRange)
     {
         hue *= 360;
-        white *= 100;
-        black *= 100;
+        whiteness *= 100;
+        blackness *= 100;
     }
-    return [ hue, white, black ];
+    return [ hue, whiteness, blackness ];
 }
 //
 // http://www.brucelindbloom.com/index.html?WorkingSpaceInfo.html
@@ -1406,7 +1405,7 @@ function hclToLab_ (hclColor)
     let luminance = hclColor[2];
     let a = Math.cos (hue * Math.PI / 180) * chroma;
     let b = Math.sin (hue * Math.PI / 180) * chroma;
-    return [ luminance, a , b ];
+    return [ luminance, a, b ];
 }
 //
 function xyzToRgb (xyzColor, xyzFloatRange, rgbFloatRange)
@@ -1465,8 +1464,8 @@ function labToRgb (labColor, labFloatRange, rgbFloatRange)
     if (labFloatRange)
     {
         luminance *= 100;
-        a *= 256; a -= 128;
-        b *= 256; b -= 128;
+        a *= 128;
+        b *= 128;
     }
     let rgbColor = xyzToRgb_ (labToXyz_ ([ luminance, a, b ]));
     let red = rgbColor[0];
@@ -1499,8 +1498,8 @@ function rgbToLab (rgbColor, rgbFloatRange, labFloatRange)
     if (labFloatRange)
     {
         luminance /= 100;
-        a += 128; a /= 256;
-        b += 128; b /= 256;
+        a /= 128;
+        b /= 128;
     }
     return [ luminance, a, b ];
 }
@@ -1603,6 +1602,75 @@ function rgbToYcbcr (rgbColor, rgbFloatRange, ycbcrFloatRange)
     return [ y, cb, cr ];
 };
 //
+const coeffs = 
+[
+    [ -0.14861, +1.78277 ],
+    [ -0.29227, -0.90649 ],
+    [ +1.97294, +0.00000 ]
+];
+//
+function cubehelixHslToRgb (hslColor, hslFloatRange, rgbFloatRange)
+{
+    let hue = hslColor[0];
+    let saturation = hslColor[1];
+    let lightness = hslColor[2];
+    if (!hslFloatRange)
+    {
+        hue /= 360;
+        saturation /= 100;
+        lightness /= 100;
+    }
+    let angle = 2 * Math.PI * (hue + (1 / 3));
+    let amplitude = saturation * lightness * (1 - lightness);
+    let red = lightness + (amplitude * ((coeffs[0][0] * Math.cos (angle)) + (coeffs[0][1] * Math.sin (angle))));
+    let green = lightness + (amplitude * ((coeffs[1][0] * Math.cos (angle)) + (coeffs[1][1] * Math.sin (angle))));
+    let blue = lightness + (amplitude * ((coeffs[2][0] * Math.cos (angle)) + (coeffs[2][1] * Math.sin (angle))));
+    if (!rgbFloatRange)
+    {
+        red *= 255;
+        green *= 255;
+        blue *= 255;
+    }
+    return [ red, green, blue ];
+}
+//
+function rgbToCubehelixHsl (rgbColor, rgbFloatRange, hslFloatRange)
+{
+    let red = rgbColor[0];
+    let green = rgbColor[1];
+    let blue = rgbColor[2];
+    if (!rgbFloatRange)
+    {
+        red /= 255;
+        green /= 255;
+        blue /= 255;
+    }
+    let hue;
+    let saturation;
+    let lightness;
+    lightness =
+        (((coeffs[1][1] * coeffs[2][0]) - (coeffs[2][1] * coeffs[1][0])) * red) +
+        (((coeffs[0][1] * coeffs[1][0]) - (coeffs[1][1] * coeffs[0][0])) * blue) +
+        (((coeffs[2][1] * coeffs[0][0]) - (coeffs[0][1] * coeffs[2][0])) * green);
+    lightness /=
+        (((coeffs[1][1] * coeffs[2][0]) - (coeffs[2][1] * coeffs[1][0])) +
+         ((coeffs[0][1] * coeffs[1][0]) - (coeffs[1][1] * coeffs[0][0])) +
+         ((coeffs[2][1] * coeffs[0][0]) - (coeffs[0][1] * coeffs[2][0])));
+    let bl = blue - lightness;
+    let gl = green - lightness;
+    let k = ((coeffs[2][0] * gl) - (coeffs[1][0] * bl)) / coeffs[1][1];
+    saturation = (Math.sqrt ((k * k) + (bl * bl)) / (coeffs[2][0] * lightness * (1 - lightness))) || 0;
+    hue = saturation ? (Math.atan2 (k, bl) / (2 * Math.PI)) - (1 / 3) : 0;
+    if (hue < 0) hue += 1;
+    if (!hslFloatRange)
+    {
+        hue *= 360;
+        saturation *= 100;
+        lightness *= 100;
+    }
+    return [ hue, saturation, lightness ];
+}
+//
 module.exports =
 {
     enumerateNamedColors,
@@ -1623,6 +1691,8 @@ module.exports =
     hclToRgb,
     rgbToHcl,
     ycbcrToRgb,
-    rgbToYcbcr
+    rgbToYcbcr,
+    cubehelixHslToRgb,
+    rgbToCubehelixHsl
 };
 //

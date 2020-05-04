@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Rainbow (HSL)",
-        "formula": "hsl_t (t, 1, 0.5)"
+        "formula": "hsl_t\n(\n    t,\n    1,\n    0.5\n)"
     }
 }

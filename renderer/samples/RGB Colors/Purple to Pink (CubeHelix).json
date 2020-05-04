@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Purple to Pink (CubeHelix)",
+        "formula": "distribute_colors\n(\n    [ \"purple\", \"pink\" ],\n    [ 0, 1 ], t,\n    \"cubehelix\"\n)"
+    }
+}

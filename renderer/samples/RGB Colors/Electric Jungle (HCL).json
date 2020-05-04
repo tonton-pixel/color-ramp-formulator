@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Electric Jungle (HCL)",
+        "formula": "distribute_colors\n(\n    [ \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\" ],\n    [ 0, 1 ], t,\n    \"hcl\", [ 100, 0, 0 ]\n)"
+    }
+}

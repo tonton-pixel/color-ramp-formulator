@@ -214,7 +214,12 @@ function smartStringify (colorRamp)
     }
     return `[\n${colorStrings.join (",\n")}\n]`;
 }
-
+// To be later moved to lib/color-ramps.js?
+function isRGBArray (rgb)
+{
+    return Array.isArray (rgb) && (rgb.length === 3) && rgb.every (component => (typeof component === 'number') && (!isNaN (component)));
+}
+//
 calculateButton.addEventListener
 (
     'click',
@@ -228,48 +233,31 @@ calculateButton.addEventListener
         let formula = formulaString.value.trim ();
         if (formula)
         {
-            let colorFormula = new ColorFormula (formula);
-            let error = colorFormula.validate ();
-            if (!error)
+            try
             {
+                let colorFormula = new ColorFormula (formula);
                 let colorRamp = [ ];
                 for (let x = 0; x < 256; x++)
                 {
-                    let result = colorFormula.evaluate (x);
-                    if (Array.isArray (result))
+                    let rgbColor = colorFormula.evaluate (x, x / 255);
+                    if (isRGBArray (rgbColor))
                     {
-                        let rgbColor = result;
                         colorRamp.push (rgbColor.map (component => normalize (component)));
                     }
                     else
                     {
-                        error = result;
-                        resultString.value = error;
-                        resultString.classList.add ('error');
-                        break;
+                        throw new Error ("Not a valid color ramp element.");
                     }
                 }
-                if (!error)
-                {
-                    if (colorRamps.isClut (colorRamp))
-                    {
-                        resultString.value = smartStringify (colorRamp);
-                        currentColorRamp = colorRamp;
-                        updatePreview ();
-                    }
-                    else
-                    {
-                        resultString.value = "Not a valid color ramp!";
-                        resultString.classList.add ('error');
-                    }
-                }
+                resultString.value = smartStringify (colorRamp);
+                currentColorRamp = colorRamp;
+                updatePreview ();
             }
-            else
+            catch (error)
             {
                 resultString.value = error;
                 resultString.classList.add ('error');
             }
-            colorFormula = null;
         }
     }
 );
@@ -453,11 +441,11 @@ colorTablePreview.addEventListener
 //
 let defaultColorRampFolderPath = prefs.defaultColorRampFolderPath;
 //
-const headerClutSize = 32;	    // NIH Image (ImageJ) header
-const rawClutFileSize = 768;	// (256 * 3) or (3 * 256)
+const headerClutSize = 32;      // NIH Image (ImageJ) header
+const rawClutFileSize = 768;    // (256 * 3) or (3 * 256)
 const rawElementSize = rawClutFileSize / 3;
-const footerClutSize = 4;		// Photoshop Save for Web CLUT footer (undocumented)
-
+const footerClutSize = 4;       // Photoshop Save for Web CLUT footer (undocumented)
+//
 importButton.addEventListener
 (
     'click',
@@ -486,7 +474,6 @@ importButton.addEventListener
                 if (extension === '.json')
                 {
                     colorRamp = JSON.parse (data.replace (/^\uFEFF/, ""));
-
                     if (colorRamps.isClut (colorRamp) || colorRamps.isMapping (colorRamp))
                     {
                         currentColorRamp = colorRamp;

@@ -1,7 +1,0 @@
-{
-    "colorRamp":
-    {
-        "name": "Dracula",
-        "formula": "distribute_colors\n(\n    [ \"#2B2926\", \"#47B3B3\", \"#E51897\", \"#47B3B3\", \"#2B2926\" ],\n    [ 31, 255 - 31 ], x,\n    \"rgb\", 100\n)"
-    }
-}

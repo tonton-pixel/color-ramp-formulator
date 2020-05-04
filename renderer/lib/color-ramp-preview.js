@@ -45,6 +45,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
     container.setAttributeNS (null, 'stroke', 'gray');
     container.setAttributeNS (null, 'stroke-width', border + gap);
     container.setAttributeNS (null, 'fill', 'white');
+    svg.appendChild (document.createTextNode ("\n"));
     svg.appendChild (container);
     //
     if (colorRamp)
@@ -105,6 +106,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 rect.setAttributeNS (null, 'width', border + curvesWidth + border);
                 rect.setAttributeNS (null, 'height', 2);
                 rect.setAttributeNS (null, 'fill', gridColor);
+                svg.appendChild (document.createTextNode ("\n"));
                 svg.appendChild (rect);
             }
             for (var column = 0; column <= gridUnitCount; column++)
@@ -116,6 +118,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 rect.setAttributeNS (null, 'width', 2);
                 rect.setAttributeNS (null, 'height', border + curvesHeight + border);
                 rect.setAttributeNS (null, 'fill', gridColor);
+                svg.appendChild (document.createTextNode ("\n"));
                 svg.appendChild (rect);
             }
         }
@@ -134,6 +137,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 rect.setAttributeNS (null, 'width', 1);
                 rect.setAttributeNS (null, 'height', 1);
                 rect.setAttributeNS (null, 'fill', '#000000');  // Not '#FFFFFF'!
+                svg.appendChild (document.createTextNode ("\n"));
                 svg.appendChild (rect);
             }
             else
@@ -147,6 +151,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 redRect.setAttributeNS (null, 'height', 1);
                 color = (redValue === greenValue) ? '#FFFF00' : ((redValue === blueValue) ? '#FF00FF' : '#FF0000');
                 redRect.setAttributeNS (null, 'fill', color);
+                svg.appendChild (document.createTextNode ("\n"));
                 svg.appendChild (redRect);
                 let greenRect = document.createElementNS (xmlns, 'rect');
                 greenRect.setAttributeNS (null, 'class', 'value');
@@ -156,6 +161,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 greenRect.setAttributeNS (null, 'height', 1);
                 color = (greenValue === redValue) ? '#FFFF00' : ((greenValue === blueValue) ? '#00FFFF' : '#00FF00');
                 greenRect.setAttributeNS (null, 'fill', color);
+                svg.appendChild (document.createTextNode ("\n"));
                 svg.appendChild (greenRect);
                 let blueRect = document.createElementNS (xmlns, 'rect');
                 blueRect.setAttributeNS (null, 'class', 'value');
@@ -165,9 +171,11 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 blueRect.setAttributeNS (null, 'height', 1);
                 color = (blueValue === redValue) ? '#FF00FF' : ((blueValue === greenValue) ? '#00FFFF' : '#0000FF');
                 blueRect.setAttributeNS (null, 'fill', color);
+                svg.appendChild (document.createTextNode ("\n"));
                 svg.appendChild (blueRect);
             }
         }
+        svg.appendChild (document.createTextNode ("\n"));
     }
     else
     {
@@ -201,6 +209,7 @@ module.exports.createLinearGradient = function (colorRamp)
     container.setAttributeNS (null, 'stroke', 'gray');
     container.setAttributeNS (null, 'stroke-width', border + gap);
     container.setAttributeNS (null, 'fill', 'white');
+    svg.appendChild (document.createTextNode ("\n"));
     svg.appendChild (container);
     //
     if (colorRamp)
@@ -253,9 +262,14 @@ module.exports.createLinearGradient = function (colorRamp)
             // stop.setAttributeNS (null, 'offset', `${(x++ / (rampWidth - 1)) * 100}%`);
             stop.setAttributeNS (null, 'offset', `${x++ / (rampWidth - 1)}`);
             stop.setAttributeNS (null, 'stop-color', color);
+            linearGradient.appendChild (document.createTextNode ("\n"));
             linearGradient.appendChild (stop);
         }
+        linearGradient.appendChild (document.createTextNode ("\n"));
+        defs.appendChild (document.createTextNode ("\n"));
         defs.appendChild (linearGradient);
+        defs.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createTextNode ("\n"));
         svg.appendChild (defs);
         //
         let rect = document.createElementNS (xmlns, 'rect');
@@ -265,7 +279,9 @@ module.exports.createLinearGradient = function (colorRamp)
         rect.setAttributeNS (null, 'width', rampWidth);
         rect.setAttributeNS (null, 'height', rampHeight);
         rect.setAttributeNS (null, 'fill', `url(#${id})`);
+        svg.appendChild (document.createTextNode ("\n"));
         svg.appendChild (rect);
+        svg.appendChild (document.createTextNode ("\n"));
     }
     else
     {
@@ -301,6 +317,7 @@ module.exports.createColorTable = function (colorRamp)
     container.setAttributeNS (null, 'stroke', 'gray');
     container.setAttributeNS (null, 'stroke-width', border + gap);
     container.setAttributeNS (null, 'fill', 'white');
+    svg.appendChild (document.createTextNode ("\n"));
     svg.appendChild (container);
     //
     if (colorRamp)
@@ -348,7 +365,7 @@ module.exports.createColorTable = function (colorRamp)
             for (let column = 0; column < columns; column++)
             {
                 let rect = document.createElementNS (xmlns, 'rect');
-                rect.setAttributeNS (null, 'class', 'ramp');
+                rect.setAttributeNS (null, 'class', 'color');
                 rect.setAttributeNS (null, 'x', border + border + gap + column * (border + gap + cellWidth));
                 rect.setAttributeNS (null, 'y', border + border + gap + row * (border + gap + cellHeight));
                 rect.setAttributeNS (null, 'width', cellWidth);
@@ -357,10 +374,12 @@ module.exports.createColorTable = function (colorRamp)
                 let title = document.createElementNS (xmlns, 'title');
                 title.textContent = `[${colorIndex}]\xA0:\xA0${hexToRgb (colors[colorIndex])}\xA0or\xA0${colors[colorIndex]}`;
                 rect.appendChild (title);
+                svg.appendChild (document.createTextNode ("\n"));
                 svg.appendChild (rect);
                 colorIndex++;
             }
         }
+        svg.appendChild (document.createTextNode ("\n"));
     }
     else
     {

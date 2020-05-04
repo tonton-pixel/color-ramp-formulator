@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Iridescent",
+        "formula": "distribute_colors\n(\n    [ \"pink\", \"light yellow\", \"pink\", \"light yellow\" ],\n    [ 0, 255 ], x,\n    \"hcl-dec\", [ 0, 0, 100 ]\n)"
+    }
+}

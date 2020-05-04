@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Black Red Yellow (HCL)",
+        "formula": "distribute_colors\n(\n    [ \"black\", \"red\", \"yellow\" ],\n    [ 0, 255 ], x,\n    \"hcl\", 0\n)"
+    }
+}

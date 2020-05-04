@@ -1,7 +1,0 @@
-{
-    "colorRamp":
-    {
-        "name": "Green Sequential (Smoothed)",
-        "formula": "distribute_colors\n(\n    [\n        \"#085A32\",\n        \"#118649\",\n        \"#18A85A\",\n        \"#52B974\",\n        \"#9ECF8A\",\n        \"#D2E3A2\",\n        \"#F0F1BA\",\n        \"#F7F8E5\"\n    ],\n    [ 0, 255 ], x,\n    \"rgb\", 100\n)"
-    }
-}

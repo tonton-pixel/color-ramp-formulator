@@ -1,15 +1,15 @@
 {
     "name": "color-ramps-formulator",
     "productName": "Color Ramps Formulator",
-    "version": "1.0.0-beta.4",
+    "version": "1.0.0-beta.5",
     "description": "Algorithmically-defined color ramps generator.",
     "main": "main.js",
     "scripts": {
         "start": "electron .",
-        "build-darwin": "electron-packager . --asar --out=build --platform=darwin --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.icns --overwrite",
-        "build-linux": "electron-packager . --asar --out=build --platform=linux --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.png --overwrite",
-        "build-mas": "electron-packager . --asar --out=build --platform=mas --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.icns --overwrite",
-        "build-win32": "electron-packager . --asar --out=build --platform=win32 --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.ico --overwrite"
+        "build-darwin": "electron-packager . --asar.unpackDir=doc --out=build --platform=darwin --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.icns --overwrite",
+        "build-linux": "electron-packager . --asar.unpackDir=doc --out=build --platform=linux --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.png --overwrite",
+        "build-mas": "electron-packager . --asar.unpackDir=doc --out=build --platform=mas --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.icns --overwrite",
+        "build-win32": "electron-packager . --asar.unpackDir=doc --out=build --platform=win32 --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.ico --overwrite"
     },
     "keywords": [
         "algorithmic",
@@ -17,6 +17,7 @@
         "color",
         "color ramp",
         "color table",
+        "cubehelix",
         "curves map",
         "electron",
         "formula",
@@ -30,6 +31,7 @@
         "lch",
         "linear gradient",
         "rgb",
+        "wavelength",
         "xyz",
         "ycbcr"
     ],
@@ -44,7 +46,7 @@
         "esprima": "^4.0.1"
     },
     "devDependencies": {
-        "electron": "^8.2.2",
+        "electron": "^8.2.5",
         "electron-packager": "^14.2.1"
     }
 }

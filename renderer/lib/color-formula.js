@@ -47,6 +47,11 @@ function limit (value, min, max)
     return (Math.min (Math.max (min, value), max));
 }
 //
+function modulo (n, m)
+{
+    return ((n % m) + m) % m;
+}
+//
 function lerp (a, b, t)
 {
     return a + ((b - a) * t);
@@ -54,7 +59,7 @@ function lerp (a, b, t)
 //
 function coserp (a, b, t)
 {
-    t = limit (t, 0.0, 1.0);
+    t = limit (t, 0, 1);
     return a + ((b - a) * (1 - Math.cos (t * Math.PI)) / 2);
 }
 //
@@ -62,13 +67,13 @@ function coserp (a, b, t)
 //
 function smoothstep (a, b, t)
 {
-    t = limit (t, 0.0, 1.0);
+    t = limit (t, 0, 1);
     return a + ((b - a) * t * t * (3 - (2 * t)));
 }
 //
 function smootherstep (a, b, t)
 {
-    t = limit (t, 0.0, 1.0);
+    t = limit (t, 0, 1);
     return a + ((b - a) * t * t * t * (t * ((t * 6) - 15) + 10));
 }
 //
@@ -84,7 +89,8 @@ function gain (t, g)
 //
 // Shape-preserving PCHIP (Piecewise Cubic Hermite Interpolation Polynomial)
 // Based on:
-// <http://www.mathworks.fr/moler/interp.pdf>
+// <http://www.mathworks.fr/moler/interp.pdf> (previous link)
+// <https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/moler/interp.pdf>
 // <http://en.wikipedia.org/wiki/Monotone_cubic_interpolation>
 //
 function getTangents (xs, ys, ms)
@@ -254,14 +260,17 @@ function interpolate (points, position, smoothness)
     }
     if (typeof smoothness !== 'undefined')
     {
-        if ((smoothness < 0) || (smoothness > 100))
+        if (typeof smoothness === 'number')
         {
-            throw new Error ("interpolate: invalid smoothness percentage: " + smoothness);
+            if (smoothness !== 0)
+            {
+                let smoothValue = pchip (points, position);
+                value = lerp (value, smoothValue, smoothness / 100);
+            }
         }
-        else if (smoothness !== 0)
+        else
         {
-            let smoothValue = pchip (points, position);
-            value = lerp (value, smoothValue, smoothness / 100);
+            throw new Error ("interpolate: invalid smoothness value");
         }
     }
     return value;
@@ -514,53 +523,186 @@ function polynomial (coeffs, x)
     return sum;
 }
 //
-function interpolate_colors (stops, location, color_model, option)
+function grayscale (gray)
+{
+    return [ gray, gray, gray ];
+}
+//
+function rgb (red, green, blue)
+{
+    return [ red, green, blue ];
+}
+//
+function hsb (hue, saturation, brightness)
+{
+    return colors.hsvToRgb ([ hue, saturation, brightness ]);
+}
+//
+function hsv (hue, saturation, value)
+{
+    return colors.hsvToRgb ([ hue, saturation, value ]);
+}
+//
+function hwb (hue, whiteness, blackness)
+{
+    return colors.hwbToRgb ([ hue, whiteness, blackness ]);
+}
+//
+function hsl (hue, saturation, lightness)
+{
+    return colors.hslToRgb ([ hue, saturation, lightness ]);
+}
+//
+function hcl (hue, chroma, luminance)
+{
+    return colors.hclToRgb ([ hue, chroma, luminance ]);
+}
+//
+function lch (luminance, chroma, hue)
+{
+    return colors.hclToRgb ([ hue, chroma, luminance ]);
+}
+//
+function lab (luminance, a, b)
+{
+    return colors.labToRgb ([ luminance, a, b ]);
+}
+//
+function xyz (x, y, z)
+{
+    return colors.xyzToRgb ([ x, y, z ]);
+}
+//
+function ycbcr (y, cb, cr)
+{
+    return colors.ycbcrToRgb ([ y, cb, cr ]);
+}
+//
+function cubehelix (hue, saturation, lightness)
+{
+    return colors.cubehelixHslToRgb ([ hue, saturation, lightness ]);
+}
+//
+function grayscale_t (gray_t)
+{
+    return [ gray_t * 255, gray_t * 255, gray_t * 255 ];
+}
+//
+function rgb_t (red_t, green_t, blue_t)
+{
+    return rgb (red_t * 255, green_t * 255, blue_t * 255);
+}
+//
+function hsb_t (hue_t, saturation_t, brightness_t)
+{
+    return colors.hsvToRgb ([ hue_t, saturation_t, brightness_t ], true);
+}
+//
+function hsv_t (hue_t, saturation_t, value_t)
+{
+    return colors.hsvToRgb ([ hue_t, saturation_t, value_t ], true);
+}
+//
+function hwb_t (hue_t, whiteness_t, blackness_t)
+{
+    return colors.hwbToRgb ([ hue_t, whiteness_t, blackness_t ], true);
+}
+//
+function hsl_t (hue_t, saturation_t, lightness_t)
+{
+    return colors.hslToRgb ([ hue_t, saturation_t, lightness_t ], true);
+}
+//
+function hcl_t (hue_t, chroma_t, luminance_t)
+{
+    return colors.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
+}
+//
+function lch_t (luminance_t, chroma_t, hue_t)
+{
+    return colors.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
+}
+//
+function lab_t (luminance_t, a_t, b_t)
+{
+    return colors.labToRgb ([ luminance_t, a_t, b_t ], true);
+}
+//
+function xyz_t (x_t, y_t, z_t)
+{
+    return colors.xyzToRgb ([ x_t, y_t, z_t ], true);
+}
+//
+function ycbcr_t (y_t, cb_t, cr_t)
+{
+    return colors.ycbcrToRgb ([ y_t, cb_t, cr_t ], true);
+}
+//
+function cubehelix_t (hue_t, saturation_t, lightness_t)
+{
+    return colors.cubehelixHslToRgb ([ hue_t, saturation_t, lightness_t ], true);
+}
+//
+function interpolate_colors (stops, location, color_model, smoothness = 0)
 {
     let rgb;
+    let components;
+    let points = [ [ ], [ ], [ ] ];
+    let rgbTo;
+    let toRgb;
+    let colorModelBase;
+    let colorModelOption;
     let stopsCount = stops.length;
     if (stopsCount > 1)
     {
-        if (color_model)
+        if (typeof color_model === 'string')
         {
-            color_model = color_model.toLowerCase ();
+            let colorModel = color_model.toLowerCase ().split (/[^\w]+/u);
+            colorModelBase = colorModel[0];
+            colorModelOption = colorModel[1];
         }
         else
         {
             throw new Error ("interpolate_colors: missing interpolation color model");
         }
-        if (color_model === "rgb")
+        if ([ "rgb", "lab", "xyz", "ycbcr" ].includes (colorModelBase))
         {
-            let redPoints = [ ];
-            let greenPoints = [ ];
-            let bluePoints = [ ];
-            for (let stopIndex = 0; stopIndex < stopsCount; stopIndex++)
+            if (colorModelOption)
             {
-                let stop = stops[stopIndex];
+                throw new Error ("interpolate_colors: invalid color model option: " + colorModelOption);
+            }
+            switch (colorModelBase)
+            {
+                case "rgb":
+                    rgbTo = null;
+                    toRgb = null;
+                    break;
+                case "lab":
+                    rgbTo = colors.rgbToLab;
+                    toRgb = colors.labToRgb;
+                    break;
+                case "xyz":
+                    rgbTo = colors.rgbToXyz;
+                    toRgb = colors.xyzToRgb;
+                    break;
+                case "ycbcr":
+                    rgbTo = colors.rgbToYcbcr;
+                    toRgb = colors.ycbcrToRgb;
+                    break;
+            }
+            for (let stop of stops)
+            {
                 let position = stop[0];
                 rgb = colors.colorToRgb (stop[1]);
-                redPoints.push ([ position, rgb[0] ]);
-                greenPoints.push ([ position, rgb[1] ]);
-                bluePoints.push ([ position, rgb[2] ]);
-            }
-            if ((typeof option === 'undefined') || (typeof option === 'number'))    // Smoothness: 0 to 100 (0 by default)
-            {
-                rgb =
-                [
-                    interpolate (redPoints, location, option),
-                    interpolate (greenPoints, location, option),
-                    interpolate (bluePoints, location, option)
-                ];
-            }
-            else
-            {
-                throw new Error ("interpolate_colors: invalid option: " + option);
+                components = rgbTo ? rgbTo (rgb) : rgb;
+                points[0].push ([ position, components[0] ]);
+                points[1].push ([ position, components[1] ]);
+                points[2].push ([ position, components[2] ]);
             }
         }
-        else
+        else if ([ "hsv", "hsb", "hwb", "hsl", "hcl", "lch", "cubehelix" ].includes (colorModelBase))
         {
-            let rgbTo;
-            let toRgb;
-            switch (color_model)
+            switch (colorModelBase)
             {
                 case "hsv":
                 case "hsb":
@@ -580,10 +722,13 @@ function interpolate_colors (stops, location, color_model, option)
                     rgbTo = colors.rgbToHcl;
                     toRgb = colors.hclToRgb;
                     break;
-                default:
-                    throw new Error ("interpolate_colors: invalid interpolation color model: " + color_model);
+                case "cubehelix":
+                    rgbTo = colors.rgbToCubehelixHsl;
+                    toRgb = colors.cubehelixHslToRgb;
                     break;
             }
+            let hueShifts = [ ];
+            let lastEndColor;
             for (let startIndex = 0; startIndex < (stopsCount - 1); startIndex++)
             {
                 let startStop = stops[startIndex];
@@ -597,103 +742,132 @@ function interpolate_colors (stops, location, color_model, option)
                 }
                 else
                 {
-                    if ((location <= endLocation) || (endIndex === (stopsCount - 1)))
+                    let hueShift = 0;   // Default
+                    let startColor = (startIndex === 0) ? rgbTo (colors.colorToRgb (startStop[1])) : lastEndColor;
+                    let endColor = rgbTo (colors.colorToRgb (endStop[1]));
+                    if (typeof colorModelOption !== 'undefined')    // Hue mode
                     {
-                        let startColor = rgbTo (colors.colorToRgb (startStop[1]), false, true);
-                        let endColor = rgbTo (colors.colorToRgb (endStop[1]), false, true);
-                        if (typeof option !== 'undefined')  // Hue mode
+                        let deltaHue;
+                        // Interpolation around the hue wheel
+                        switch (colorModelOption)
                         {
-                            if (typeof option === 'string')
-                            {
-                                let delta;
-                                // Interpolation around the hue wheel
-                                switch (option.toLowerCase ())
+                            case "inc":     // Increasing
+                            case "asc":     // Ascending
+                                if (endColor[0] < startColor[0])
                                 {
-                                    case "desc":    // Descending
-                                    case "dec":     // Decreasing
-                                        if (endColor[0] > startColor[0])
-                                        {
-                                            startColor[0] += 1;
-                                        }
-                                        break;
-                                    case "asc":     // Ascending
-                                    case "inc":     // Increasing
-                                        if (startColor[0] > endColor[0])
-                                        {
-                                            endColor[0] += 1;
-                                        }
-                                        break;
-                                    case "far":     // Furthest route
-                                    case "long":    // Longest path
-                                        delta = Math.abs (endColor[0] - startColor[0]);
-                                        if (delta < 0.5)
-                                        {
-                                            if (endColor[0] > startColor[0])
-                                            {
-                                                startColor[0] += 1;
-                                            }
-                                            else if (startColor[0] > endColor[0])
-                                            {
-                                                endColor[0] += 1;
-                                            }
-                                        }
-                                        else if (delta === 0.5)
-                                        {
-                                            // Same as "desc" or "dec"
-                                            if (endColor[0] > startColor[0])
-                                            {
-                                                startColor[0] += 1;
-                                            }
-                                        }
-                                        break;
-                                    case "near":    // Nearest route
-                                    case "short":   // Shortest path
-                                        delta = Math.abs (endColor[0] - startColor[0]);
-                                        if (delta > 0.5)
-                                        {
-                                            if (endColor[0] > startColor[0])
-                                            {
-                                                startColor[0] += 1;
-                                            }
-                                            else if (startColor[0] > endColor[0])
-                                            {
-                                                endColor[0] += 1;
-                                            }
-                                        }
-                                        else if (delta === 0.5)
-                                        {
-                                            // Same as "asc" or "inc"
-                                            if (startColor[0] > endColor[0])
-                                            {
-                                                endColor[0] += 1;
-                                            }
-                                        }
-                                        break;
-                                    case "none":    // Do nothing
-                                        break;
-                                    default:
-                                        throw new Error ("interpolate_colors: invalid option: " + option);
-                                        break;
+                                    hueShift = +1;
                                 }
-                            }
-                            else
-                            {
-                                throw new Error ("interpolate_colors: invalid option: " + option);
-                            }
+                                break;
+                            case "dec":     // Decreasing
+                            case "desc":    // Descending
+                                if (endColor[0] > startColor[0])
+                                {
+                                    hueShift = -1;
+                                }
+                                break;
+                            case "near":    // Nearest route
+                            case "short":   // Shortest path
+                                deltaHue = Math.abs (endColor[0] - startColor[0]);
+                                if (deltaHue > 180)
+                                {
+                                    if (endColor[0] < startColor[0])
+                                    {
+                                        hueShift = +1;
+                                    }
+                                    else if (endColor[0] > startColor[0])
+                                    {
+                                        hueShift = -1;
+                                    }
+                                }
+                                else if (deltaHue === 180)
+                                {
+                                    // Same as "asc" or "inc"
+                                    if (endColor[0] < startColor[0])
+                                    {
+                                        hueShift = +1;
+                                    }
+                                }
+                                break;
+                            case "far":     // Furthest route
+                            case "long":    // Longest path
+                                deltaHue = Math.abs (endColor[0] - startColor[0]);
+                                if (deltaHue < 180)
+                                {
+                                    if (endColor[0] > startColor[0])
+                                    {
+                                        hueShift = -1;
+                                    }
+                                    else if (endColor[0] < startColor[0])
+                                    {
+                                        hueShift = +1;
+                                    }
+                                }
+                                else if (deltaHue === 180)
+                                {
+                                    // Same as "desc" or "dec"
+                                    if (endColor[0] > startColor[0])
+                                    {
+                                        hueShift = -1;
+                                    }
+                                }
+                                break;
+                            default:
+                                throw new Error ("interpolate_colors: invalid color model option: " + colorModelOption);
+                                break;
                         }
-                        let t = (location - startLocation) / (endLocation - startLocation);
-                        let color =
-                        [
-                            lerp (startColor[0], endColor[0], t),
-                            lerp (startColor[1], endColor[1], t),
-                            lerp (startColor[2], endColor[2], t)
-                        ];
-                        rgb = toRgb (color, true);
-                        break;
+                    }
+                    hueShifts.push (hueShift);
+                    if (startIndex === 0)
+                    {
+                        points[0].push ([ startLocation, startColor[0] ]);
+                        points[1].push ([ startLocation, startColor[1] ]);
+                        points[2].push ([ startLocation, startColor[2] ]);
+                    }
+                    points[0].push ([ endLocation, endColor[0] ]);
+                    points[1].push ([ endLocation, endColor[1] ]);
+                    points[2].push ([ endLocation, endColor[2] ]);
+                    lastEndColor = endColor;
+                }
+            }
+            for (let hueShiftIndex = 0; hueShiftIndex < hueShifts.length; hueShiftIndex++)
+            {
+                let hueShift = hueShifts[hueShiftIndex];
+                if (hueShift > 0)
+                {
+                    for (let index = hueShiftIndex + 1; index < points[0].length; index++)
+                    {
+                        points[0][index][1] += 360;
+                    }
+                }
+                else if (hueShift < 0)
+                {
+                    for (let index = hueShiftIndex + 1; index < points[0].length; index++)
+                    {
+                        points[0][index][1] -= 360;
                     }
                 }
             }
         }
+        else
+        {
+            throw new Error ("interpolate_colors: invalid interpolation color model: " + colorModelBase);
+        }
+        //
+        if (typeof smoothness === 'number')
+        {
+            smoothness = [ smoothness, smoothness, smoothness ];
+        }
+        if (colorModelBase === "lch")
+        {
+            smoothness.reverse ();
+        }
+        components =
+        [
+            interpolate (points[0], location, smoothness[0]),
+            interpolate (points[1], location, smoothness[1]),
+            interpolate (points[2], location, smoothness[2])
+        ];
+        rgb = toRgb ? toRgb (components) : components;
     }
     else
     {
@@ -702,7 +876,7 @@ function interpolate_colors (stops, location, color_model, option)
     return rgb;
 }
 //
-function distribute_colors (colors, bounds, location, color_model, option)
+function distribute_colors (colors, bounds, location, color_model, smoothness)
 {
     let rgb;
     let count = colors.length;
@@ -715,12 +889,39 @@ function distribute_colors (colors, bounds, location, color_model, option)
         {
             stops.push ([ min + ((max - min) * stopIndex / (count - 1)), colors[stopIndex] ]);
         }
-        rgb = interpolate_colors (stops, location, color_model, option);
+        rgb = interpolate_colors (stops, location, color_model, smoothness);
     }
     else
     {
         throw new Error ("distribute_colors: invalid number of colors: " + count);
     }
+    return rgb;
+}
+//
+// http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubetry.html
+// https://astron-soc.in/bulletin/11June/289392011.pdf
+//
+function cubehelix_color (t, start = 0.5, rotations = -1.5, saturation = 1, gamma = 1, lightness = [ 0, 1 ])
+{
+    if (typeof lightness === 'number')
+    {
+        lightness = [ lightness, lightness ];
+    }
+    const coeffs = 
+    [
+        [ -0.14861, +1.78277 ],
+        [ -0.29227, -0.90649 ],
+        [ +1.97294, +0.00000 ]
+    ];
+    let angle = 2 * Math.PI * ((start / 3) + (rotations * t));
+    let l = Math.pow (lerp (limit (lightness[0], 0, 1), limit (lightness[1], 0, 1), t), gamma);
+    let amplitude = saturation * l * (1 - l) / 2;
+    let rgb =
+    [
+        (l + (amplitude * ((coeffs[0][0] * Math.cos (angle)) + (coeffs[0][1] * Math.sin (angle))))) * 255,
+        (l + (amplitude * ((coeffs[1][0] * Math.cos (angle)) + (coeffs[1][1] * Math.sin (angle))))) * 255,
+        (l + (amplitude * ((coeffs[2][0] * Math.cos (angle)) + (coeffs[2][1] * Math.sin (angle))))) * 255
+    ];
     return rgb;
 }
 //
@@ -801,116 +1002,6 @@ function wavelength_color (w)
     return [ red, green, blue ];
 }
 //
-function grayscale (gray)
-{
-    return [ gray, gray, gray ];
-}
-//
-function rgb (red, green, blue)
-{
-    return [ red, green, blue ];
-}
-//
-function hsb (hue, saturation, brightness)
-{
-    return colors.hsvToRgb ([ hue, saturation, brightness ]);
-}
-//
-function hsv (hue, saturation, value)
-{
-    return colors.hsvToRgb ([ hue, saturation, value ]);
-}
-//
-function hwb (hue, white, black)
-{
-    return colors.hwbToRgb ([ hue, white, black ]);
-}
-//
-function hsl (hue, saturation, lightness)
-{
-    return colors.hslToRgb ([ hue, saturation, lightness ]);
-}
-//
-function hcl (hue, chroma, luminance)
-{
-    return colors.hclToRgb ([ hue, chroma, luminance ]);
-}
-//
-function lch (luminance, chroma, hue)
-{
-    return colors.hclToRgb ([ hue, chroma, luminance ]);
-}
-//
-function lab (luminance, a, b)
-{
-    return colors.labToRgb ([ luminance, a, b ]);
-}
-//
-function xyz (x, y, z)
-{
-    return colors.xyzToRgb ([ x, y, z ]);
-}
-//
-function ycbcr (y, cb, cr)
-{
-    return colors.ycbcrToRgb ([ y, cb, cr ]);
-}
-//
-function grayscale_t (gray_t)
-{
-    return [ gray_t * 255, gray_t * 255, gray_t * 255 ];
-}
-//
-function rgb_t (red_t, green_t, blue_t)
-{
-    return rgb (red_t * 255, green_t * 255, blue_t * 255);
-}
-//
-function hsb_t (hue_t, saturation_t, brightness_t)
-{
-    return colors.hsvToRgb ([ hue_t, saturation_t, brightness_t ], true);
-}
-//
-function hsv_t (hue_t, saturation_t, value_t)
-{
-    return colors.hsvToRgb ([ hue_t, saturation_t, value_t ], true);
-}
-//
-function hwb_t (hue_t, white_t, black_t)
-{
-    return colors.hwbToRgb ([ hue_t, white_t, black_t ], true);
-}
-//
-function hsl_t (hue_t, saturation_t, lightness_t)
-{
-    return colors.hslToRgb ([ hue_t, saturation_t, lightness_t ], true);
-}
-//
-function hcl_t (hue_t, chroma_t, luminance_t)
-{
-    return colors.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
-}
-//
-function lch_t (luminance_t, chroma_t, hue_t)
-{
-    return colors.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
-}
-//
-function lab_t (luminance_t, a_t, b_t)
-{
-    return colors.labToRgb ([ luminance_t, a_t, b_t ], true);
-}
-//
-function xyz_t (x_t, y_t, z_t)
-{
-    return colors.xyzToRgb ([ x_t, y_t, z_t ], true);
-}
-//
-function ycbcr_t (y_t, cb_t, cr_t)
-{
-    return colors.ycbcrToRgb ([ y_t, cb_t, cr_t ], true);
-}
-//
 function rgb_color_t (rgb_t)
 {
     return rgb_t.map (component => component * 255);
@@ -923,248 +1014,229 @@ function rgb_colors_t (colors_t)
 //
 const variables =
 [
-    "x",
-    "t"
+    'x',
+    't'
 ];
 //
 const constants =
 [
-    "E",
-    "LN2",
-    "LN10",
-    "LOG2E",
-    "LOG10E",
-    "PI",
-    "SQRT1_2",
-    "SQRT2",
+    'E',
+    'LN2',
+    'LN10',
+    'LOG2E',
+    'LOG10E',
+    'PI',
+    'SQRT1_2',
+    'SQRT2',
 ];
 //
 const functions =
 [
-    "abs",
-    "acos",
-    "asin",
-    "atan",
-    "atan2",
-    "ceil",
-    "cos",
-    "exp",
-    "floor",
-    "log",
-    "max",
-    "min",
-    "pow",
-    "random",
-    "round",
-    "sin",
-    "sqrt",
-    "tan",
+    'abs',
+    'acos',
+    'asin',
+    'atan',
+    'atan2',
+    'ceil',
+    'cos',
+    'exp',
+    'floor',
+    'log',
+    'max',
+    'min',
+    'pow',
+    'random',
+    'round',
+    'sin',
+    'sqrt',
+    'tan',
     //
-    "bias",
-    "coserp",
-    "cubic",
-    "distribute",
-    "gain",
-    "interpolate",
-    "lerp",
-    "linear",
-    "pchip",
-    "polynomial",
-    "quadratic",
-    "smootherstep",
-    "smoothstep",
-    "spline",
+    // 'modulo',
     //
-    "interpolate_colors",
-    "distribute_colors",
-    "wavelength_color",
+    'bias',
+    'coserp',
+    'cubic',
+    'distribute',
+    'gain',
+    'interpolate',
+    'lerp',
+    'linear',
+    'pchip',
+    'polynomial',
+    'quadratic',
+    'smootherstep',
+    'smoothstep',
+    'spline',
     //
-    "grayscale",
-    "rgb",
-    "hsb",
-    "hsv",
-    "hwb",
-    "hsl",
-    "hcl",
-    "lch",
-    "lab",
-    "xyz",
-    "ycbcr",
+    'grayscale',
+    'rgb',
+    'hsb',
+    'hsv',
+    'hwb',
+    'hsl',
+    'hcl',
+    'lch',
+    'lab',
+    'xyz',
+    'ycbcr',
+    'cubehelix',
     //
-    "grayscale_t",
-    "rgb_t",
-    "hsb_t",
-    "hsv_t",
-    "hwb_t",
-    "hsl_t",
-    "hcl_t",
-    "lch_t",
-    "lab_t",
-    "xyz_t",
-    "ycbcr_t",
+    'grayscale_t',
+    'rgb_t',
+    'hsb_t',
+    'hsv_t',
+    'hwb_t',
+    'hsl_t',
+    'hcl_t',
+    'lch_t',
+    'lab_t',
+    'xyz_t',
+    'ycbcr_t',
+    'cubehelix_t',
     //
-    "rgb_color_t",
-    "rgb_colors_t"
+    'interpolate_colors',
+    'distribute_colors',
+    'cubehelix_color',
+    'wavelength_color',
+    //
+    'rgb_color_t',
+    'rgb_colors_t'
 ];
-//
-let forbiddenNodeTypes =
-[
-    'AssignmentExpression',
-    'MemberExpression',
-    'ObjectExpression',
-    'SequenceExpression',
-    'LineComment',
-    'BlockComment'
-];
-//
-function traverseNodes (node, meta)
-{
-    if (forbiddenNodeTypes.includes (node.type))
-    {
-        throw new Error (`[Line\xA0${meta.start.line},\xA0Col.\xA0${meta.start.column}] to [Line\xA0${meta.end.line},\xA0Col.\xA0${meta.end.column}]: Forbidden expression: ${node.type}`);
-    }
-}
 //
 module.exports = function (formula)
 {
-    let evaluateFunction = null;
-    //
-    this.validate = function ()
+    let tokens = tokenize (formula, { comment: true });
+    for (let token of tokens)
     {
-        let result = "";
-        try
+        if
+        (
+            (token.type === 'Identifier')
+            &&
+            (!([...variables, ...constants, ...functions].includes (token.value)))
+        )
         {
-            let tokens = tokenize (formula);
-            for (let token of tokens)
-            {
-                if
-                (
-                    (token.type === "Identifier")
-                    &&
-                    (!([...variables, ...constants, ...functions].includes (token.value)))
-                )
-                {
-                    throw new Error (`Unknown identifier: ${token.value}`);
-                }
-                else if (token.type === "Keyword")
-                {
-                    throw new Error (`Unexpected keyword: ${token.value}`);
-                }
-            }
+            throw new Error (`Unknown identifier: ${token.value}`);
+        }
+        else if (token.type === 'Keyword')
+        {
+            throw new Error (`Unexpected keyword: ${token.value}`);
+        }
+        else if (token.type === 'Null')
+        {
+            throw new Error (`Unexpected ${token.value}.`);
+        }
+    }
+    //
+    function traverseNodes (node, meta)
+    {
+        let forbiddenNodeTypes =
+        [
+            'AssignmentExpression',
+            'BlockComment',
+            'LineComment',
+            'MemberExpression',
+            'ObjectExpression',
+            'SequenceExpression'
+        ];
+        if (forbiddenNodeTypes.includes (node.type))
+        {
+            throw new Error (`[Line\xA0${meta.start.line},\xA0Col.\xA0${meta.start.column}] to [Line\xA0${meta.end.line},\xA0Col.\xA0${meta.end.column}]: Forbidden expression: ${node.type}`);
+        }
+    }
+    parseScript (formula, { comment: true }, traverseNodes);
+    //
+    let evaluateFunction = new Function (variables, constants, functions, `'use strict';\nreturn (${formula});`);
+    //
+    this.evaluate = function (x, t)
+    {
+        let result = evaluateFunction
+        (
+            x,
+            t,
             //
-            parseScript (formula, { comment: true }, traverseNodes);
-        }
-        catch (error)
-        {
-            result = error.toString ();
-        }
-        if (!result)
-        {
-            try
-            {
-                evaluateFunction = new Function (variables, constants, functions, `'use strict';\nreturn (${formula});`);
-            }
-            catch (error)
-            {
-                result = error.toString ();
-            }
-        }
-        return result;
-    };
-    //
-    this.evaluate = function (x)
-    {
-        let result;
-        try
-        {
-            result = evaluateFunction
-            (
-                x,
-                x / 255,
-                //
-                // Math properties
-                Math.E,       // Euler's constant and the base of natural logarithms, approximately 2.718.
-                Math.LN2,     // Natural logarithm of 2, approximately 0.693.
-                Math.LN10,    // Natural logarithm of 10, approximately 2.303.
-                Math.LOG2E,   // Base 2 logarithm of E, approximately 1.443.
-                Math.LOG10E,  // Base 10 logarithm of E, approximately 0.434.
-                Math.PI,      // Ratio of the circumference of a circle to its diameter, approximately 3.14159.
-                Math.SQRT1_2, // Square root of 1/2; equivalently, 1 over the square root of 2, approximately 0.707.
-                Math.SQRT2,   // Square root of 2, approximately 1.414.
-                //
-                // Math methods
-                Math.abs,     // Returns the absolute value of a number.
-                Math.acos,    // Returns the arccosine of a number.
-                Math.asin,    // Returns the arcsine of a number.
-                Math.atan,    // Returns the arctangent of a number.
-                Math.atan2,   // Returns the arctangent of the quotient of its arguments.
-                Math.ceil,    // Returns the smallest integer greater than or equal to a number.
-                Math.cos,     // Returns the cosine of a number.
-                Math.exp,     // Returns E^x, where x is the argument, and E is Euler's constant (2.718...), the base of the natural logarithm.
-                Math.floor,   // Returns the largest integer less than or equal to a number.
-                Math.log,     // Returns the natural logarithm of a number.
-                Math.max,     // Returns the largest value from the numbers provided as parameters.
-                Math.min,     // Returns the smallest value from the numbers provided as parameters.
-                Math.pow,     // Returns base to the exponent power, that is, base^exponent.
-                Math.random,  // Returns a pseudo-random number between 0 and 1.
-                Math.round,   // Returns the value of a number rounded to the nearest integer.
-                Math.sin,     // Returns the sine of a number.
-                Math.sqrt,    // Returns the positive square root of a number.
-                Math.tan,     // Returns the tangent of a number.
-                //
-                // Built-in functions
-                //
-                bias,
-                coserp,
-                cubic,
-                distribute,
-                gain,
-                interpolate,
-                lerp,
-                linear,
-                pchip,
-                polynomial,
-                quadratic,
-                smootherstep,
-                smoothstep,
-                spline,
-                //
-                interpolate_colors,
-                distribute_colors,
-                wavelength_color,
-                //
-                grayscale,
-                rgb,
-                hsb,
-                hsv,
-                hwb,
-                hsl,
-                hcl,
-                lch,
-                lab,
-                xyz,
-                ycbcr,
-                //
-                grayscale_t,
-                rgb_t,
-                hsb_t,
-                hsv_t,
-                hwb_t,
-                hsl_t,
-                hcl_t,
-                lch_t,
-                lab_t,
-                xyz_t,
-                ycbcr_t,
-                //
-                rgb_color_t,
-                rgb_colors_t
-            );
-        }
-        catch (error)
-        {
-            result = error.toString ();
-        }
+            // Math properties
+            Math.E,       // Euler's constant and the base of natural logarithms, approximately 2.718.
+            Math.LN2,     // Natural logarithm of 2, approximately 0.693.
+            Math.LN10,    // Natural logarithm of 10, approximately 2.303.
+            Math.LOG2E,   // Base 2 logarithm of E, approximately 1.443.
+            Math.LOG10E,  // Base 10 logarithm of E, approximately 0.434.
+            Math.PI,      // Ratio of the circumference of a circle to its diameter, approximately 3.14159.
+            Math.SQRT1_2, // Square root of 1/2; equivalently, 1 over the square root of 2, approximately 0.707.
+            Math.SQRT2,   // Square root of 2, approximately 1.414.
+            //
+            // Math methods
+            Math.abs,     // Returns the absolute value of a number.
+            Math.acos,    // Returns the arccosine of a number.
+            Math.asin,    // Returns the arcsine of a number.
+            Math.atan,    // Returns the arctangent of a number.
+            Math.atan2,   // Returns the arctangent of the quotient of its arguments.
+            Math.ceil,    // Returns the smallest integer greater than or equal to a number.
+            Math.cos,     // Returns the cosine of a number.
+            Math.exp,     // Returns E^x, where x is the argument, and E is Euler's constant (2.718...), the base of the natural logarithm.
+            Math.floor,   // Returns the largest integer less than or equal to a number.
+            Math.log,     // Returns the natural logarithm of a number.
+            Math.max,     // Returns the largest value from the numbers provided as parameters.
+            Math.min,     // Returns the smallest value from the numbers provided as parameters.
+            Math.pow,     // Returns base to the exponent power, that is, base^exponent.
+            Math.random,  // Returns a pseudo-random number between 0 and 1.
+            Math.round,   // Returns the value of a number rounded to the nearest integer.
+            Math.sin,     // Returns the sine of a number.
+            Math.sqrt,    // Returns the positive square root of a number.
+            Math.tan,     // Returns the tangent of a number.
+            //
+            // Built-in functions
+            //
+            // modulo,
+            //
+            bias,
+            coserp,
+            cubic,
+            distribute,
+            gain,
+            interpolate,
+            lerp,
+            linear,
+            pchip,
+            polynomial,
+            quadratic,
+            smootherstep,
+            smoothstep,
+            spline,
+            //
+            grayscale,
+            rgb,
+            hsb,
+            hsv,
+            hwb,
+            hsl,
+            hcl,
+            lch,
+            lab,
+            xyz,
+            ycbcr,
+            cubehelix,
+            //
+            grayscale_t,
+            rgb_t,
+            hsb_t,
+            hsv_t,
+            hwb_t,
+            hsl_t,
+            hcl_t,
+            lch_t,
+            lab_t,
+            xyz_t,
+            ycbcr_t,
+            cubehelix_t,
+            //
+            interpolate_colors,
+            distribute_colors,
+            cubehelix_color,
+            wavelength_color,
+            //
+            rgb_color_t,
+            rgb_colors_t
+        );
         return result;
     };
 }

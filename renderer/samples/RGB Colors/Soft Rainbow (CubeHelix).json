@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Soft Rainbow (CubeHelix)",
+        "formula": "distribute_colors\n(\n    [\n        cubehelix (-100, 75, 35),\n        cubehelix (80, 150, 80),\n        cubehelix (260, 75, 35)\n    ],\n    [ 0, 1 ], t,\n    \"cubehelix-inc\", 0\n)"
+    }
+}

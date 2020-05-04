@@ -1,7 +1,0 @@
-{
-    "colorRamp":
-    {
-        "name": "Forty-Two (Smoothed)",
-        "formula": "distribute_colors\n(\n    [\n        [ 215, 25, 28 ],\n        [ 255, 255, 191 ],\n        [ 44, 123, 143 ]\n    ],\n    [ 31, 255 - 31 ], x,\n    \"rgb\", 100\n)"
-    }
-}

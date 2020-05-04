@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Turquoise",
+        "formula": "distribute_colors\n(\n    [\n        [ 0, 0, 0 ],\n        [ 0, 209, 232 ],\n        [ 0, 0, 0 ]\n    ],\n    [ 0, 255 ], x,\n    \"lab\", 100\n)"
+    }
+}

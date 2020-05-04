@@ -269,6 +269,10 @@ else
         submenu:
         [
             { label: "License...", click: showLicense },
+            { type: 'separator' },
+            { label: "Documentation", click: () => { shell.openItem (path.join (unpackedDirname, 'doc', 'index.html')); } },
+            { label: "Formula Format", click: () => { shell.openItem (path.join (unpackedDirname, 'doc', 'formula.html')); } },
+            { type: 'separator' },
             { label: settings.repository.label, click: () => { shell.openExternal (settings.repository.URL); } },
             { label: settings.releases.label, click: () => { shell.openExternal (settings.releases.URL); } }
         ]
@@ -279,8 +283,11 @@ else
         submenu:
         [
             { label: "About...", click: showAboutBox },
-            { type: 'separator' },
             { label: "License...", click: showLicense },
+            { type: 'separator' },
+            { label: "Documentation", click: () => { shell.openItem (path.join (unpackedDirname, 'doc', 'index.html')); } },
+            { label: "Formula Format", click: () => { shell.openItem (path.join (unpackedDirname, 'doc', 'formula.html')); } },
+            { type: 'separator' },
             { label: settings.repository.label, click: () => { shell.openExternal (settings.repository.URL); } },
             { label: settings.releases.label, click: () => { shell.openExternal (settings.releases.URL); } }
         ]

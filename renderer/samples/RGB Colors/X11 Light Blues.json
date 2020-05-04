@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "X11 Light Blues",
+        "formula": "distribute_colors\n(\n    [\n        \"x11/light_slate_blue\",\n        \"x11/light_sky_blue\",\n        \"x11/light_steel_blue_1\"\n    ],\n    [ 0, 255 ], x,\n    \"hcl\", [ 0, 0, 0 ]\n)"
+    }
+}

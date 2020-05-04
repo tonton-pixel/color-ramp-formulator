@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Radiancy (HSL)",
+        "formula": "distribute_colors\n(\n    [ \"#2A4858\", \"#FAFA6E\", \"#2A4858\" ],\n    [ 0, 1 ], t,\n    \"hsl-far\", [ 0, 100, 0 ]\n)"
+    }
+}
