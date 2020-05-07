@@ -1621,10 +1621,12 @@ function cubehelixHslToRgb (hslColor, hslFractional, rgbFractional)
         lightness /= 100;
     }
     let angle = 2 * Math.PI * (hue + (1 / 3));
+    let x = Math.cos (angle);
+    let y = Math.sin (angle);
     let amplitude = saturation * lightness * (1 - lightness);
-    let red = lightness + (amplitude * ((coeffs[0][0] * Math.cos (angle)) + (coeffs[0][1] * Math.sin (angle))));
-    let green = lightness + (amplitude * ((coeffs[1][0] * Math.cos (angle)) + (coeffs[1][1] * Math.sin (angle))));
-    let blue = lightness + (amplitude * ((coeffs[2][0] * Math.cos (angle)) + (coeffs[2][1] * Math.sin (angle))));
+    let red = lightness + (amplitude * ((coeffs[0][0] * x) + (coeffs[0][1] * y)));
+    let green = lightness + (amplitude * ((coeffs[1][0] * x) + (coeffs[1][1] * y)));
+    let blue = lightness + (amplitude * ((coeffs[2][0] * x) + (coeffs[2][1] * y)));
     if (!rgbFractional)
     {
         red *= 255;
@@ -1658,8 +1660,8 @@ function rgbToCubehelixHsl (rgbColor, rgbFractional, hslFractional)
     let x = (coeffs[1][1] * bl) - (coeffs[2][1] * gl);
     let y = (coeffs[2][0] * gl) - (coeffs[1][0] * bl);
     let k = (coeffs[1][0] * coeffs[2][1]) - (coeffs[1][1] * coeffs[2][0]);
-    let saturation = Math.sqrt (Math.pow (x, 2) + Math.pow (y, 2)) / (k * lightness * (1 - lightness)) || 0;
-    let hue = saturation ? ((Math.atan2 (y, x) + Math.PI ) / (2 * Math.PI)) - (1 / 3) : 0;
+    let saturation = Math.sqrt ((x * x) + (y * y)) / (k * lightness * (1 - lightness)) || 0;
+    let hue = saturation ? ((Math.atan2 (y, x) + Math.PI) / (2 * Math.PI)) - (1 / 3) : 0;
     if (hue < 0) hue += 1;
     if (!hslFractional)
     {

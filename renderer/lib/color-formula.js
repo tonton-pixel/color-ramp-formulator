@@ -915,13 +915,15 @@ function cubehelix_color (t, start = 0.5, rotations = -1.5, saturation = 1, gamm
         [  1.97294,  0.00000 ]
     ];
     let angle = 2 * Math.PI * ((start / 3) + (rotations * t));
+    let x = Math.cos (angle);
+    let y = Math.sin (angle);
     let lightnessGamma = Math.pow (lerp (limit (lightness[0], 0, 1), limit (lightness[1], 0, 1), t), gamma);
     let amplitude = saturation * lightnessGamma * (1 - lightnessGamma) / 2;
     let rgb =
     [
-        (lightnessGamma + (amplitude * ((coeffs[0][0] * Math.cos (angle)) + (coeffs[0][1] * Math.sin (angle))))) * 255,
-        (lightnessGamma + (amplitude * ((coeffs[1][0] * Math.cos (angle)) + (coeffs[1][1] * Math.sin (angle))))) * 255,
-        (lightnessGamma + (amplitude * ((coeffs[2][0] * Math.cos (angle)) + (coeffs[2][1] * Math.sin (angle))))) * 255
+        (lightnessGamma + (amplitude * ((coeffs[0][0] * x) + (coeffs[0][1] * y)))) * 255,
+        (lightnessGamma + (amplitude * ((coeffs[1][0] * x) + (coeffs[1][1] * y)))) * 255,
+        (lightnessGamma + (amplitude * ((coeffs[2][0] * x) + (coeffs[2][1] * y)))) * 255
     ];
     return rgb;
 }
