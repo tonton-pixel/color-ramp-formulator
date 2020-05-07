@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.6
+
+- Revamped calculations of saturation and hue in the function converting `RGB` to `CubeHelix HSL`, making use of all coefficients.
+- Updated component values for examples of `cubehelix ()` and `cubehelix_t ()` in the formula format help page.
+- Used 'fractional range' terminology instead of 'float range'.
+- Updated formula samples.
+- Added provisional reference links to the documentation help page.
+
 ## 1.0.0-beta.5
 
 - Moved calculation of `t` (`x / 255`) out of the `colorRamp.evaluate ()` function.
@@ -13,7 +21,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
     - Added hue option as string suffix to hue-based color models.
     - Allowed smoothness to be applied to all color models, and to each color component independently.
     - Lifted restrictions on smoothness range: [0, 100].
-- Used simpler, more consistent float range for `a` and `b` components of `Lab` color model.
+- Used simpler, more consistent fractional range for `a` and `b` components of `Lab` color model.
 - Updated formula samples accordingly.
 - Added drafts pages about documentation and formula format, accessible from the `Help` menu.
 - Improved display of monospaced fonts on Linux by adding "DejaVu Sans Mono" to the font stack.
@@ -23,7 +31,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## 1.0.0-beta.4
 
-- Added two new color helper functions: `rgb_color_t ()` and `rgb_colors_t ()` to convert RGB colors with components expressed in float range `[0, 1]` to standard `[0, 255]`.
+- Added two new color helper functions: `rgb_color_t ()` and `rgb_colors_t ()` to convert RGB colors with components expressed in fractional range `[0, 1]` to standard `[0, 255]`.
 - Improved evaluation of formulas.
 - Updated formula samples.
 - Updated `Electron` to version `8.2.2`.

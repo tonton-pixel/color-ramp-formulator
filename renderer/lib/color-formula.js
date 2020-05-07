@@ -54,7 +54,8 @@ function modulo (n, m)
 //
 function lerp (a, b, t)
 {
-    return a + ((b - a) * t);
+    // return a + ((b - a) * t);    // Imprecise method
+    return (a * (1 - t)) + (b * t); // Precise method
 }
 //
 function coserp (a, b, t)
@@ -909,18 +910,18 @@ function cubehelix_color (t, start = 0.5, rotations = -1.5, saturation = 1, gamm
     }
     const coeffs = 
     [
-        [ -0.14861, +1.78277 ],
+        [ -0.14861,  1.78277 ],
         [ -0.29227, -0.90649 ],
-        [ +1.97294, +0.00000 ]
+        [  1.97294,  0.00000 ]
     ];
     let angle = 2 * Math.PI * ((start / 3) + (rotations * t));
-    let l = Math.pow (lerp (limit (lightness[0], 0, 1), limit (lightness[1], 0, 1), t), gamma);
-    let amplitude = saturation * l * (1 - l) / 2;
+    let lightnessGamma = Math.pow (lerp (limit (lightness[0], 0, 1), limit (lightness[1], 0, 1), t), gamma);
+    let amplitude = saturation * lightnessGamma * (1 - lightnessGamma) / 2;
     let rgb =
     [
-        (l + (amplitude * ((coeffs[0][0] * Math.cos (angle)) + (coeffs[0][1] * Math.sin (angle))))) * 255,
-        (l + (amplitude * ((coeffs[1][0] * Math.cos (angle)) + (coeffs[1][1] * Math.sin (angle))))) * 255,
-        (l + (amplitude * ((coeffs[2][0] * Math.cos (angle)) + (coeffs[2][1] * Math.sin (angle))))) * 255
+        (lightnessGamma + (amplitude * ((coeffs[0][0] * Math.cos (angle)) + (coeffs[0][1] * Math.sin (angle))))) * 255,
+        (lightnessGamma + (amplitude * ((coeffs[1][0] * Math.cos (angle)) + (coeffs[1][1] * Math.sin (angle))))) * 255,
+        (lightnessGamma + (amplitude * ((coeffs[2][0] * Math.cos (angle)) + (coeffs[2][1] * Math.sin (angle))))) * 255
     ];
     return rgb;
 }

@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Default (CubeHelix)",
+        "formula": "cubehelix\n(\n    lerp (300, -240, t),\n    50,\n    100 * t\n)"
+    }
+}

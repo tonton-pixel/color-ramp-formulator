@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Rainbow Warm (CubeHelix)",
+        "formula": "cubehelix\n(\n    lerp (-100, 80, t),\n    lerp (75, 150, t),\n    lerp (35, 80, t)\n)"
+    }
+}

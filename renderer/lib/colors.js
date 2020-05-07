@@ -1010,20 +1010,20 @@ function limit (value, min, max)
     return Math.min (Math.max (min, value), max);
 }
 //
-function hslToRgb (hslColor, hslFloatRange, rgbFloatRange)
+function hslToRgb (hslColor, hslFractional, rgbFractional)
 {
     let hue = hslColor[0];
     let saturation = hslColor[1];
     let lightness = hslColor[2];
-    if (!hslFloatRange)
+    if (!hslFractional)
     {
         hue /= 360;
         saturation /= 100;
         lightness /= 100;
     }
     hue -= Math.floor (hue);
-    saturation = limit (saturation, 0.0, 1.0);
-    lightness = limit (lightness, 0.0, 1.0);
+    saturation = limit (saturation, 0, 1);
+    lightness = limit (lightness, 0, 1);
     let red;
     let green;
     let blue;
@@ -1048,7 +1048,7 @@ function hslToRgb (hslColor, hslFloatRange, rgbFloatRange)
         green = hue2rgb (p, q, hue);
         blue = hue2rgb (p, q, hue - 1/3);
     }
-    if (!rgbFloatRange)
+    if (!rgbFractional)
     {
         red *= 255;
         green *= 255;
@@ -1057,20 +1057,20 @@ function hslToRgb (hslColor, hslFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 }
 //
-function rgbToHsl (rgbColor, rgbFloatRange, hslFloatRange)
+function rgbToHsl (rgbColor, rgbFractional, hslFractional)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (!rgbFloatRange)
+    if (!rgbFractional)
     {
         red /= 255;
         green /= 255;
         blue /= 255;
     }
-    red = limit (red, 0.0, 1.0);
-    green = limit (green, 0.0, 1.0);
-    blue = limit (blue, 0.0, 1.0);
+    red = limit (red, 0, 1);
+    green = limit (green, 0, 1);
+    blue = limit (blue, 0, 1);
     let min = Math.min (red, green, blue);
     let max = Math.max (red, green, blue);
     let delta = max - min;
@@ -1101,7 +1101,7 @@ function rgbToHsl (rgbColor, rgbFloatRange, hslFloatRange)
             hue -= 1;
         }
     }
-    if (!hslFloatRange)
+    if (!hslFractional)
     {
         hue *= 360;
         saturation *= 100;
@@ -1110,20 +1110,20 @@ function rgbToHsl (rgbColor, rgbFloatRange, hslFloatRange)
     return [ hue, saturation, lightness ];
 }
 //
-function hsvToRgb (hsvColor, hsvFloatRange, rgbFloatRange)
+function hsvToRgb (hsvColor, hsvFractional, rgbFractional)
 {
     let hue = hsvColor[0];
     let saturation = hsvColor[1];
     let value = hsvColor[2];
-    if (!hsvFloatRange)
+    if (!hsvFractional)
     {
         hue /= 360;
         saturation /= 100;
         value /= 100;
     }
     hue -= Math.floor (hue);
-    saturation = limit (saturation, 0.0, 1.0);
-    value = limit (value, 0.0, 1.0);
+    saturation = limit (saturation, 0, 1);
+    value = limit (value, 0, 1);
     let red;
     let green;
     let blue;
@@ -1165,7 +1165,7 @@ function hsvToRgb (hsvColor, hsvFloatRange, rgbFloatRange)
             blue = q;
             break;
     }
-    if (!rgbFloatRange)
+    if (!rgbFractional)
     {
         red *= 255;
         green *= 255;
@@ -1174,20 +1174,20 @@ function hsvToRgb (hsvColor, hsvFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 };
 //
-function rgbToHsv (rgbColor, rgbFloatRange, hsvFloatRange)
+function rgbToHsv (rgbColor, rgbFractional, hsvFractional)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (!rgbFloatRange)
+    if (!rgbFractional)
     {
         red /= 255;
         green /= 255;
         blue /= 255;
     }
-    red = limit (red, 0.0, 1.0);
-    green = limit (green, 0.0, 1.0);
-    blue = limit (blue, 0.0, 1.0);
+    red = limit (red, 0, 1);
+    green = limit (green, 0, 1);
+    blue = limit (blue, 0, 1);
     let min = Math.min (red, green, blue);
     let max = Math.max (red, green, blue);
     let delta = max - min;
@@ -1218,7 +1218,7 @@ function rgbToHsv (rgbColor, rgbFloatRange, hsvFloatRange)
             hue -= 1;
         }
     }
-    if (!hsvFloatRange)
+    if (!hsvFractional)
     {
         hue *= 360;
         saturation *= 100;
@@ -1227,12 +1227,12 @@ function rgbToHsv (rgbColor, rgbFloatRange, hsvFloatRange)
     return [ hue, saturation, value ];
 }
 //
-function hwbToRgb (hwbColor, hwbFloatRange, rgbFloatRange)
+function hwbToRgb (hwbColor, hwbFractional, rgbFractional)
 {
     let hue = hwbColor[0];
     let whiteness = hwbColor[1];
     let blackness = hwbColor[2];
-    if (!hwbFloatRange)
+    if (!hwbFractional)
     {
         hue /= 360;
         whiteness /= 100;
@@ -1248,7 +1248,7 @@ function hwbToRgb (hwbColor, hwbFloatRange, rgbFloatRange)
     let red = (rgb[0] * (1 - whiteness - blackness)) + whiteness;
     let green = (rgb[1] * (1 - whiteness - blackness)) + whiteness;
     let blue = (rgb[2] * (1 - whiteness - blackness)) + whiteness;
-    if (!rgbFloatRange)
+    if (!rgbFractional)
     {
         red *= 255;
         green *= 255;
@@ -1257,12 +1257,12 @@ function hwbToRgb (hwbColor, hwbFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 }
 //
-function rgbToHwb (rgbColor, rgbFloatRange, hwbFloatRange)
+function rgbToHwb (rgbColor, rgbFractional, hwbFractional)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (!rgbFloatRange)
+    if (!rgbFractional)
     {
         red /= 255;
         green /= 255;
@@ -1271,7 +1271,7 @@ function rgbToHwb (rgbColor, rgbFloatRange, hwbFloatRange)
     let hue = rgbToHsl ([ red, green, blue ], true, true)[0];
     let whiteness = Math.min (red, green, blue);
     let blackness = 1 - Math.max (red, green, blue);
-    if (!hwbFloatRange)
+    if (!hwbFractional)
     {
         hue *= 360;
         whiteness *= 100;
@@ -1408,12 +1408,12 @@ function hclToLab_ (hclColor)
     return [ luminance, a, b ];
 }
 //
-function xyzToRgb (xyzColor, xyzFloatRange, rgbFloatRange)
+function xyzToRgb (xyzColor, xyzFractional, rgbFractional)
 {
     let x = xyzColor[0];
     let y = xyzColor[1];
     let z = xyzColor[2];
-    if (xyzFloatRange)
+    if (xyzFractional)
     {
         x *= 100;
         y *= 100;
@@ -1423,7 +1423,7 @@ function xyzToRgb (xyzColor, xyzFloatRange, rgbFloatRange)
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (rgbFloatRange)
+    if (rgbFractional)
     {
         red /= 255;
         green /= 255;
@@ -1432,12 +1432,12 @@ function xyzToRgb (xyzColor, xyzFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 }
 //
-function rgbToXyz (rgbColor, rgbFloatRange, xyzFloatRange)
+function rgbToXyz (rgbColor, rgbFractional, xyzFractional)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (rgbFloatRange)
+    if (rgbFractional)
     {
         red *= 255;
         green *= 255;
@@ -1447,7 +1447,7 @@ function rgbToXyz (rgbColor, rgbFloatRange, xyzFloatRange)
     let x = xyzColor[0];
     let y = xyzColor[1];
     let z = xyzColor[2];
-    if (xyzFloatRange)
+    if (xyzFractional)
     {
         x /= 100;
         y /= 100;
@@ -1456,12 +1456,12 @@ function rgbToXyz (rgbColor, rgbFloatRange, xyzFloatRange)
     return [ x, y, z ];
 }
 //
-function labToRgb (labColor, labFloatRange, rgbFloatRange)
+function labToRgb (labColor, labFractional, rgbFractional)
 {
     let luminance = labColor[0];
     let a = labColor[1];
     let b = labColor[2];
-    if (labFloatRange)
+    if (labFractional)
     {
         luminance *= 100;
         a *= 128;
@@ -1471,7 +1471,7 @@ function labToRgb (labColor, labFloatRange, rgbFloatRange)
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (rgbFloatRange)
+    if (rgbFractional)
     {
         red /= 255;
         green /= 255;
@@ -1480,12 +1480,12 @@ function labToRgb (labColor, labFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 }
 //
-function rgbToLab (rgbColor, rgbFloatRange, labFloatRange)
+function rgbToLab (rgbColor, rgbFractional, labFractional)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (rgbFloatRange)
+    if (rgbFractional)
     {
         red *= 255;
         green *= 255;
@@ -1495,7 +1495,7 @@ function rgbToLab (rgbColor, rgbFloatRange, labFloatRange)
     let luminance = labColor[0];
     let a = labColor[1];
     let b = labColor[2];
-    if (labFloatRange)
+    if (labFractional)
     {
         luminance /= 100;
         a /= 128;
@@ -1504,12 +1504,12 @@ function rgbToLab (rgbColor, rgbFloatRange, labFloatRange)
     return [ luminance, a, b ];
 }
 //
-function hclToRgb (hclColor, hclFloatRange, rgbFloatRange)
+function hclToRgb (hclColor, hclFractional, rgbFractional)
 {
     let hue = hclColor[0];
     let chroma = hclColor[1];
     let luminance = hclColor[2];
-    if (hclFloatRange)
+    if (hclFractional)
     {
         hue *= 360;
         chroma *= 128;
@@ -1519,7 +1519,7 @@ function hclToRgb (hclColor, hclFloatRange, rgbFloatRange)
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (rgbFloatRange)
+    if (rgbFractional)
     {
         red /= 255;
         green /= 255;
@@ -1528,12 +1528,12 @@ function hclToRgb (hclColor, hclFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 }
 //
-function rgbToHcl (rgbColor, rgbFloatRange, hclFloatRange)
+function rgbToHcl (rgbColor, rgbFractional, hclFractional)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (rgbFloatRange)
+    if (rgbFractional)
     {
         red *= 255;
         green *= 255;
@@ -1543,7 +1543,7 @@ function rgbToHcl (rgbColor, rgbFloatRange, hclFloatRange)
     let hue = hclColor[0];
     let chroma = hclColor[1];
     let luminance = hclColor[2];
-    if (hclFloatRange)
+    if (hclFractional)
     {
         hue /= 360;
         chroma /= 128;
@@ -1556,12 +1556,12 @@ function rgbToHcl (rgbColor, rgbFloatRange, hclFloatRange)
 // Intuitive Colorization of Temperature in Thermal Cameras <http://www.diva-portal.org/smash/get/diva2:797457/FULLTEXT01.pdf>
 // Color Conversion <http://www.equasys.de/colorconversion.html>
 //
-function ycbcrToRgb (ycbcrColor, ycbcrFloatRange, rgbFloatRange)
+function ycbcrToRgb (ycbcrColor, ycbcrFractional, rgbFractional)
 {
     let y = ycbcrColor[0];
     let cb = ycbcrColor[1];
     let cr = ycbcrColor[2];
-    if (ycbcrFloatRange)
+    if (ycbcrFractional)
     {
         y *= 255;
         cb *= 255;
@@ -1570,7 +1570,7 @@ function ycbcrToRgb (ycbcrColor, ycbcrFloatRange, rgbFloatRange)
     let red = y + (1.402 * (cr - 128));
     let green = y - (0.34414 * (cb - 128)) - (0.71414 * (cr - 128));
     let blue = y + (1.772 * (cb - 128));
-    if (rgbFloatRange)
+    if (rgbFractional)
     {
         red /= 255;
         green /= 255;
@@ -1579,12 +1579,12 @@ function ycbcrToRgb (ycbcrColor, ycbcrFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 }
 //
-function rgbToYcbcr (rgbColor, rgbFloatRange, ycbcrFloatRange)
+function rgbToYcbcr (rgbColor, rgbFractional, ycbcrFractional)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (rgbFloatRange)
+    if (rgbFractional)
     {
         red *= 255;
         green *= 255;
@@ -1593,7 +1593,7 @@ function rgbToYcbcr (rgbColor, rgbFloatRange, ycbcrFloatRange)
     let y = 0 + (0.299 * red) + (0.587 * green) + (0.114 * blue);
     let cb = 128 - (0.168736 * red) - (0.331264 * green) + (0.5 * blue);
     let cr = 128 + (0.5 * red) - (0.418688 * green) - (0.081312 * blue);
-    if (ycbcrFloatRange)
+    if (ycbcrFractional)
     {
         y /= 255;
         cb /= 255;
@@ -1604,17 +1604,17 @@ function rgbToYcbcr (rgbColor, rgbFloatRange, ycbcrFloatRange)
 //
 const coeffs = 
 [
-    [ -0.14861, +1.78277 ],
+    [ -0.14861,  1.78277 ],
     [ -0.29227, -0.90649 ],
-    [ +1.97294, +0.00000 ]
+    [  1.97294,  0.00000 ]
 ];
 //
-function cubehelixHslToRgb (hslColor, hslFloatRange, rgbFloatRange)
+function cubehelixHslToRgb (hslColor, hslFractional, rgbFractional)
 {
     let hue = hslColor[0];
     let saturation = hslColor[1];
     let lightness = hslColor[2];
-    if (!hslFloatRange)
+    if (!hslFractional)
     {
         hue /= 360;
         saturation /= 100;
@@ -1625,7 +1625,7 @@ function cubehelixHslToRgb (hslColor, hslFloatRange, rgbFloatRange)
     let red = lightness + (amplitude * ((coeffs[0][0] * Math.cos (angle)) + (coeffs[0][1] * Math.sin (angle))));
     let green = lightness + (amplitude * ((coeffs[1][0] * Math.cos (angle)) + (coeffs[1][1] * Math.sin (angle))));
     let blue = lightness + (amplitude * ((coeffs[2][0] * Math.cos (angle)) + (coeffs[2][1] * Math.sin (angle))));
-    if (!rgbFloatRange)
+    if (!rgbFractional)
     {
         red *= 255;
         green *= 255;
@@ -1634,35 +1634,34 @@ function cubehelixHslToRgb (hslColor, hslFloatRange, rgbFloatRange)
     return [ red, green, blue ];
 }
 //
-function rgbToCubehelixHsl (rgbColor, rgbFloatRange, hslFloatRange)
+function rgbToCubehelixHsl (rgbColor, rgbFractional, hslFractional)
 {
     let red = rgbColor[0];
     let green = rgbColor[1];
     let blue = rgbColor[2];
-    if (!rgbFloatRange)
+    if (!rgbFractional)
     {
         red /= 255;
         green /= 255;
         blue /= 255;
     }
-    let hue;
-    let saturation;
-    let lightness;
-    lightness =
+    let lightness =
         (((coeffs[1][1] * coeffs[2][0]) - (coeffs[2][1] * coeffs[1][0])) * red) +
-        (((coeffs[0][1] * coeffs[1][0]) - (coeffs[1][1] * coeffs[0][0])) * blue) +
-        (((coeffs[2][1] * coeffs[0][0]) - (coeffs[0][1] * coeffs[2][0])) * green);
+        (((coeffs[2][1] * coeffs[0][0]) - (coeffs[0][1] * coeffs[2][0])) * green) +
+        (((coeffs[0][1] * coeffs[1][0]) - (coeffs[1][1] * coeffs[0][0])) * blue);
     lightness /=
         (((coeffs[1][1] * coeffs[2][0]) - (coeffs[2][1] * coeffs[1][0])) +
-         ((coeffs[0][1] * coeffs[1][0]) - (coeffs[1][1] * coeffs[0][0])) +
-         ((coeffs[2][1] * coeffs[0][0]) - (coeffs[0][1] * coeffs[2][0])));
-    let bl = blue - lightness;
+         ((coeffs[2][1] * coeffs[0][0]) - (coeffs[0][1] * coeffs[2][0])) +
+         ((coeffs[0][1] * coeffs[1][0]) - (coeffs[1][1] * coeffs[0][0])));
     let gl = green - lightness;
-    let k = ((coeffs[2][0] * gl) - (coeffs[1][0] * bl)) / coeffs[1][1];
-    saturation = (Math.sqrt ((k * k) + (bl * bl)) / (coeffs[2][0] * lightness * (1 - lightness))) || 0;
-    hue = saturation ? (Math.atan2 (k, bl) / (2 * Math.PI)) - (1 / 3) : 0;
+    let bl = blue - lightness;
+    let x = (coeffs[1][1] * bl) - (coeffs[2][1] * gl);
+    let y = (coeffs[2][0] * gl) - (coeffs[1][0] * bl);
+    let k = (coeffs[1][0] * coeffs[2][1]) - (coeffs[1][1] * coeffs[2][0]);
+    let saturation = Math.sqrt (Math.pow (x, 2) + Math.pow (y, 2)) / (k * lightness * (1 - lightness)) || 0;
+    let hue = saturation ? ((Math.atan2 (y, x) + Math.PI ) / (2 * Math.PI)) - (1 / 3) : 0;
     if (hue < 0) hue += 1;
-    if (!hslFloatRange)
+    if (!hslFractional)
     {
         hue *= 360;
         saturation *= 100;

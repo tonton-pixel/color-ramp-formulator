@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Rainbow (CubeHelix)",
+        "formula": "cubehelix\n(\n    distribute ([ -100, 80, 260 ], [ 0, 1 ], t, 0),\n    distribute ([ 75, 150, 75 ], [ 0, 1 ], t, 0),\n    distribute ([ 35, 80, 35 ], [ 0, 1 ], t, 0)\n)"
+    }
+}
