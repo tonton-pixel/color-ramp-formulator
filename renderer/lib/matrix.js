@@ -10,20 +10,20 @@ function scalarMultiply (s, v)
 //
 function multiply (m1, m2)
 {
-    if (m1[0].length !== m2.length)	// (m1.width !== m2.height)
+    if (m1[0].length !== m2.length) // (m1.width !== m2.height)
     {
         throw new Error ("matrix.multiply: incompatible sizes");
     }
     else
     {
         var result = [ ];
-        for (var i = 0; i < m1.length; i++)	// m1.height
+        for (var i = 0; i < m1.length; i++) // m1.height
         {
             result[i] = [ ];
-            for (var j = 0; j < m2[0].length; j++)	// m2.width
+            for (var j = 0; j < m2[0].length; j++)  // m2.width
             {
                 var sum = 0;
-                for (var k = 0; k < m2.length; k++)	// m2.height
+                for (var k = 0; k < m2.length; k++) // m2.height
                 {
                     sum += m1[i][k] * m2[k][j];
                 }

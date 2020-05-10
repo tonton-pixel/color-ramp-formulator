@@ -1659,7 +1659,7 @@ function rgbToCubehelixHsl (rgbColor, rgbFractional, hslFractional)
     let bl = blue - lightness;
     let x = (coeffs[1][1] * bl) - (coeffs[2][1] * gl);
     let y = (coeffs[2][0] * gl) - (coeffs[1][0] * bl);
-    let k = (coeffs[1][0] * coeffs[2][1]) - (coeffs[1][1] * coeffs[2][0]);
+    let k = Math.abs ((coeffs[1][0] * coeffs[2][1]) - (coeffs[1][1] * coeffs[2][0]));
     let saturation = Math.sqrt ((x * x) + (y * y)) / (k * lightness * (1 - lightness)) || 0;
     let hue = saturation ? ((Math.atan2 (y, x) + Math.PI) / (2 * Math.PI)) - (1 / 3) : 0;
     if (hue < 0) hue += 1;

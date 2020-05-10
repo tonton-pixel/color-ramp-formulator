@@ -1,7 +1,7 @@
 {
     "name": "color-ramps-formulator",
     "productName": "Color Ramps Formulator",
-    "version": "1.0.0-beta.6",
+    "version": "1.0.0-beta.7",
     "description": "Algorithmically-defined color ramps generator.",
     "main": "main.js",
     "scripts": {

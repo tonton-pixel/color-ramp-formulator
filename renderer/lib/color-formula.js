@@ -1,7 +1,7 @@
 //
 const { tokenize, parseScript } = require ('esprima');
 //
-const colors = require ('./colors.js');
+const colorUtils = require ('./color-utils.js');
 //
 function equalPoints (data1, data2)
 {
@@ -54,8 +54,7 @@ function modulo (n, m)
 //
 function lerp (a, b, t)
 {
-    // return a + ((b - a) * t);    // Imprecise method
-    return (a * (1 - t)) + (b * t); // Precise method
+    return (a * (1 - t)) + (b * t);
 }
 //
 function coserp (a, b, t)
@@ -536,52 +535,52 @@ function rgb (red, green, blue)
 //
 function hsb (hue, saturation, brightness)
 {
-    return colors.hsvToRgb ([ hue, saturation, brightness ]);
+    return colorUtils.hsvToRgb ([ hue, saturation, brightness ]);
 }
 //
 function hsv (hue, saturation, value)
 {
-    return colors.hsvToRgb ([ hue, saturation, value ]);
+    return colorUtils.hsvToRgb ([ hue, saturation, value ]);
 }
 //
 function hwb (hue, whiteness, blackness)
 {
-    return colors.hwbToRgb ([ hue, whiteness, blackness ]);
+    return colorUtils.hwbToRgb ([ hue, whiteness, blackness ]);
 }
 //
 function hsl (hue, saturation, lightness)
 {
-    return colors.hslToRgb ([ hue, saturation, lightness ]);
+    return colorUtils.hslToRgb ([ hue, saturation, lightness ]);
 }
 //
 function hcl (hue, chroma, luminance)
 {
-    return colors.hclToRgb ([ hue, chroma, luminance ]);
+    return colorUtils.hclToRgb ([ hue, chroma, luminance ]);
 }
 //
 function lch (luminance, chroma, hue)
 {
-    return colors.hclToRgb ([ hue, chroma, luminance ]);
+    return colorUtils.hclToRgb ([ hue, chroma, luminance ]);
 }
 //
 function lab (luminance, a, b)
 {
-    return colors.labToRgb ([ luminance, a, b ]);
+    return colorUtils.labToRgb ([ luminance, a, b ]);
 }
 //
 function xyz (x, y, z)
 {
-    return colors.xyzToRgb ([ x, y, z ]);
+    return colorUtils.xyzToRgb ([ x, y, z ]);
 }
 //
 function ycbcr (y, cb, cr)
 {
-    return colors.ycbcrToRgb ([ y, cb, cr ]);
+    return colorUtils.ycbcrToRgb ([ y, cb, cr ]);
 }
 //
 function cubehelix (hue, saturation, lightness)
 {
-    return colors.cubehelixHslToRgb ([ hue, saturation, lightness ]);
+    return colorUtils.cubehelixHslToRgb ([ hue, saturation, lightness ]);
 }
 //
 function grayscale_t (gray_t)
@@ -596,52 +595,52 @@ function rgb_t (red_t, green_t, blue_t)
 //
 function hsb_t (hue_t, saturation_t, brightness_t)
 {
-    return colors.hsvToRgb ([ hue_t, saturation_t, brightness_t ], true);
+    return colorUtils.hsvToRgb ([ hue_t, saturation_t, brightness_t ], true);
 }
 //
 function hsv_t (hue_t, saturation_t, value_t)
 {
-    return colors.hsvToRgb ([ hue_t, saturation_t, value_t ], true);
+    return colorUtils.hsvToRgb ([ hue_t, saturation_t, value_t ], true);
 }
 //
 function hwb_t (hue_t, whiteness_t, blackness_t)
 {
-    return colors.hwbToRgb ([ hue_t, whiteness_t, blackness_t ], true);
+    return colorUtils.hwbToRgb ([ hue_t, whiteness_t, blackness_t ], true);
 }
 //
 function hsl_t (hue_t, saturation_t, lightness_t)
 {
-    return colors.hslToRgb ([ hue_t, saturation_t, lightness_t ], true);
+    return colorUtils.hslToRgb ([ hue_t, saturation_t, lightness_t ], true);
 }
 //
 function hcl_t (hue_t, chroma_t, luminance_t)
 {
-    return colors.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
+    return colorUtils.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
 }
 //
 function lch_t (luminance_t, chroma_t, hue_t)
 {
-    return colors.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
+    return colorUtils.hclToRgb ([ hue_t, chroma_t, luminance_t ], true);
 }
 //
 function lab_t (luminance_t, a_t, b_t)
 {
-    return colors.labToRgb ([ luminance_t, a_t, b_t ], true);
+    return colorUtils.labToRgb ([ luminance_t, a_t, b_t ], true);
 }
 //
 function xyz_t (x_t, y_t, z_t)
 {
-    return colors.xyzToRgb ([ x_t, y_t, z_t ], true);
+    return colorUtils.xyzToRgb ([ x_t, y_t, z_t ], true);
 }
 //
 function ycbcr_t (y_t, cb_t, cr_t)
 {
-    return colors.ycbcrToRgb ([ y_t, cb_t, cr_t ], true);
+    return colorUtils.ycbcrToRgb ([ y_t, cb_t, cr_t ], true);
 }
 //
 function cubehelix_t (hue_t, saturation_t, lightness_t)
 {
-    return colors.cubehelixHslToRgb ([ hue_t, saturation_t, lightness_t ], true);
+    return colorUtils.cubehelixHslToRgb ([ hue_t, saturation_t, lightness_t ], true);
 }
 //
 function interpolate_colors (stops, location, color_model, smoothness = 0)
@@ -679,22 +678,22 @@ function interpolate_colors (stops, location, color_model, smoothness = 0)
                     toRgb = null;
                     break;
                 case "lab":
-                    rgbTo = colors.rgbToLab;
-                    toRgb = colors.labToRgb;
+                    rgbTo = colorUtils.rgbToLab;
+                    toRgb = colorUtils.labToRgb;
                     break;
                 case "xyz":
-                    rgbTo = colors.rgbToXyz;
-                    toRgb = colors.xyzToRgb;
+                    rgbTo = colorUtils.rgbToXyz;
+                    toRgb = colorUtils.xyzToRgb;
                     break;
                 case "ycbcr":
-                    rgbTo = colors.rgbToYcbcr;
-                    toRgb = colors.ycbcrToRgb;
+                    rgbTo = colorUtils.rgbToYcbcr;
+                    toRgb = colorUtils.ycbcrToRgb;
                     break;
             }
             for (let stop of stops)
             {
                 let position = stop[0];
-                rgb = colors.colorToRgb (stop[1]);
+                rgb = colorUtils.colorToRgb (stop[1]);
                 components = rgbTo ? rgbTo (rgb) : rgb;
                 points[0].push ([ position, components[0] ]);
                 points[1].push ([ position, components[1] ]);
@@ -707,25 +706,25 @@ function interpolate_colors (stops, location, color_model, smoothness = 0)
             {
                 case "hsv":
                 case "hsb":
-                    rgbTo = colors.rgbToHsv;
-                    toRgb = colors.hsvToRgb;
+                    rgbTo = colorUtils.rgbToHsv;
+                    toRgb = colorUtils.hsvToRgb;
                     break;
                 case "hwb":
-                    rgbTo = colors.rgbToHwb;
-                    toRgb = colors.hwbToRgb;
+                    rgbTo = colorUtils.rgbToHwb;
+                    toRgb = colorUtils.hwbToRgb;
                     break;
                 case "hsl":
-                    rgbTo = colors.rgbToHsl;
-                    toRgb = colors.hslToRgb;
+                    rgbTo = colorUtils.rgbToHsl;
+                    toRgb = colorUtils.hslToRgb;
                     break;
                 case "hcl":
                 case "lch":
-                    rgbTo = colors.rgbToHcl;
-                    toRgb = colors.hclToRgb;
+                    rgbTo = colorUtils.rgbToHcl;
+                    toRgb = colorUtils.hclToRgb;
                     break;
                 case "cubehelix":
-                    rgbTo = colors.rgbToCubehelixHsl;
-                    toRgb = colors.cubehelixHslToRgb;
+                    rgbTo = colorUtils.rgbToCubehelixHsl;
+                    toRgb = colorUtils.cubehelixHslToRgb;
                     break;
             }
             let hueShifts = [ ];
@@ -744,8 +743,8 @@ function interpolate_colors (stops, location, color_model, smoothness = 0)
                 else
                 {
                     let hueShift = 0;   // Default
-                    let startColor = (startIndex === 0) ? rgbTo (colors.colorToRgb (startStop[1])) : lastEndColor;
-                    let endColor = rgbTo (colors.colorToRgb (endStop[1]));
+                    let startColor = (startIndex === 0) ? rgbTo (colorUtils.colorToRgb (startStop[1])) : lastEndColor;
+                    let endColor = rgbTo (colorUtils.colorToRgb (endStop[1]));
                     if (typeof colorModelOption !== 'undefined')    // Hue mode
                     {
                         let deltaHue;
@@ -896,6 +895,95 @@ function distribute_colors (colors, bounds, location, color_model, smoothness)
     {
         throw new Error ("distribute_colors: invalid number of colors: " + count);
     }
+    return rgb;
+}
+//
+function segmentIndex (index, count)
+{
+    return Math.floor ((index + 0.5) * count / 256);
+}
+//
+function sampleIndex (index, count, alignment)
+{
+    if (!alignment)
+    {
+        alignment = "fill";
+    }
+    switch (alignment.toLowerCase ())
+    {
+        case "f":
+        case "fill":
+            index = index * 255 / (count - 1);
+            break;
+        case "l":
+        case "left":
+            index = (index + 0) * 255 / count;
+            break;
+        case "c":
+        case "center":
+            index = (index + 0.5) * 255 / count;
+            break;
+        case "r":
+        case "right":
+            index = (index + 1) * 255 / count;
+            break;
+        default:
+            throw new Error ("sampleIndex: invalid alignment: " + alignment);
+            break;
+    }
+    return index;
+}
+//
+function steps (index, count, alignment)
+{
+    if (count)
+    {
+        if ((count > 1) && (count <= 256))
+        {
+            index = sampleIndex (segmentIndex (index, count), count, alignment)
+        }
+        else
+        {
+            throw new Error ("steps: invalid number of steps: " + count);
+        }
+    }
+    return index;
+}
+//
+// From p5.js: https://github.com/processing/p5.js/blob/master/src/math/calculation.js
+//
+// Constrains a value between a minimum and maximum value.
+function constrain (n, low, high)
+{
+    return Math.max (Math.min (n, high), low);
+}
+//
+// Re-maps a number from one range to another.
+function map (n, start1, stop1, start2, stop2, withinBounds)
+{
+    const newval = (n - start1) / (stop1 - start1) * (stop2 - start2) + start2;
+    if (!withinBounds)
+    {
+        return newval;
+    }
+    if (start2 < stop2)
+    {
+        return constrain (newval, start2, stop2);
+    }
+    else
+    {
+        return constrain (newval, stop2, start2);
+    }
+}
+//
+function discrete_colors (colors, bounds, location)
+{
+    let rgb;
+    if ((location < bounds[0]) || (location > bounds[1]))
+    {
+        throw new Error ("discrete_colors: location out of bounds");
+    }
+    rgb = colors[Math.round (map (location, bounds[0], bounds[1], 0, colors.length - 1))];
     return rgb;
 }
 //
@@ -1099,6 +1187,7 @@ const functions =
     //
     'interpolate_colors',
     'distribute_colors',
+    'discrete_colors',
     'cubehelix_color',
     'wavelength_color',
     //
@@ -1234,6 +1323,7 @@ module.exports = function (formula)
             //
             interpolate_colors,
             distribute_colors,
+            discrete_colors,
             cubehelix_color,
             wavelength_color,
             //

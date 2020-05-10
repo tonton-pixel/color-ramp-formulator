@@ -114,9 +114,37 @@ body
     color: var(--color-error);
 }
 
+.interface
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: -8px;
+}
+
+.dummy
+{
+    width: 48px;
+}
+
 .calculate-button
 {
-    margin: 12px 0 -9px 0;
+}
+
+.import-export-menu-button
+{
+    user-select: none;
+    white-space: nowrap;
+}
+
+.import-export-menu-button svg.gear
+{
+    width: 1em;
+    height: 1em;
+    vertical-align: bottom;
 }
 
 .preview-area
@@ -146,14 +174,4 @@ body
 .preview-area svg.disabled > rect
 {
     stroke: lightgray;
-}
-
-.import-export
-{
-    margin: 12px 0;
-}
-
-.import-export button + button
-{
-    margin-left: 2em;
 }

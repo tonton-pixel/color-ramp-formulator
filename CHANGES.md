@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.7
+
+- Added File menu in menu bar.
+- Added Import/Export actions menu button.
+- Added import of four color ramp data file formats (`.json`, `.act`, `.amp`, `.lut`), with automatic conversion to custom formula format, making use of a new `discrete_colors ()` color helper function.
+- Improved handling of invalid loaded or imported data files.
+
 ## 1.0.0-beta.6
 
 - Revamped calculations of saturation and hue in the function converting `RGB` to `CubeHelix HSL`, making use of all coefficients.

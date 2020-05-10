@@ -7,6 +7,8 @@ const path = require ('path');
 //
 const appName = app.name;
 //
+const webContents = getCurrentWebContents ();
+//
 const settings = getGlobal ('settings');
 //
 const appDefaultFolderPath = app.getPath (settings.defaultFolder);
@@ -64,12 +66,11 @@ const saveButton = document.body.querySelector ('.save-button');
 const formulaName = document.body.querySelector ('.formula-name');
 const formulaString = document.body.querySelector ('.formula-string');
 const calculateButton = document.body.querySelector ('.calculate-button');
+const importExportMenuButton = document.body.querySelector ('.import-export-menu-button');
 const resultString = document.body.querySelector ('.result-string');
 const curvesMapPreview = document.body.querySelector ('.curves-map-preview');
 const linearGradientPreview = document.body.querySelector ('.linear-gradient-preview');
 const colorTablePreview = document.body.querySelector ('.color-table-preview');
-const importButton = document.body.querySelector ('.import-button');
-const exportButton = document.body.querySelector ('.export-button');
 //
 let currentColorRamp = null;
 //
@@ -159,10 +160,17 @@ loadButton.addEventListener
             'utf8',
             (text, filePath) =>
             {
-                let colorRamp = JSON.parse (text.replace (/^\uFEFF/, "")).colorRamp;
-                formulaName.value = colorRamp.name;
-                formulaString.value = colorRamp.formula;
-                calculateButton.click ();
+                try
+                {
+                    let colorRamp = JSON.parse (text.replace (/^\uFEFF/, "")).colorRamp;
+                    formulaName.value = colorRamp.name;
+                    formulaString.value = colorRamp.formula;
+                    calculateButton.click ();
+                }
+                catch (err)
+                {
+                    alert (`Invalid formula file format:\n${path.basename (filePath)}`);
+                }
                 defaultFormulaFolderPath = path.dirname (filePath);
             }
         );
@@ -188,6 +196,9 @@ saveButton.addEventListener
         );
     }
 );
+//
+ipcRenderer.on ('load-formula', () => { loadButton.click (); });
+ipcRenderer.on ('save-formula', () => { saveButton.click (); });
 //
 formulaName.value = prefs.formulaName;
 formulaString.value = prefs.formulaString;
@@ -261,6 +272,227 @@ calculateButton.addEventListener
         }
     }
 );
+//
+let defaultColorRampFolderPath = prefs.defaultColorRampFolderPath;
+//
+const headerClutSize = 32;      // NIH Image (ImageJ) header
+const rawClutFileSize = 768;    // (256 * 3) or (3 * 256)
+const rawElementSize = rawClutFileSize / 3;
+const footerClutSize = 4;       // Photoshop Save for Web CLUT footer (undocumented)
+//
+function convertColorRampFileToFormula (name, colorRamp)
+{
+    formulaName.value = name;
+    formulaString.value = `discrete_colors\n(\n    ${json.stringify (colorRamp)},\n    [ 0, 255 ], x\n)`;
+}
+//
+function importColorRamp ()
+{
+    fileDialogs.loadAnyFile
+    (
+        "Import color ramp data file (.json):",
+        [
+            {
+                name: "Color ramp data file (*.json)",
+                extensions: [ 'json' ]
+            }
+        ],
+        defaultColorRampFolderPath,
+        {
+            '.json': 'utf8'
+        },
+        (data, filePath) =>
+        {
+            let colorRamp = JSON.parse (data.replace (/^\uFEFF/, ""));
+            if (colorRamps.isClut (colorRamp))
+            {
+                convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
+                calculateButton.click ();
+            }
+            else if (colorRamps.isMapping (colorRamp))
+            {
+                colorRamp = colorRamps.mappingToClut (colorRamp);
+                convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
+                calculateButton.click ();
+            }
+            else
+            {
+                alert (`Invalid color ramp data file format:\n${path.basename (filePath)}`);
+            }
+            defaultColorRampFolderPath = path.dirname (filePath);
+        }
+    );
+}
+//
+function importColorTable ()
+{
+    fileDialogs.loadAnyFile
+    (
+        "Import color table data file (.act):",
+        [
+            {
+                name: "Color table data file (*.act)",
+                extensions: [ 'act' ]
+            }
+        ],
+        defaultColorRampFolderPath,
+        {
+            '.act': 'binary'
+        },
+        (data, filePath) =>
+        {
+            let colorRamp = [ ];
+            if ((data.length === rawClutFileSize)　||　(data.length === (rawClutFileSize + footerClutSize)))
+            {
+                // Interleaved
+                for (var index = 0; index < rawElementSize; index++)
+                {
+                    var rgb = data.substr (3 * index, 3);
+                    colorRamp.push ([ rgb.charCodeAt (0), rgb.charCodeAt (1), rgb.charCodeAt (2) ]);
+                }
+                convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
+                calculateButton.click ();
+            }
+            else
+            {
+                alert (`Unrecognized color table data file format:\n${path.basename (filePath)}`);
+            }
+            defaultColorRampFolderPath = path.dirname (filePath);
+        }
+    );
+}
+//
+function importCurvesMap ()
+{
+    fileDialogs.loadAnyFile
+    (
+        "Import curves map data file (.amp):",
+        [
+            {
+                name: "Curves map data file (*.amp)",
+                extensions: [ 'amp' ]
+            }
+        ],
+        defaultColorRampFolderPath,
+        {
+            '.amp': 'binary'
+        },
+        (data, filePath) =>
+        {
+            let colorRamp = [ ];
+            if (data.length === rawClutFileSize)
+            {
+                // Not interleaved
+                let curvesMap = [ ];
+                for (let index = 0; index < 3; index++)
+                {
+                    curvesMap.push (data.substr (rawElementSize * index, rawElementSize));
+                }
+                for (var index = 0; index < rawElementSize; index++)
+                {
+                    colorRamp.push ([ curvesMap[0].charCodeAt (index), curvesMap[1].charCodeAt (index), curvesMap[2].charCodeAt (index) ]);
+                }
+                convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
+                calculateButton.click ();
+            }
+            else
+            {
+                alert (`Unrecognized curves map data file format:\n${path.basename (filePath)}`);
+            }
+            defaultColorRampFolderPath = path.dirname (filePath);
+        }
+    );
+}
+//
+function importLookupTable ()
+{
+    fileDialogs.loadAnyFile
+    (
+        "Import Lookup table data file (.lut):",
+        [
+            {
+                name: "Lookup table data file (*.lut)",
+                extensions: [ 'lut' ]
+            }
+        ],
+        defaultColorRampFolderPath,
+        {
+            '.lut': 'binary'
+        },
+        (data, filePath) =>
+        {
+            let colorRamp = [ ];
+            if
+            (
+                (data.length === rawClutFileSize)
+                ||
+                ((data.length === (headerClutSize + rawClutFileSize)) && (data.substr (0, 4) === 'ICOL'))
+            )
+            {
+                // Not interleaved
+                let offset = (data.length === (headerClutSize + rawClutFileSize)) ? headerClutSize : 0;
+                let curvesMap = [ ];
+                for (let index = 0; index < 3; index++)
+                {
+                    curvesMap.push (data.substr (offset + (rawElementSize * index), rawElementSize));
+                }
+                for (var index = 0; index < rawElementSize; index++)
+                {
+                    colorRamp.push ([ curvesMap[0].charCodeAt (index), curvesMap[1].charCodeAt (index), curvesMap[2].charCodeAt (index) ]);
+                }
+                convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
+                calculateButton.click ();
+            }
+            else
+            {
+                alert (`Unrecognized lookup table data file format:\n${path.basename (filePath)}`);
+            }
+            defaultColorRampFolderPath = path.dirname (filePath);
+        }
+    );
+}
+//
+let importExportMenu =
+remote.Menu.buildFromTemplate
+(
+    [
+        {
+            label: "Import",
+            submenu:
+            [
+                { label: "Color Ramp (.json)...", click: () => { webContents.send ('import-color-ramp'); } },
+                { label: "Color Table (.act)...", click: () => { webContents.send ('import-color-table'); } },
+                { label: "Curves Map (.amp)...", click: () => { webContents.send ('import-curves-map'); } },
+                { label: "Lookup Table (.lut)...", click: () => { webContents.send ('import-lookup-table'); } }
+            ]
+        },
+        {
+            label: "Export",
+            submenu:
+            [
+                { label: "Color Ramp (.json)...", enabled: false, click: () => { webContents.send ('export-color-ramp'); } },
+                { label: "Color Palette (.json)...", enabled: false, click: () => { webContents.send ('export-color-palette'); } }
+            ]
+        }
+    ]
+);
+//
+importExportMenuButton.addEventListener
+(
+    'click',
+    (event) =>
+    {
+        pullDownMenus.popup (event.currentTarget, importExportMenu);
+    }
+);
+//
+ipcRenderer.on ('import-color-ramp', () => { importColorRamp (); });
+ipcRenderer.on ('import-color-table', () => { importColorTable (); });
+ipcRenderer.on ('import-curves-map', () => { importCurvesMap (); });
+ipcRenderer.on ('import-lookup-table', () => { importLookupTable (); });
+//
+ipcRenderer.on ('export-color-ramp', () => { console.log ("Export Color Ramp"); });
+ipcRenderer.on ('export-color-palette', () => { console.log ("Export Color Palette"); });
 //
 let currentGridUnitCount = prefs.gridUnitCount;
 //
@@ -439,137 +671,6 @@ colorTablePreview.addEventListener
     }
 );
 //
-let defaultColorRampFolderPath = prefs.defaultColorRampFolderPath;
-//
-const headerClutSize = 32;      // NIH Image (ImageJ) header
-const rawClutFileSize = 768;    // (256 * 3) or (3 * 256)
-const rawElementSize = rawClutFileSize / 3;
-const footerClutSize = 4;       // Photoshop Save for Web CLUT footer (undocumented)
-//
-importButton.addEventListener
-(
-    'click',
-    (event) =>
-    {
-        fileDialogs.loadAnyFile
-        (
-            "Load color ramp file:",
-            [
-                {
-                    name: "Color ramp file (*.json;*.act;*.amp;*.lut)",
-                    extensions: [ 'json', 'act', 'amp','lut' ]
-                }
-            ],
-            defaultColorRampFolderPath,
-            {
-                '.json': 'utf8',
-                '.act': 'binary',
-                '.amp': 'binary',
-                '.lut': 'binary'
-            },
-            (data, filePath) =>
-            {
-                let colorRamp = [ ];
-                let extension = path.extname (filePath).toLowerCase ();
-                if (extension === '.json')
-                {
-                    colorRamp = JSON.parse (data.replace (/^\uFEFF/, ""));
-                    if (colorRamps.isClut (colorRamp) || colorRamps.isMapping (colorRamp))
-                    {
-                        currentColorRamp = colorRamp;
-                        updatePreview ();
-                        defaultColorRampFolderPath = path.dirname (filePath);
-                    }
-                    else
-                    {
-                        alert (`Invalid color ramp file format:\n${filePath}`);
-                    }
-                }
-                else if (extension === '.act')
-                {
-                    if ((data.length === rawClutFileSize)　||　(data.length === (rawClutFileSize + footerClutSize)))
-                    {
-                        // Interleaved
-                        for (var index = 0; index < rawElementSize; index++)
-                        {
-                            var rgb = data.substr (3 * index, 3);
-                            colorRamp.push ([ rgb.charCodeAt (0), rgb.charCodeAt (1), rgb.charCodeAt (2) ]);
-                        }
-                        currentColorRamp = colorRamp;
-                        updatePreview ();
-                        defaultColorRampFolderPath = path.dirname (filePath);
-                    }
-                    else
-                    {
-                        alert (`Unrecognized color table file format:\n${filePath}`);
-                    }
-                }
-                else if (extension === '.amp')
-                {
-                    if (data.length === rawClutFileSize)
-                    {
-                        // Not interleaved
-                        let curvesMap = [ ];
-                        for (let index = 0; index < 3; index++)
-                        {
-                            curvesMap.push (data.substr (rawElementSize * index, rawElementSize));
-                        }
-                        for (var index = 0; index < rawElementSize; index++)
-                        {
-                            colorRamp.push ([ curvesMap[0].charCodeAt (index), curvesMap[1].charCodeAt (index), curvesMap[2].charCodeAt (index) ]);
-                        }
-                        currentColorRamp = colorRamp;
-                        updatePreview ();
-                        defaultColorRampFolderPath = path.dirname (filePath);
-                    }
-                    else
-                    {
-                        alert (`Unrecognized curves map file format:\n${filePath}`);
-                    }
-                }
-                else if (extension === '.lut')
-                {
-                    if
-                    (
-                        (data.length === rawClutFileSize)
-                        ||
-                        ((data.length === (headerClutSize + rawClutFileSize)) && (data.substr (0, 4) === 'ICOL'))
-                    )
-                    {
-                        // Not interleaved
-                        let offset = (data.length === (headerClutSize + rawClutFileSize)) ? headerClutSize : 0;
-                        let curvesMap = [ ];
-                        for (let index = 0; index < 3; index++)
-                        {
-                            curvesMap.push (data.substr (offset + (rawElementSize * index), rawElementSize));
-                        }
-                        for (var index = 0; index < rawElementSize; index++)
-                        {
-                            colorRamp.push ([ curvesMap[0].charCodeAt (index), curvesMap[1].charCodeAt (index), curvesMap[2].charCodeAt (index) ]);
-                        }
-                        currentColorRamp = colorRamp;
-                        updatePreview ();
-                        defaultColorRampFolderPath = path.dirname (filePath);
-                    }
-                    else
-                    {
-                        alert (`Unrecognized lookup table file format:\n${filePath}`);
-                    }
-                }
-            }
-        );
-    }
-);
-//
-exportButton.addEventListener
-(
-    'click',
-    (event) =>
-    {
-        console.log ("Export");
-    }
-);
-//
 function normalize (component)
 {
     return Math.min (Math.max (0, Math.round (component)), 255);
@@ -614,7 +715,7 @@ document.body.addEventListener
     }
 );
 //
-getCurrentWebContents ().once
+webContents.once
 (
     'did-finish-load', (event) =>
     {

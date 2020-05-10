@@ -207,6 +207,34 @@ else
             { role: 'selectall' }
         ]
     };
+    const fileMenu =
+    {
+        label: "File",
+        submenu:
+        [
+            { label: "Load Formula...", accelerator: 'CommandOrControl+L', click: () => { mainWindow.webContents.send ('load-formula'); } },
+            { label: "Save Formula...", accelerator: 'CommandOrControl+S', click: () => { mainWindow.webContents.send ('save-formula'); } },
+            { type: 'separator' },
+            {
+                label: "Import",
+                submenu:
+                [
+                    { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('import-color-ramp'); } },
+                    { label: "Color Table (.act)...", click: () => { mainWindow.webContents.send ('import-color-table'); } },
+                    { label: "Curves Map (.amp)...", click: () => { mainWindow.webContents.send ('import-curves-map'); } },
+                    { label: "Lookup Table (.lut)...", click: () => { mainWindow.webContents.send ('import-lookup-table'); } }
+                ]
+            },
+            {
+                label: "Export",
+                submenu:
+                [
+                    { label: "Color Ramp (.json)...", enabled: false, click: () => { mainWindow.webContents.send ('export-color-ramp'); } },
+                    { label: "Color Palette (.json)...", enabled: false, click: () => { mainWindow.webContents.send ('export-color-palette'); } }
+                ]
+            }
+        ]
+    };
     const viewMenu =
     {
         label: "View",
@@ -295,6 +323,7 @@ else
     //
     let menuTemplate = [ ];
     menuTemplate.push ((process.platform === 'darwin') ? darwinAppMenu : appMenu);
+    menuTemplate.push (fileMenu);
     menuTemplate.push (editMenu);
     menuTemplate.push (viewMenu);
     if ((!isPackaged) || settings.developerFeatures)

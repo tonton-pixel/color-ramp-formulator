@@ -20,7 +20,11 @@
                 </div>
                 <div class="labelled"><span>Name:</span><input class="formula-name" type="text" size="80"></div>
                 <div class="labelled"><span>Formula:</span><textarea class="formula-string" cols="80" rows="12"></textarea></div>
-                <button class="calculate-button" type="button">Calculate</button>
+                <div class="interface">
+                    <span class="dummy">&nbsp;</span>
+                    <button class="calculate-button" type="button">Calculate</button>
+                    <button class="pull-down-menu import-export-menu-button" type="button"><svg class="gear"><use href="images/actions.svg#gear"></use></svg></button>
+                </div>
                 <div class="labelled"><span>Color Ramp:</span><textarea class="result-string" cols="80" rows="12" readonly></textarea></div>
             </div>
             <div class="color-ramp-panel">
@@ -28,10 +32,6 @@
                     <div class="curves-map-preview"></div>
                     <div class="linear-gradient-preview"></div>
                     <div class="color-table-preview"></div>
-                </div>
-                <div class="import-export">
-                    <button class="import-button" type="button" disabled>Import...</button>
-                    <button class="export-button" type="button" disabled>Export...</button>
                 </div>
             </div>
         </section>
