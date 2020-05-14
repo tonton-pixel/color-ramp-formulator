@@ -24,18 +24,18 @@
     "copyright": "© 2020 Michel MARIANI.",
     "electronApp":
     {
-        "label": "Color Ramps Formulator | Apps | Electron",
-        "URL": "https://electronjs.org/apps/color-ramps-formulator"
+        "label": "Color Ramp Formulator | Apps | Electron",
+        "URL": "https://electronjs.org/apps/color-ramp-formulator"
     },
     "repository":
     {
         "label": "Repository",
-        "URL": "https://github.com/tonton-pixel/color-ramps-formulator"
+        "URL": "https://github.com/tonton-pixel/color-ramp-formulator"
     },
     "releases":
     {
         "label": "Latest Releases",
-        "URL": "https://github.com/tonton-pixel/color-ramps-formulator/releases"
+        "URL": "https://github.com/tonton-pixel/color-ramp-formulator/releases"
     },
     "defaultFolder": "documents"
 }

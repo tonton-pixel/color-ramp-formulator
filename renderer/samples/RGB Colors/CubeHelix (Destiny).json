@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "CubeHelix (Destiny)",
+        "formula": "cubehelix_color (1 - t, 0, 0.4, 0.8, 1, [ 0.15, 0.85 ])"
+    }
+}

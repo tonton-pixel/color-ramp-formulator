@@ -989,6 +989,8 @@ function discrete_colors (colors, bounds, location)
 //
 // http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubetry.html
 // https://astron-soc.in/bulletin/11June/289392011.pdf
+// https://gka.github.io/chroma.js/
+// https://github.com/gka/chroma.js/blob/master/src/generator/cubehelix.js
 //
 function cubehelix_color (t, start = 0.5, rotations = -1.5, saturation = 1, gamma = 1, lightness = [ 0, 1 ])
 {

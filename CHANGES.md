@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.8
+
+- Renamed application to `Color Ramp Formulator`.
+
 ## 1.0.0-beta.7
 
 - Added File menu in menu bar.

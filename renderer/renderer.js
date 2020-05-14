@@ -52,8 +52,7 @@ if (settings.smartZoom)
 //
 function generateTitle ()
 {
-    let title = settings.window.titleTemplate
-                    .replace ("{{app}}", appName);
+    let title = settings.window.titleTemplate.replace ("{{app}}", appName);
     let zoomFactor = Math.round (webFrame.getZoomFactor () * 100);
     return title + ((zoomFactor !== 100) ? settings.window.zoomSuffixTemplate.replace ("{{zoom}}", zoomFactor) : "");
 }
@@ -216,14 +215,15 @@ formulaString.addEventListener
     }
 );
 //
-function smartStringify (colorRamp)
+function smartStringify (colorRamp, level = 0)
 {
+    let indentation = "    ";
     let colorStrings = [ ];
     for (let color of colorRamp)
     {
-        colorStrings.push (`    ${json.stringify (color)}`);
+        colorStrings.push (`${indentation.repeat (level + 1)}${json.stringify (color)}`);
     }
-    return `[\n${colorStrings.join (",\n")}\n]`;
+    return `${indentation.repeat (level)}[\n${colorStrings.join (",\n")}\n${indentation.repeat (level)}]`;
 }
 // To be later moved to lib/color-ramps.js?
 function isRGBArray (rgb)
@@ -283,7 +283,7 @@ const footerClutSize = 4;       // Photoshop Save for Web CLUT footer (undocumen
 function convertColorRampFileToFormula (name, colorRamp)
 {
     formulaName.value = name;
-    formulaString.value = `discrete_colors\n(\n    ${json.stringify (colorRamp)},\n    [ 0, 255 ], x\n)`;
+    formulaString.value = `discrete_colors\n(\n${smartStringify (colorRamp, 1)},\n    [ 0, 255 ], x\n)`;
 }
 //
 function importColorRamp ()
