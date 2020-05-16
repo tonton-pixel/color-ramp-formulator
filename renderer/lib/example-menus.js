@@ -2,29 +2,29 @@
 const { remote } = require ('electron');
 const { Menu, MenuItem } = remote;
 //
-module.exports.makeMenu = function (samples, callback)
+module.exports.makeMenu = function (examples, callback)
 {
     let menu = new Menu ();
-    for (let sample of samples)
+    for (let example of examples)
     {
-        if (sample === null)
+        if (example === null)
         {
             menu.append (new MenuItem ({ type: 'separator' }));
         }
-        else if ("string" in sample)
+        else if ("string" in example)
         {
             let menuItem = new MenuItem
             (
                 {
-                    label: sample.label.replace (/&/g, "&&"),
-                    click: () => { callback (sample); }
+                    label: example.label.replace (/&/g, "&&"),
+                    click: () => { callback (example); }
                 }
             );
             menu.append (menuItem);
         }
-        else if ("items" in sample)
+        else if ("items" in example)
         {
-            let items = sample.items;
+            let items = example.items;
             let subMenus = [ ];
             for (let item of items)
             {
@@ -44,7 +44,7 @@ module.exports.makeMenu = function (samples, callback)
             let menuItem = new MenuItem
             (
                 {
-                    label: sample.label.replace (/&/g, "&&"),
+                    label: example.label.replace (/&/g, "&&"),
                     submenu: subMenus
                 }
             );

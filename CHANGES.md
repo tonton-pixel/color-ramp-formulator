@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.9
+
+- Revamped `discrete_colors ()` function.
+- Updated formula format page accordingly.
+- Renamed `Samples` to `Examples`.
+- Added and updated formula examples.
+- Added choice between discrete and continuous gradient formats in the linear gradient contextual menu.
+- Used smaller default window.
+- Updated `Electron` to version `8.3.0`.
+
 ## 1.0.0-beta.8
 
 - Renamed application to `Color Ramp Formulator`.

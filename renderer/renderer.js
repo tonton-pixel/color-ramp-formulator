@@ -18,7 +18,7 @@ const rendererStorage = new Storage ('renderer-preferences');
 //
 const fileDialogs = require ('./lib/file-dialogs.js');
 const pullDownMenus = require ('./lib/pull-down-menus.js');
-const sampleMenus = require ('./lib/sample-menus');
+const exampleMenus = require ('./lib/example-menus');
 const json = require ('./lib/json2.js');
 //
 const colorRamps = require ('./lib/color-ramps.js');
@@ -32,6 +32,7 @@ const defaultPrefs =
     formulaName: "",
     formulaString: "",
     gridUnitCount: 4,
+    continuousGradient: false,
     defaultFormulaFolderPath: appDefaultFolderPath,
     defaultSVGFolderPath: appDefaultFolderPath,
     defaultColorRampFolderPath: appDefaultFolderPath
@@ -59,7 +60,7 @@ function generateTitle ()
 //
 const section = document.body.querySelector ('.section');
 const clearButton = document.body.querySelector ('.clear-button');
-const samplesButton = document.body.querySelector ('.samples-button');
+const examplesButton = document.body.querySelector ('.examples-button');
 const loadButton = document.body.querySelector ('.load-button');
 const saveButton = document.body.querySelector ('.save-button');
 const formulaName = document.body.querySelector ('.formula-name');
@@ -86,13 +87,13 @@ clearButton.addEventListener
     }
 );
 //
-let samplesDirname = path.join (__dirname, 'samples');
-let samplesFilenames = fs.readdirSync (samplesDirname);
-samplesFilenames.sort ((a, b) => a.replace (/\.json$/i, "").localeCompare (b.replace (/\.json$/i, "")));
-let samples = [ ];
-for (let samplesFilename of samplesFilenames)
+let examplesDirname = path.join (__dirname, 'examples');
+let examplesFilenames = fs.readdirSync (examplesDirname);
+examplesFilenames.sort ((a, b) => a.replace (/\.json$/i, "").localeCompare (b.replace (/\.json$/i, "")));
+let examples = [ ];
+for (let examplesFilename of examplesFilenames)
 {
-    let filename = path.join (samplesDirname, samplesFilename);
+    let filename = path.join (examplesDirname, examplesFilename);
     if (fs.statSync (filename).isDirectory ())
     {
         let dirname = filename;
@@ -111,36 +112,36 @@ for (let samplesFilename of samplesFilenames)
                 }
             }
         }
-        samples.push ({ label: samplesFilename, items: items });
+        examples.push ({ label: examplesFilename, items: items });
     }
     else if (fs.statSync (filename).isFile ())
     {
-        let jsonFilename = samplesFilename.match (/(.*)\.json$/i);
+        let jsonFilename = examplesFilename.match (/(.*)\.json$/i);
         if (jsonFilename && (jsonFilename[1][0] !== '~'))
         {
-            samples.push ({ label: jsonFilename[1], string: fs.readFileSync (filename, 'utf8').replace (/^\uFEFF/, "") });
+            examples.push ({ label: jsonFilename[1], string: fs.readFileSync (filename, 'utf8').replace (/^\uFEFF/, "") });
         }
     }
 }
 //
-let samplesMenu = sampleMenus.makeMenu
+let examplesMenu = exampleMenus.makeMenu
 (
-    samples,
-    (sample) =>
+    examples,
+    (example) =>
     {
-        let colorRamp = JSON.parse (sample.string).colorRamp;
+        let colorRamp = JSON.parse (example.string).colorRamp;
         formulaName.value = colorRamp.name;
         formulaString.value = colorRamp.formula;
         calculateButton.click ();
     }
 );
 //
-samplesButton.addEventListener
+examplesButton.addEventListener
 (
     'click',
     (event) =>
     {
-        pullDownMenus.popup (event.currentTarget, samplesMenu);
+        pullDownMenus.popup (event.currentTarget, examplesMenu);
     }
 );
 //
@@ -496,6 +497,8 @@ ipcRenderer.on ('export-color-palette', () => { console.log ("Export Color Palet
 //
 let currentGridUnitCount = prefs.gridUnitCount;
 //
+let currentContinuousGradient = prefs.continuousGradient;
+//
 function updateCurvesMapPreview ()
 {
     while (curvesMapPreview.firstChild)
@@ -511,7 +514,7 @@ function updateLinearGradientPreview ()
     {
         linearGradientPreview.firstChild.remove ();
     }
-    linearGradientPreview.appendChild (createLinearGradient (currentColorRamp));
+    linearGradientPreview.appendChild (createLinearGradient (currentColorRamp, currentContinuousGradient));
 }
 //
 function updateColorTablePreview ()
@@ -605,8 +608,10 @@ curvesMapPreview.addEventListener
 //
 function saveLinearGradientSVG (menuItem)
 {
-    saveSVG (serializer.serializeToString (createLinearGradient (currentColorRamp)), "linear-gradient");
+    saveSVG (serializer.serializeToString (createLinearGradient (currentColorRamp, currentContinuousGradient)), "linear-gradient");
 }
+//
+let setContinuousGradient = (menuItem) => { currentContinuousGradient = menuItem.id; updateLinearGradientPreview ();};
 //
 let linearGradientMenuTemplate =
 [
@@ -618,10 +623,23 @@ let linearGradientMenuTemplate =
         type: "separator"
     },
     {
+        label: "Gradient",
+        submenu:
+        [
+            { label: "Discrete", id: false, type: 'radio', click: setContinuousGradient },
+            { label: "Continuous", id: true, type: 'radio', click: setContinuousGradient }
+        ]
+    },
+    {
         label: "Save as SVG...", click: saveLinearGradientSVG
     }
 ];
 let linearGradientContextualMenu = remote.Menu.buildFromTemplate (linearGradientMenuTemplate);
+let currentContinuousGradientMenuItem = linearGradientContextualMenu.getMenuItemById (currentContinuousGradient);
+if (currentContinuousGradientMenuItem)
+{
+    currentContinuousGradientMenuItem.checked = true;
+}
 //
 linearGradientPreview.addEventListener
 (
@@ -687,6 +705,7 @@ window.addEventListener // *Not* document.addEventListener
             formulaName: formulaName.value,
             formulaString: formulaString.value,
             gridUnitCount: currentGridUnitCount,
+            continuousGradient: currentContinuousGradient,
             defaultFormulaFolderPath: defaultFormulaFolderPath,
             defaultSVGFolderPath: defaultSVGFolderPath,
             defaultColorRampFolderPath: defaultColorRampFolderPath

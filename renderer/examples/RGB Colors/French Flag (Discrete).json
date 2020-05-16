@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "French Flag (Discrete)",
+        "formula": "discrete_colors\n(\n    [\n        \"#002395\",\n        \"#FFFFFF\",\n        \"#ED2939\"\n    ],\n    [ 0, 255 ], x\n)"
+    }
+}

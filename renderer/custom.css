@@ -25,7 +25,7 @@ body
     display: none;
     flex-direction: row;
     margin: auto auto;
-    padding: 12px 1em 8px 1em;
+    padding: 8px 1em;
 }
 
 .section.is-shown
@@ -64,7 +64,7 @@ body
     margin-left: 1em;
 }
 
-.option-group .samples-button
+.option-group .examples-button
 {
     margin-left: 0.75em;
 }

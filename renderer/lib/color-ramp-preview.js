@@ -186,7 +186,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
 };
 //
 //
-module.exports.createLinearGradient = function (colorRamp)
+module.exports.createLinearGradient = function (colorRamp, continuousGradient)
 {
     const rampWidth = 256;
     const rampHeight = 48;
@@ -251,36 +251,54 @@ module.exports.createLinearGradient = function (colorRamp)
             }
         }
         //
-        let defs = document.createElementNS (xmlns, 'defs');
-        let linearGradient = document.createElementNS (xmlns, 'linearGradient');
-        linearGradient.setAttributeNS (null, 'gradientUnits', 'objectBoundingBox');
-        linearGradient.setAttributeNS (null, 'id', id);
-        let x = 0;
-        for (let color of colors)
+        if (continuousGradient)
         {
-            let stop = document.createElementNS (xmlns, 'stop');
-            // stop.setAttributeNS (null, 'offset', `${(x++ / (rampWidth - 1)) * 100}%`);
-            stop.setAttributeNS (null, 'offset', `${x++ / (rampWidth - 1)}`);
-            stop.setAttributeNS (null, 'stop-color', color);
+            let defs = document.createElementNS (xmlns, 'defs');
+            let linearGradient = document.createElementNS (xmlns, 'linearGradient');
+            linearGradient.setAttributeNS (null, 'gradientUnits', 'objectBoundingBox');
+            linearGradient.setAttributeNS (null, 'id', id);
+            let x = 0;
+            for (let color of colors)
+            {
+                let stop = document.createElementNS (xmlns, 'stop');
+                // stop.setAttributeNS (null, 'offset', `${(x++ / (rampWidth - 1)) * 100}%`);
+                stop.setAttributeNS (null, 'offset', `${x++ / (rampWidth - 1)}`);
+                stop.setAttributeNS (null, 'stop-color', color);
+                linearGradient.appendChild (document.createTextNode ("\n"));
+                linearGradient.appendChild (stop);
+            }
             linearGradient.appendChild (document.createTextNode ("\n"));
-            linearGradient.appendChild (stop);
+            defs.appendChild (document.createTextNode ("\n"));
+            defs.appendChild (linearGradient);
+            defs.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (defs);
+            //
+            let rect = document.createElementNS (xmlns, 'rect');
+            rect.setAttributeNS (null, 'class', 'ramp');
+            rect.setAttributeNS (null, 'x', border + gap);
+            rect.setAttributeNS (null, 'y', border + gap);
+            rect.setAttributeNS (null, 'width', rampWidth);
+            rect.setAttributeNS (null, 'height', rampHeight);
+            rect.setAttributeNS (null, 'fill', `url(#${id})`);
+            svg.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (rect);
         }
-        linearGradient.appendChild (document.createTextNode ("\n"));
-        defs.appendChild (document.createTextNode ("\n"));
-        defs.appendChild (linearGradient);
-        defs.appendChild (document.createTextNode ("\n"));
-        svg.appendChild (document.createTextNode ("\n"));
-        svg.appendChild (defs);
-        //
-        let rect = document.createElementNS (xmlns, 'rect');
-        rect.setAttributeNS (null, 'class', 'ramp');
-        rect.setAttributeNS (null, 'x', border + gap);
-        rect.setAttributeNS (null, 'y', border + gap);
-        rect.setAttributeNS (null, 'width', rampWidth);
-        rect.setAttributeNS (null, 'height', rampHeight);
-        rect.setAttributeNS (null, 'fill', `url(#${id})`);
-        svg.appendChild (document.createTextNode ("\n"));
-        svg.appendChild (rect);
+        else
+        {
+            for (let colorIndex = 0; colorIndex < colors.length; colorIndex++)
+            {
+                let rect = document.createElementNS (xmlns, 'rect');
+                rect.setAttributeNS (null, 'class', 'color');
+                rect.setAttributeNS (null, 'x', border + gap + colorIndex);
+                rect.setAttributeNS (null, 'y', border + gap);
+                rect.setAttributeNS (null, 'width', 1);
+                rect.setAttributeNS (null, 'height', rampHeight);
+                rect.setAttributeNS (null, 'fill', colors[colorIndex]);
+                svg.appendChild (document.createTextNode ("\n"));
+                svg.appendChild (rect);
+            }
+        }
         svg.appendChild (document.createTextNode ("\n"));
     }
     else

@@ -978,13 +978,8 @@ function map (n, start1, stop1, start2, stop2, withinBounds)
 //
 function discrete_colors (colors, bounds, location)
 {
-    let rgb;
-    if ((location < bounds[0]) || (location > bounds[1]))
-    {
-        throw new Error ("discrete_colors: location out of bounds");
-    }
-    rgb = colors[Math.round (map (location, bounds[0], bounds[1], 0, colors.length - 1))];
-    return rgb;
+    let index = Math.floor ((map (location, bounds[0], bounds[1], 0, 255) + 0.5) * colors.length / 256);
+    return colorUtils.colorToRgb (colors[constrain (index, 0, colors.length - 1)]);
 }
 //
 // http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubetry.html
