@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Blue to Light Yellow",
+        "formula": "distribute_colors\n(\n    [\n        \"#00429d\",\n        \"#96ffea\",\n        \"light yellow\"\n    ],\n    [ 0, 255 ], x,\n    \"cubehelix\", 100\n)"
+    }
+}

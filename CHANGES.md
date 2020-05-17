@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.10
+
+- Improved shape rendering of SVG previews; fixed vertical artefacts when discrete gradients were zoomed in.
+
 ## 1.0.0-beta.9
 
 - Revamped `discrete_colors ()` function.

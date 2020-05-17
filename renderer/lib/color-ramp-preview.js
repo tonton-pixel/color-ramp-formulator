@@ -45,6 +45,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
     container.setAttributeNS (null, 'stroke', 'gray');
     container.setAttributeNS (null, 'stroke-width', border + gap);
     container.setAttributeNS (null, 'fill', 'white');
+    container.setAttributeNS (null, 'shape-rendering', 'crispEdges');
     svg.appendChild (document.createTextNode ("\n"));
     svg.appendChild (container);
     //
@@ -97,6 +98,9 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
         //
         if (gridUnitCount)
         {
+            let grid = document.createElementNS (xmlns, 'g');
+            grid.setAttributeNS (null, 'class', 'grid');
+            grid.setAttributeNS (null, 'shape-rendering', 'geometricPrecision');
             for (var row = 0; row <= gridUnitCount; row++)
             {
                 let rect = document.createElementNS (xmlns, 'rect');
@@ -106,8 +110,8 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 rect.setAttributeNS (null, 'width', border + curvesWidth + border);
                 rect.setAttributeNS (null, 'height', 2);
                 rect.setAttributeNS (null, 'fill', gridColor);
-                svg.appendChild (document.createTextNode ("\n"));
-                svg.appendChild (rect);
+                grid.appendChild (document.createTextNode ("\n"));
+                grid.appendChild (rect);
             }
             for (var column = 0; column <= gridUnitCount; column++)
             {
@@ -118,11 +122,17 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 rect.setAttributeNS (null, 'width', 2);
                 rect.setAttributeNS (null, 'height', border + curvesHeight + border);
                 rect.setAttributeNS (null, 'fill', gridColor);
-                svg.appendChild (document.createTextNode ("\n"));
-                svg.appendChild (rect);
+                grid.appendChild (document.createTextNode ("\n"));
+                grid.appendChild (rect);
             }
+            grid.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (grid);
         }
         //
+        let values = document.createElementNS (xmlns, 'g');
+        values.setAttributeNS (null, 'class', 'values');
+        values.setAttributeNS (null, 'shape-rendering', 'geometricPrecision');
         for (let index = 0; index < 256; index++)
         {
             let redValue = curves.red[index];
@@ -137,8 +147,8 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 rect.setAttributeNS (null, 'width', 1);
                 rect.setAttributeNS (null, 'height', 1);
                 rect.setAttributeNS (null, 'fill', '#000000');  // Not '#FFFFFF'!
-                svg.appendChild (document.createTextNode ("\n"));
-                svg.appendChild (rect);
+                values.appendChild (document.createTextNode ("\n"));
+                values.appendChild (rect);
             }
             else
             {
@@ -151,8 +161,8 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 redRect.setAttributeNS (null, 'height', 1);
                 color = (redValue === greenValue) ? '#FFFF00' : ((redValue === blueValue) ? '#FF00FF' : '#FF0000');
                 redRect.setAttributeNS (null, 'fill', color);
-                svg.appendChild (document.createTextNode ("\n"));
-                svg.appendChild (redRect);
+                values.appendChild (document.createTextNode ("\n"));
+                values.appendChild (redRect);
                 let greenRect = document.createElementNS (xmlns, 'rect');
                 greenRect.setAttributeNS (null, 'class', 'value');
                 greenRect.setAttributeNS (null, 'x', border + gap + index);
@@ -161,8 +171,8 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 greenRect.setAttributeNS (null, 'height', 1);
                 color = (greenValue === redValue) ? '#FFFF00' : ((greenValue === blueValue) ? '#00FFFF' : '#00FF00');
                 greenRect.setAttributeNS (null, 'fill', color);
-                svg.appendChild (document.createTextNode ("\n"));
-                svg.appendChild (greenRect);
+                values.appendChild (document.createTextNode ("\n"));
+                values.appendChild (greenRect);
                 let blueRect = document.createElementNS (xmlns, 'rect');
                 blueRect.setAttributeNS (null, 'class', 'value');
                 blueRect.setAttributeNS (null, 'x', border + gap + index);
@@ -171,10 +181,13 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
                 blueRect.setAttributeNS (null, 'height', 1);
                 color = (blueValue === redValue) ? '#FF00FF' : ((blueValue === greenValue) ? '#00FFFF' : '#0000FF');
                 blueRect.setAttributeNS (null, 'fill', color);
-                svg.appendChild (document.createTextNode ("\n"));
-                svg.appendChild (blueRect);
+                values.appendChild (document.createTextNode ("\n"));
+                values.appendChild (blueRect);
             }
         }
+        values.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (values);
         svg.appendChild (document.createTextNode ("\n"));
     }
     else
@@ -192,7 +205,6 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient)
     const rampHeight = 48;
     const border = 1;
     const gap = 1;
-    const id = "ramp-linear-gradient";
     const containerWidth = border + gap + rampWidth + gap + border;
     const containerHeight = border + gap + rampHeight + gap + border;
     //
@@ -209,6 +221,7 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient)
     container.setAttributeNS (null, 'stroke', 'gray');
     container.setAttributeNS (null, 'stroke-width', border + gap);
     container.setAttributeNS (null, 'fill', 'white');
+    container.setAttributeNS (null, 'shape-rendering', 'crispEdges');
     svg.appendChild (document.createTextNode ("\n"));
     svg.appendChild (container);
     //
@@ -253,6 +266,7 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient)
         //
         if (continuousGradient)
         {
+            const id = "linear-gradient";
             let defs = document.createElementNS (xmlns, 'defs');
             let linearGradient = document.createElementNS (xmlns, 'linearGradient');
             linearGradient.setAttributeNS (null, 'gradientUnits', 'objectBoundingBox');
@@ -275,17 +289,21 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient)
             svg.appendChild (defs);
             //
             let rect = document.createElementNS (xmlns, 'rect');
-            rect.setAttributeNS (null, 'class', 'ramp');
+            rect.setAttributeNS (null, 'class', 'continuous-gradient');
             rect.setAttributeNS (null, 'x', border + gap);
             rect.setAttributeNS (null, 'y', border + gap);
             rect.setAttributeNS (null, 'width', rampWidth);
             rect.setAttributeNS (null, 'height', rampHeight);
             rect.setAttributeNS (null, 'fill', `url(#${id})`);
+            rect.setAttributeNS (null, 'shape-rendering', 'crispEdges');
             svg.appendChild (document.createTextNode ("\n"));
             svg.appendChild (rect);
         }
         else
         {
+            let discreteGradient = document.createElementNS (xmlns, 'g');
+            discreteGradient.setAttributeNS (null, 'class', 'discrete-gradient');
+            discreteGradient.setAttributeNS (null, 'shape-rendering', 'crispEdges');
             for (let colorIndex = 0; colorIndex < colors.length; colorIndex++)
             {
                 let rect = document.createElementNS (xmlns, 'rect');
@@ -295,9 +313,12 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient)
                 rect.setAttributeNS (null, 'width', 1);
                 rect.setAttributeNS (null, 'height', rampHeight);
                 rect.setAttributeNS (null, 'fill', colors[colorIndex]);
-                svg.appendChild (document.createTextNode ("\n"));
-                svg.appendChild (rect);
+                discreteGradient.appendChild (document.createTextNode ("\n"));
+                discreteGradient.appendChild (rect);
             }
+            discreteGradient.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (discreteGradient);
         }
         svg.appendChild (document.createTextNode ("\n"));
     }
@@ -335,13 +356,15 @@ module.exports.createColorTable = function (colorRamp)
     container.setAttributeNS (null, 'stroke', 'gray');
     container.setAttributeNS (null, 'stroke-width', border + gap);
     container.setAttributeNS (null, 'fill', 'white');
+    container.setAttributeNS (null, 'shape-rendering', 'crispEdges');
     svg.appendChild (document.createTextNode ("\n"));
     svg.appendChild (container);
+    svg.appendChild (document.createTextNode ("\n"));
     //
     if (colorRamp)
     {
         svg.classList.remove ('disabled');
-        let colors = [ ];
+        let colorTable = [ ];
         if (Array.isArray (colorRamp) && (colorRamp.length === 3)) // curves
         {
             let redCurve = colorRamp[0];
@@ -358,7 +381,7 @@ module.exports.createColorTable = function (colorRamp)
             {
                 for (let index = 0; index < 256; index++)
                 {
-                    colors.push (rgbToHex ([ redCurve[index], greenCurve[index], blueCurve[index] ]));
+                    colorTable.push (rgbToHex ([ redCurve[index], greenCurve[index], blueCurve[index] ]));
                 }
             }
         }
@@ -368,15 +391,18 @@ module.exports.createColorTable = function (colorRamp)
             {
                 if ((typeof color === 'string') && (/^#[0-9a-fA-F]{6}$/.test (color)))
                 {
-                    colors.push (color.toUpperCase ());
+                    colorTable.push (color.toUpperCase ());
                 }
                 else if (Array.isArray (color) && (color.length === 3))
                 {
-                    colors.push (rgbToHex (color));
+                    colorTable.push (rgbToHex (color));
                 }
             }
         }
         //
+        let colors = document.createElementNS (xmlns, 'g');
+        colors.setAttributeNS (null, 'class', 'colors');
+        colors.setAttributeNS (null, 'shape-rendering', 'geometricPrecision');
         let colorIndex = 0;
         for (let row = 0; row < rows; row++)
         {
@@ -388,15 +414,17 @@ module.exports.createColorTable = function (colorRamp)
                 rect.setAttributeNS (null, 'y', border + border + gap + row * (border + gap + cellHeight));
                 rect.setAttributeNS (null, 'width', cellWidth);
                 rect.setAttributeNS (null, 'height', cellHeight);
-                rect.setAttributeNS (null, 'fill', colors[colorIndex]);
+                rect.setAttributeNS (null, 'fill', colorTable[colorIndex]);
                 let title = document.createElementNS (xmlns, 'title');
-                title.textContent = `[${colorIndex}]\xA0:\xA0${hexToRgb (colors[colorIndex])}\xA0or\xA0${colors[colorIndex]}`;
+                title.textContent = `[${colorIndex}]\xA0:\xA0${hexToRgb (colorTable[colorIndex])}\xA0or\xA0${colorTable[colorIndex]}`;
                 rect.appendChild (title);
-                svg.appendChild (document.createTextNode ("\n"));
-                svg.appendChild (rect);
+                colors.appendChild (document.createTextNode ("\n"));
+                colors.appendChild (rect);
                 colorIndex++;
             }
         }
+        colors.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (colors);
         svg.appendChild (document.createTextNode ("\n"));
     }
     else

@@ -47,11 +47,6 @@ function limit (value, min, max)
     return (Math.min (Math.max (min, value), max));
 }
 //
-function modulo (n, m)
-{
-    return ((n % m) + m) % m;
-}
-//
 function lerp (a, b, t)
 {
     return (a * (1 - t)) + (b * t);
@@ -1139,8 +1134,6 @@ const functions =
     'sqrt',
     'tan',
     //
-    // 'modulo',
-    //
     'bias',
     'coserp',
     'cubic',
@@ -1274,8 +1267,6 @@ module.exports = function (formula)
             Math.tan,     // Returns the tangent of a number.
             //
             // Built-in functions
-            //
-            // modulo,
             //
             bias,
             coserp,
