@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Electric Jungle (HSL)",
-        "formula": "distribute_colors\n(\n    [ \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\" ],\n    [ 0, 1 ], t,\n    \"hsl\", 0\n)"
+        "formula": "distribute_colors\n(\n    [ \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\" ],\n    [ 0, 1 ], t,\n    \"hsl-near\", 0\n)"
     }
 }

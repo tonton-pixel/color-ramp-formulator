@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Cold Song",
+        "formula": "distribute_colors\n(\n    [ \"hot pink\", \"white\" ],\n    [ 0, 1 ], t,\n    \"cubehelix-far\"\n)"
+    }
+}

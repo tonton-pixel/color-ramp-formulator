@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.11
+
+- Required hue mode to be explicitely set for hue-based color models, in calls to `interpolate_colors ()` and `distribute_colors ()` functions.
+- Updated all color map formula examples, making use of `discrete_colors ()`.
+- Defined platform-independent focus outline color for text areas.
+- Added app name and version as comments to the generated SVG files.
+
 ## 1.0.0-beta.10
 
 - Improved shape rendering of SVG previews; fixed vertical artefacts when discrete gradients were zoomed in.

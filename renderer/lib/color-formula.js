@@ -740,7 +740,11 @@ function interpolate_colors (stops, location, color_model, smoothness = 0)
                     let hueShift = 0;   // Default
                     let startColor = (startIndex === 0) ? rgbTo (colorUtils.colorToRgb (startStop[1])) : lastEndColor;
                     let endColor = rgbTo (colorUtils.colorToRgb (endStop[1]));
-                    if (typeof colorModelOption !== 'undefined')    // Hue mode
+                    if (typeof colorModelOption === 'undefined')
+                    {
+                        throw new Error ("interpolate_colors: missing hue mode option suffix");
+                    }
+                    else
                     {
                         let deltaHue;
                         // Interpolation around the hue wheel

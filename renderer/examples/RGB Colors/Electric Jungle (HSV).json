@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Electric Jungle (HSV)",
-        "formula": "distribute_colors\n(\n    [ \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\" ],\n    [ 0, 1 ], t,\n    \"hsv\", 0\n)"
+        "formula": "distribute_colors\n(\n    [ \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\", \"#2A4858\", \"#FAFA6E\" ],\n    [ 0, 1 ], t,\n    \"hsv-near\", 0\n)"
     }
 }

@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Hot to Cold (HSV)",
-        "formula": "distribute_colors\n(\n    [ \"red\", \"blue\" ],\n    [ 0, 1 ], t,\n    \"hsv\"\n)"
+        "formula": "distribute_colors\n(\n    [ \"red\", \"blue\" ],\n    [ 0, 1 ], t,\n    \"hsv-inc\"\n)"
     }
 }

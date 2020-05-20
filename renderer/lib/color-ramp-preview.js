@@ -22,7 +22,7 @@ function hexToRgb (hex)
     return `rgb(${red}, ${green}, ${blue})`;
 }
 //
-module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
+module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
 {
     const curvesWidth = 256;
     const curvesHeight = 256;
@@ -37,6 +37,12 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
     svg.setAttributeNS (null, 'viewBox', `0 0 ${containerWidth} ${containerHeight}`);
     svg.setAttributeNS (null, 'width', containerWidth);
     svg.setAttributeNS (null, 'height', containerHeight);
+    //
+    if (comment)
+    {
+        svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createComment (comment));
+    }
     //
     let container = document.createElementNS (xmlns, 'rect');
     container.setAttributeNS (null, 'class', 'curves-map-container');
@@ -199,7 +205,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount)
 };
 //
 //
-module.exports.createLinearGradient = function (colorRamp, continuousGradient)
+module.exports.createLinearGradient = function (colorRamp, continuousGradient, comment)
 {
     const rampWidth = 256;
     const rampHeight = 48;
@@ -213,6 +219,12 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient)
     svg.setAttributeNS (null, 'viewBox', `0 0 ${containerWidth} ${containerHeight}`);
     svg.setAttributeNS (null, 'width', containerWidth);
     svg.setAttributeNS (null, 'height', containerHeight);
+    //
+    if (comment)
+    {
+        svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createComment (comment));
+    }
     //
     let container = document.createElementNS (xmlns, 'rect');
     container.setAttributeNS (null, 'class', 'linear-gradient-container');
@@ -330,7 +342,7 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient)
     return svg;
 };
 //
-module.exports.createColorTable = function (colorRamp)
+module.exports.createColorTable = function (colorRamp, comment)
 {
     const rows = 16;
     const columns = 16;
@@ -348,6 +360,12 @@ module.exports.createColorTable = function (colorRamp)
     svg.setAttributeNS (null, 'viewBox', `0 0 ${containerWidth} ${containerHeight}`);
     svg.setAttributeNS (null, 'width', containerWidth);
     svg.setAttributeNS (null, 'height', containerHeight);
+    //
+    if (comment)
+    {
+        svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createComment (comment));
+    }
     //
     let container = document.createElementNS (xmlns, 'rect');
     container.setAttributeNS (null, 'class', 'color-table-container');

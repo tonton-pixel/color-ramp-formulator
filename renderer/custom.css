@@ -13,6 +13,7 @@
     --color-error:     hsl(0, 100%, 40%);
     --color-highlight: hsl(55, 100%, 50%);
     --color-selection: hsl(255, 75%, 60%);
+    --color-focus:     hsl(210, 100%, 67%);
 }
 
 body
@@ -25,7 +26,7 @@ body
     display: none;
     flex-direction: row;
     margin: auto auto;
-    padding: 8px 1em;
+    padding: 1em;
 }
 
 .section.is-shown

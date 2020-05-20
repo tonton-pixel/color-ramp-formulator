@@ -385,7 +385,8 @@ else
                 show: !settings.window.deferredShow,
                 webPreferences:
                 {
-                    nodeIntegration: true
+                    nodeIntegration: true,
+                    spellcheck: false
                 }
             }
         );
