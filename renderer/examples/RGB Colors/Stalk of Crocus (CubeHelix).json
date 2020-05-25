@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Stalk of Crocus (CubeHelix)",
-        "formula": "interpolate_colors\n(\n    [\n        [ 0 / 8, [ 164, 225, 85 ] ],\n        [ 1 / 8, [ 164, 225, 85 ] ],\n        [ 8 / 8, [ 106, 69, 154 ] ]\n    ],\n    t,\n    \"cubehelix-near\", 100\n)"
+        "formula": "interpolate_colors\n(\n    [\n        [ 0/8, [ 164, 225, 85 ] ],\n        [ 1/8, [ 164, 225, 85 ] ],\n        [ 8/8, [ 106, 69, 154 ] ]\n    ],\n    t,\n    \"cubehelix-near\", 100\n)"
     }
 }

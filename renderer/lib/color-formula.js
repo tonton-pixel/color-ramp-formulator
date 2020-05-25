@@ -975,10 +975,38 @@ function map (n, start1, stop1, start2, stop2, withinBounds)
     }
 }
 //
-function discrete_colors (colors, bounds, location)
+function discrete_colors (colors, bounds, location, average)
 {
-    let index = Math.floor ((map (location, bounds[0], bounds[1], 0, 255) + 0.5) * colors.length / 256);
-    return colorUtils.colorToRgb (colors[constrain (index, 0, colors.length - 1)]);
+    let rgb;
+    if (average)
+    {
+        let lowIndex = Math.floor ((map (location, bounds[0], bounds[1], 0, 255) + 0.25) * colors.length / 256);
+        let highIndex = Math.floor ((map (location, bounds[0], bounds[1], 0, 255) + 0.75) * colors.length / 256);
+        if (lowIndex !== highIndex)
+        {
+            let lowRgb = colorUtils.colorToRgb (colors[constrain (lowIndex, 0, colors.length - 1)]);
+            let lowLab = colorUtils.rgbToLab (lowRgb);
+            let highRgb = colorUtils.colorToRgb (colors[constrain (highIndex, 0, colors.length - 1)]);
+            let highLab = colorUtils.rgbToLab (highRgb);
+            let lab =
+            [
+                (lowLab[0] + highLab[0]) / 2,
+                (lowLab[1] + highLab[1]) / 2,
+                (lowLab[2] + highLab[2]) / 2
+            ]
+            rgb = colorUtils.labToRgb (lab);
+        }
+        else
+        {
+            rgb = colorUtils.colorToRgb (colors[constrain (lowIndex, 0, colors.length - 1)]);
+        }
+    }
+    else
+    {
+        let index = Math.floor ((map (location, bounds[0], bounds[1], 0, 255) + 0.5) * colors.length / 256);
+        rgb = colorUtils.colorToRgb (colors[constrain (index, 0, colors.length - 1)]);
+    }
+    return rgb;
 }
 //
 // http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubetry.html

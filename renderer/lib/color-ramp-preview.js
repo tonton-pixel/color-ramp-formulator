@@ -281,8 +281,8 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
             const id = "linear-gradient";
             let defs = document.createElementNS (xmlns, 'defs');
             let linearGradient = document.createElementNS (xmlns, 'linearGradient');
-            linearGradient.setAttributeNS (null, 'gradientUnits', 'objectBoundingBox');
             linearGradient.setAttributeNS (null, 'id', id);
+            linearGradient.setAttributeNS (null, 'gradientUnits', 'objectBoundingBox');
             let x = 0;
             for (let color of colors)
             {

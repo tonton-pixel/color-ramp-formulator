@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.12
+
+- Added an optional `average` parameter to the `discrete_colors ()` function, allowing some extra transitions between consecutive colors, producing more visually equal ranges.
+- Updated formula examples and format page accordingly.
+
 ## 1.0.0-beta.11
 
 - Required hue mode to be explicitely set for hue-based color models, in calls to `interpolate_colors ()` and `distribute_colors ()` functions.
