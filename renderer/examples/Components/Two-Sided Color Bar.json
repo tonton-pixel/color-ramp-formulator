@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Two-Sided Color Bar",
-        "formula": "hsv\n(\n    t < 0.5 ? lerp (240, 120, t) : lerp (60, -60, (t - 0.5)),\n    100,\n    100\n)"
+        "formula": "hsv\n(\n    t < 0.5 ? lerp (240, 120, t) : lerp (60, -60, t - 0.5),\n    100,\n    100\n)"
     }
 }

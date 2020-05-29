@@ -1,6 +1,6 @@
 # <img src="icons/icon-256.png" width="64px" align="center" alt="Color Ramp Formulator icon"> COLOR RAMP FORMULATOR
 
-**Color Ramp Formulator** is a desktop application used to generate algorithmically-defined color ramps.
+**Color Ramp Formulator** is a desktop application used to generate algorithmically-defined color ramps, making use of formulas.
 
 This application is built with [Electron](https://electronjs.org), and works on macOS, Linux and Windows operating systems.
 

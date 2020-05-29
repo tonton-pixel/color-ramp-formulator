@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.13
+
+- Used basic RGB instead of Lab color model for averaging of consecutive discrete colors.
+- Updated app's description.
+
 ## 1.0.0-beta.12
 
 - Added an optional `average` parameter to the `discrete_colors ()` function, allowing some extra transitions between consecutive colors, producing more visually equal ranges.
