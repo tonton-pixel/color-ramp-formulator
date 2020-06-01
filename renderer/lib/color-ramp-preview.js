@@ -1,3 +1,4 @@
+//
 function normalize (value)
 {
     return Math.min (Math.max (0, Math.round (value)), 255);

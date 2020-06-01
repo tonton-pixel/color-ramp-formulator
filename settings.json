@@ -8,9 +8,9 @@
     "maxZoomLevel": 4,
     "window":
     {
-        "largerDefaultWidth": 1280,
+        "largerDefaultWidth": 1200,
         "largerDefaultHeight": 800,
-        "defaultWidth": 1080,
+        "defaultWidth": 900,
         "defaultHeight": 675,
         "minWidth": 675,
         "minHeight": 675,

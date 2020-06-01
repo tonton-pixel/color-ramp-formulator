@@ -120,3 +120,41 @@ module.exports.loadAnyFile = function (prompt, filters, defaultPath, encodings, 
         }
     );
 }
+//
+module.exports.saveBinaryFile = function (prompt, filters, defaultPath, callback)
+{
+    dialog.showSaveDialog
+    (
+        getCurrentWindow (),
+        {
+            title: prompt,
+            message: prompt,
+            filters: filters,
+            defaultPath: defaultPath
+        }
+    )
+    .then
+    (
+        result =>
+        {
+            if (!result.canceled)
+            {
+                let filePath = result.filePath;
+                fs.writeFile
+                (
+                    filePath,
+                    callback (filePath),
+                    'binary',
+                    (err) =>
+                    {
+                        if (err)
+                        {
+                            alert ("An error occurred writing the file: " + err.message);
+                        }
+                    }
+                );
+            }
+        }
+    );
+};
+//

@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0-beta.14
+
+- Revamped display of calculated color ramp as a list of 256 color values (RGB and Hex) and matching color swatches.
+- Implemented export to four color ramp data file formats (`.json`, `.act`, `.amp`, `.lut`).
+- Used smaller default window dimensions.
+
 ## 1.0.0-beta.13
 
 - Used basic RGB instead of Lab color model for averaging of consecutive discrete colors.
@@ -41,7 +47,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - Added File menu in menu bar.
 - Added Import/Export actions menu button.
-- Added import of four color ramp data file formats (`.json`, `.act`, `.amp`, `.lut`), with automatic conversion to custom formula format, making use of a new `discrete_colors ()` color helper function.
+- Added import from four color ramp data file formats (`.json`, `.act`, `.amp`, `.lut`), with automatic conversion to custom formula format, making use of a new `discrete_colors ()` color helper function.
 - Improved handling of invalid loaded or imported data files.
 
 ## 1.0.0-beta.6

@@ -221,6 +221,7 @@ else
             { type: 'separator' },
             {
                 label: "Import",
+                id: "import",
                 submenu:
                 [
                     { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('import-color-ramp'); } },
@@ -231,10 +232,13 @@ else
             },
             {
                 label: "Export",
+                id: "export",
                 submenu:
                 [
-                    { label: "Color Ramp (.json)...", enabled: false, click: () => { mainWindow.webContents.send ('export-color-ramp'); } },
-                    { label: "Color Palette (.json)...", enabled: false, click: () => { mainWindow.webContents.send ('export-color-palette'); } }
+                    { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('export-color-ramp'); } },
+                    { label: "Color Table (.act)...", click: () => { mainWindow.webContents.send ('export-color-table'); } },
+                    { label: "Curves Map (.amp)...", click: () => { mainWindow.webContents.send ('export-curves-map'); } },
+                    { label: "Lookup Table (.lut)...", click: () => { mainWindow.webContents.send ('export-lookup-table'); } }
                 ]
             }
         ]

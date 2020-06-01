@@ -82,8 +82,7 @@ body
 }
 
 .formula-name,
-.formula-string,
-.result-string
+.formula-string
 {
     width: 100%;
     margin: 3px 0 4px 0;
@@ -96,8 +95,7 @@ body
     padding: 0.125em 0.25em;
 }
 
-.formula-string,
-.result-string
+.formula-string
 {
     font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
     font-size: 13px;
@@ -109,10 +107,80 @@ body
     overscroll-behavior: contain;
 }
 
-.result-string.error
+.color-ramp-list
 {
-    white-space: pre-wrap;
+    font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
+    font-size: 13px;
+    line-height: 1.333em;
+    background-color: white;
+    border: 1px solid #a9a9a9;
+    height: calc(16em + 2px);
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+
+.color-ramp-list .list
+{
+    background-color: white;
+    border: none;
+}
+
+.color-ramp-list .list .row
+{
+    height: 2em;
+    border: none;
+    user-select: text;
+    cursor: text;
+}
+
+.color-ramp-list .list .row .index,
+.color-ramp-list .list .row .hex,
+.color-ramp-list .list .row .rgb,
+.color-ramp-list .list .row .color,
+.color-ramp-list .list .row .error
+{
+    padding: 0 0.4em;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.color-ramp-list .list .row .index
+{
+    text-align: right;
+}
+
+.color-ramp-list .list .row .hex
+{
+    text-align: left;
+}
+
+.color-ramp-list .list .row .rgb
+{
+    text-align: left;
+}
+
+.color-ramp-list .list .row .color
+{
+    width: 100%;
+    user-select: none;
+    cursor: default;
+}
+
+.color-ramp-list .list .row .color .swatch
+{
+    height: 19px;
+    border: 1px solid var(--color-border);
+    border-radius: 0.25em;
+}
+
+.color-ramp-list .list .row .error
+{
     color: var(--color-error);
+    text-align: left;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 0;
 }
 
 .interface

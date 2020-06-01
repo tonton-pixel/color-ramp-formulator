@@ -1,3 +1,4 @@
+//
 function scalarMultiply (s, v)
 {
     var result = [ ];

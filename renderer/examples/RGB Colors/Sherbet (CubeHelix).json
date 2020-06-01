@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Sherbet (CubeHelix)",
+        "formula": "cubehelix_color (t, 0, 0.5, 1.6, (1 - t) / 2)"
+    }
+}
