@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.0.0
+
+- First official release.
+
 ## 1.0.0-beta.14
 
 - Revamped display of calculated color ramp as a list of 256 color values (RGB and Hex) and matching color swatches.

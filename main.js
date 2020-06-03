@@ -233,6 +233,7 @@ else
             {
                 label: "Export",
                 id: "export",
+                enabled: false,
                 submenu:
                 [
                     { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('export-color-ramp'); } },
@@ -266,8 +267,8 @@ else
             { role: 'reload' },
             { role: 'toggledevtools' },
             { type: 'separator' },
-            { label: "Open User Data Directory", click: () => { shell.openItem (app.getPath ('userData')); } },
-            { label: "Open Temporary Directory", click: () => { shell.openItem (app.getPath ('temp')); } },
+            { label: "Open User Data Directory", click: () => { shell.openPath (app.getPath ('userData')); } },
+            { label: "Open Temporary Directory", click: () => { shell.openPath (app.getPath ('temp')); } },
             { type: 'separator' },
             { label: "Show Executable File", click: () => { shell.showItemInFolder (app.getPath ('exe')); } },
             { type: 'separator' },
@@ -306,8 +307,9 @@ else
         [
             { label: "License...", click: showLicense },
             { type: 'separator' },
-            { label: "Documentation", click: () => { shell.openItem (path.join (unpackedDirname, 'doc', 'index.html')); } },
-            { label: "Formula Format", click: () => { shell.openItem (path.join (unpackedDirname, 'doc', 'formula.html')); } },
+            { label: "Documentation", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'index.html')); } },
+            { label: "Formula Format", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'formula.html')); } },
+            { label: "References", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'references.html')); } },
             { type: 'separator' },
             { label: settings.repository.label, click: () => { shell.openExternal (settings.repository.URL); } },
             { label: settings.releases.label, click: () => { shell.openExternal (settings.releases.URL); } }
@@ -321,8 +323,9 @@ else
             { label: "About...", click: showAboutBox },
             { label: "License...", click: showLicense },
             { type: 'separator' },
-            { label: "Documentation", click: () => { shell.openItem (path.join (unpackedDirname, 'doc', 'index.html')); } },
-            { label: "Formula Format", click: () => { shell.openItem (path.join (unpackedDirname, 'doc', 'formula.html')); } },
+            { label: "Documentation", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'index.html')); } },
+            { label: "Formula Format", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'formula.html')); } },
+            { label: "References", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'references.html')); } },
             { type: 'separator' },
             { label: settings.repository.label, click: () => { shell.openExternal (settings.repository.URL); } },
             { label: settings.releases.label, click: () => { shell.openExternal (settings.releases.URL); } }
@@ -347,6 +350,16 @@ else
     {
         menu = Menu.buildFromTemplate (menuTemplate);
         Menu.setApplicationMenu (menu);
+        //
+        ipcMain.on
+        (
+            'enable-export-menu',
+            (event, enabled) =>
+            {
+                menu.getMenuItemById ('export').enabled = enabled;
+                Menu.setApplicationMenu (menu); // Shouldn't be necessary, but...
+            }
+        );
         //
         const Storage = require ('./lib/storage.js');
         const mainStorage = new Storage ('main-preferences');
@@ -390,6 +403,7 @@ else
                 webPreferences:
                 {
                     nodeIntegration: true,
+                    enableRemoteModule: true,
                     spellcheck: false
                 }
             }

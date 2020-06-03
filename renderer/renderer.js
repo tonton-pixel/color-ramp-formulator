@@ -30,8 +30,8 @@ const ColorFormula = require ('./lib/color-formula.js');
 const defaultPrefs =
 {
     zoomLevel: 0,
-    formulaName: "",
-    formulaString: "",
+    formulaName: "Linear Grayscale",
+    formulaString: "[ x, x, x ]",
     gridUnitCount: 4,
     continuousGradient: false,
     defaultFormulaFolderPath: appDefaultFolderPath,
@@ -87,6 +87,7 @@ clearButton.addEventListener
         formulaString.value = "";
         currentColorRamp = null;
         currentErrorString = null;
+        ipcRenderer.send ('enable-export-menu', false);
         updatePreviews ();
     }
 );
@@ -243,6 +244,7 @@ calculateButton.addEventListener
     {
         currentColorRamp = null;
         currentErrorString = null;
+        ipcRenderer.send ('enable-export-menu', false);
         updatePreviews ();
         let formula = formulaString.value.trim ();
         if (formula)
@@ -264,6 +266,7 @@ calculateButton.addEventListener
                     }
                 }
                 currentColorRamp = colorRamp;
+                ipcRenderer.send ('enable-export-menu', true);
                 updatePreviews ();
             }
             catch (error)
@@ -460,6 +463,7 @@ remote.Menu.buildFromTemplate
         {
             label: "Export",
             id: "export",
+            enabled: false,
             submenu:
             [
                 { label: "Color Ramp (.json)...", click: () => { webContents.send ('export-color-ramp'); } },
@@ -476,6 +480,7 @@ importExportMenuButton.addEventListener
     'click',
     (event) =>
     {
+        importExportMenu.getMenuItemById ('export').enabled = (currentColorRamp !== null);
         pullDownMenus.popup (event.currentTarget, importExportMenu);
     }
 );

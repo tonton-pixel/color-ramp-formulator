@@ -4,13 +4,7 @@
 
 This application is built with [Electron](https://electronjs.org), and works on macOS, Linux and Windows operating systems.
 
-## Features
-
-**[TBD]**
-
-**Note**: This is currently a beta release: please refer to the document [CHANGES.md](CHANGES.md) for more details.
-
-<img src="screenshots/color-ramp-formulator.png" width="1080px" alt="Color Ramp Formulator screenshot">
+<img src="screenshots/color-ramp-formulator.png" width="675" alt="Color Ramp Formulator screenshot">
 
 ## Building
 
@@ -34,7 +28,7 @@ npm run build-darwin
 
 ## Using
 
-~~You can [download the latest release](https://github.com/tonton-pixel/color-ramp-formulator/releases) for macOS.~~
+You can [download the latest release](https://github.com/tonton-pixel/color-ramp-formulator/releases) for macOS.
 
 ## License
 

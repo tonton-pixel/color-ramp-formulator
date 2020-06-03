@@ -7,8 +7,31 @@
     </head>
     <body>
         <div class="wrapper">
-            <h1><img src="icon-256.png" width="64px" alt="Color Ramp Formulator icon">&nbsp;Color Ramp Formulator<br>&nbsp;v1.0.0-beta.14 [Draft]</h1>
+            <h1><img src="icon-256.png" width="64px" alt="Color Ramp Formulator icon">&nbsp;Color Ramp Formulator</h1>
             <h2>Formula Format</h2>
+            <h3>Main variables</h3>
+            <table>
+            <tr>
+            <th>Variable</th>
+            <th>Value</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td><strong>x</strong></td>
+            <td>0 to 255</td>
+            <td>The formula is evaluated in a loop for each value of <code>x</code> between 0 and 255.</td>
+            </tr>
+            <tr>
+            <td><strong>t</strong></td>
+            <td>0.0 to 1.0</td>
+            <td>Provided as a convenience: <code>t = x / 255</code></td>
+            </tr>
+            </table>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+            <li>Either <em>x</em> or <em>t</em> can be used in a formula, or even both.</li>
+            <li>Some helper functions, such as <em>lerp ()</em>, are actually expecting a variable <em>t</em> between 0.0 and 1.0.</li>
+            </ul>
             <h3>Math constants</h3>
             <table>
             <tr>
@@ -403,7 +426,7 @@
             <tr>
             <td><strong>discrete_colors</strong><br>(colors, bounds, location, average)</td>
             <td>colors:&nbsp;array<br>bounds:&nbsp;array<br>location:&nbsp;number<br>average:&nbsp;boolean</td>
-            <td>Returns a color at (location) within (bounds) from an array of (colors). The optional parameter (average), false by default, allows some extra transitions between consecutive colors, producing more visually equal ranges.</td>
+            <td>Returns a color at (location) within (bounds) from an array of (colors). The last optional parameter (average), false by default, allows more visually equal ranges by generating extra transitions between consecutive colors.</td>
             </tr>
             <tr>
             <td><strong>cubehelix_color</strong><br>(t, start, rotations, saturation, gamma, lightness)</td>

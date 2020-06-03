@@ -26,7 +26,7 @@ body
     display: none;
     flex-direction: row;
     margin: auto auto;
-    padding: 1em;
+    padding: 0.8em 1em;
 }
 
 .section.is-shown
@@ -82,7 +82,8 @@ body
 }
 
 .formula-name,
-.formula-string
+.formula-string,
+.color-ramp-list
 {
     width: 100%;
     margin: 3px 0 4px 0;
@@ -225,7 +226,7 @@ body
 
 .preview-area div
 {
-    margin-bottom: -5px;
+    margin-bottom: -4px;
     padding: 0;
 }
 
