@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.1.0
+
+- Added new formula examples.
+- Updated app building instructions.
+- Updated `Electron` to version `9.0.2`.
+
 ## 1.0.0
 
 - First official release.

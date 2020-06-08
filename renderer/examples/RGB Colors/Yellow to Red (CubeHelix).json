@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Yellow to Red (CubeHelix)",
+        "formula": "distribute_colors\n(\n    [ \"yellow\", \"red\" ],\n    [ 0, 255 ], x,\n    \"cubehelix-near\"\n)"
+    }
+}

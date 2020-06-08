@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Clafoutis",
+        "formula": "xyz_t\n(\n    gain (t, 0.4),\n    gain (t, 0.3),\n    gain (t, 0.6)\n)"
+    }
+}

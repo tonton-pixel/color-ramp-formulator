@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Yellow to Red (Wavelengths)",
+        "formula": "wavelength_color (lerp (580, 645, t))"
+    }
+}

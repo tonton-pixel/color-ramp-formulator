@@ -8,7 +8,7 @@ This application is built with [Electron](https://www.electronjs.org/), and work
 
 ## Building
 
-You'll need [Node.js](https://nodejs.org) (which comes with [npm](http://npmjs.com/)) installed on your computer in order to build this application.
+You'll need [Node.js](https://nodejs.org/) (which comes with [npm](https://www.npmjs.com/)) installed on your computer in order to build this application.
 
 ### Clone method
 

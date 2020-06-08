@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Blue Whale Spouting",
+        "formula": "xyz_t\n(\n    1 - sin ((1 - t) * PI / 2),\n    pow (sin (t * PI / 2), 2),\n    sin (t * PI / 2)\n)"
+    }
+}
