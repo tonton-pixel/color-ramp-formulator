@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.2.0
+
+- Updated documentation, merged into a single page with navigation sidebar.
+- Added indentation to saved preview SVG files.
+- Updated `Electron` to version `9.0.4`.
+
 ## 1.1.0
 
 - Added new formula examples.

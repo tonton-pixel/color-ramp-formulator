@@ -33,15 +33,21 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
     const containerHeight = border + gap + curvesHeight + gap + border;
     const gridColor = "#EBEBEB";
     //
+    let level = 0;
+    let indentation = "    ";
+    //
     const xmlns = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS (xmlns, 'svg');    
     svg.setAttributeNS (null, 'viewBox', `0 0 ${containerWidth} ${containerHeight}`);
     svg.setAttributeNS (null, 'width', containerWidth);
     svg.setAttributeNS (null, 'height', containerHeight);
     //
+    level++;
+    //
     if (comment)
     {
         svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createTextNode (indentation.repeat (level)));
         svg.appendChild (document.createComment (comment));
     }
     //
@@ -54,6 +60,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
     container.setAttributeNS (null, 'fill', 'white');
     container.setAttributeNS (null, 'shape-rendering', 'crispEdges');
     svg.appendChild (document.createTextNode ("\n"));
+    svg.appendChild (document.createTextNode (indentation.repeat (level)));
     svg.appendChild (container);
     //
     if (colorRamp)
@@ -103,6 +110,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
             }
         }
         //
+        level++;
         if (gridUnitCount)
         {
             let grid = document.createElementNS (xmlns, 'g');
@@ -118,6 +126,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 rect.setAttributeNS (null, 'height', 2);
                 rect.setAttributeNS (null, 'fill', gridColor);
                 grid.appendChild (document.createTextNode ("\n"));
+                grid.appendChild (document.createTextNode (indentation.repeat (level)));
                 grid.appendChild (rect);
             }
             for (var column = 0; column <= gridUnitCount; column++)
@@ -130,13 +139,18 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 rect.setAttributeNS (null, 'height', border + curvesHeight + border);
                 rect.setAttributeNS (null, 'fill', gridColor);
                 grid.appendChild (document.createTextNode ("\n"));
+                grid.appendChild (document.createTextNode (indentation.repeat (level)));
                 grid.appendChild (rect);
             }
+            level--;
             grid.appendChild (document.createTextNode ("\n"));
+            grid.appendChild (document.createTextNode (indentation.repeat (level)));
             svg.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (document.createTextNode (indentation.repeat (level)));
             svg.appendChild (grid);
         }
         //
+        level++;
         let values = document.createElementNS (xmlns, 'g');
         values.setAttributeNS (null, 'class', 'values');
         values.setAttributeNS (null, 'shape-rendering', 'geometricPrecision');
@@ -155,6 +169,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 rect.setAttributeNS (null, 'height', 1);
                 rect.setAttributeNS (null, 'fill', '#000000');  // Not '#FFFFFF'!
                 values.appendChild (document.createTextNode ("\n"));
+                values.appendChild (document.createTextNode (indentation.repeat (level)));
                 values.appendChild (rect);
             }
             else
@@ -169,6 +184,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 color = (redValue === greenValue) ? '#FFFF00' : ((redValue === blueValue) ? '#FF00FF' : '#FF0000');
                 redRect.setAttributeNS (null, 'fill', color);
                 values.appendChild (document.createTextNode ("\n"));
+                values.appendChild (document.createTextNode (indentation.repeat (level)));
                 values.appendChild (redRect);
                 let greenRect = document.createElementNS (xmlns, 'rect');
                 greenRect.setAttributeNS (null, 'class', 'value');
@@ -179,6 +195,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 color = (greenValue === redValue) ? '#FFFF00' : ((greenValue === blueValue) ? '#00FFFF' : '#00FF00');
                 greenRect.setAttributeNS (null, 'fill', color);
                 values.appendChild (document.createTextNode ("\n"));
+                values.appendChild (document.createTextNode (indentation.repeat (level)));
                 values.appendChild (greenRect);
                 let blueRect = document.createElementNS (xmlns, 'rect');
                 blueRect.setAttributeNS (null, 'class', 'value');
@@ -189,18 +206,25 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 color = (blueValue === redValue) ? '#FF00FF' : ((blueValue === greenValue) ? '#00FFFF' : '#0000FF');
                 blueRect.setAttributeNS (null, 'fill', color);
                 values.appendChild (document.createTextNode ("\n"));
+                values.appendChild (document.createTextNode (indentation.repeat (level)));
                 values.appendChild (blueRect);
             }
         }
+        level--;
         values.appendChild (document.createTextNode ("\n"));
+        values.appendChild (document.createTextNode (indentation.repeat (level)));
         svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createTextNode (indentation.repeat (level)));
         svg.appendChild (values);
-        svg.appendChild (document.createTextNode ("\n"));
     }
     else
     {
         svg.classList.add ('disabled');
     }
+    //
+    level--;
+    svg.appendChild (document.createTextNode ("\n"));
+    svg.appendChild (document.createTextNode (indentation.repeat (level)));
     //
     return svg;
 };
@@ -215,15 +239,21 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
     const containerWidth = border + gap + rampWidth + gap + border;
     const containerHeight = border + gap + rampHeight + gap + border;
     //
+    let level = 0;
+    let indentation = "    ";
+    //
     const xmlns = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS (xmlns, 'svg');    
     svg.setAttributeNS (null, 'viewBox', `0 0 ${containerWidth} ${containerHeight}`);
     svg.setAttributeNS (null, 'width', containerWidth);
     svg.setAttributeNS (null, 'height', containerHeight);
     //
+    level++;
+    //
     if (comment)
     {
         svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createTextNode (indentation.repeat (level)));
         svg.appendChild (document.createComment (comment));
     }
     //
@@ -236,6 +266,7 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
     container.setAttributeNS (null, 'fill', 'white');
     container.setAttributeNS (null, 'shape-rendering', 'crispEdges');
     svg.appendChild (document.createTextNode ("\n"));
+    svg.appendChild (document.createTextNode (indentation.repeat (level)));
     svg.appendChild (container);
     //
     if (colorRamp)
@@ -277,8 +308,10 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
             }
         }
         //
+        level++;
         if (continuousGradient)
         {
+            level++;
             const id = "linear-gradient";
             let defs = document.createElementNS (xmlns, 'defs');
             let linearGradient = document.createElementNS (xmlns, 'linearGradient');
@@ -292,13 +325,20 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
                 stop.setAttributeNS (null, 'offset', `${x++ / (rampWidth - 1)}`);
                 stop.setAttributeNS (null, 'stop-color', color);
                 linearGradient.appendChild (document.createTextNode ("\n"));
+                linearGradient.appendChild (document.createTextNode (indentation.repeat (level)));
                 linearGradient.appendChild (stop);
             }
+            level--;
             linearGradient.appendChild (document.createTextNode ("\n"));
+            linearGradient.appendChild (document.createTextNode (indentation.repeat (level)));
             defs.appendChild (document.createTextNode ("\n"));
+            defs.appendChild (document.createTextNode (indentation.repeat (level)));
             defs.appendChild (linearGradient);
+            level--;
             defs.appendChild (document.createTextNode ("\n"));
+            defs.appendChild (document.createTextNode (indentation.repeat (level)));
             svg.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (document.createTextNode (indentation.repeat (level)));
             svg.appendChild (defs);
             //
             let rect = document.createElementNS (xmlns, 'rect');
@@ -310,6 +350,7 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
             rect.setAttributeNS (null, 'fill', `url(#${id})`);
             rect.setAttributeNS (null, 'shape-rendering', 'crispEdges');
             svg.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (document.createTextNode (indentation.repeat (level)));
             svg.appendChild (rect);
         }
         else
@@ -327,18 +368,25 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
                 rect.setAttributeNS (null, 'height', rampHeight);
                 rect.setAttributeNS (null, 'fill', colors[colorIndex]);
                 discreteGradient.appendChild (document.createTextNode ("\n"));
+                discreteGradient.appendChild (document.createTextNode (indentation.repeat (level)));
                 discreteGradient.appendChild (rect);
             }
+            level--;
             discreteGradient.appendChild (document.createTextNode ("\n"));
+            discreteGradient.appendChild (document.createTextNode (indentation.repeat (level)));
             svg.appendChild (document.createTextNode ("\n"));
+            svg.appendChild (document.createTextNode (indentation.repeat (level)));
             svg.appendChild (discreteGradient);
         }
-        svg.appendChild (document.createTextNode ("\n"));
     }
     else
     {
         svg.classList.add ('disabled');
     }
+    //
+    level--;
+    svg.appendChild (document.createTextNode ("\n"));
+    svg.appendChild (document.createTextNode (indentation.repeat (level)));
     //
     return svg;
 };
@@ -356,15 +404,21 @@ module.exports.createColorTable = function (colorRamp, comment)
     const cellWidth = 14;
     const cellHeight = 14;
     //
+    let level = 0;
+    let indentation = "    ";
+    //
     const xmlns = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS (xmlns, 'svg');    
     svg.setAttributeNS (null, 'viewBox', `0 0 ${containerWidth} ${containerHeight}`);
     svg.setAttributeNS (null, 'width', containerWidth);
     svg.setAttributeNS (null, 'height', containerHeight);
     //
+    level++;
+    //
     if (comment)
     {
         svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createTextNode (indentation.repeat (level)));
         svg.appendChild (document.createComment (comment));
     }
     //
@@ -377,8 +431,8 @@ module.exports.createColorTable = function (colorRamp, comment)
     container.setAttributeNS (null, 'fill', 'white');
     container.setAttributeNS (null, 'shape-rendering', 'crispEdges');
     svg.appendChild (document.createTextNode ("\n"));
+    svg.appendChild (document.createTextNode (indentation.repeat (level)));
     svg.appendChild (container);
-    svg.appendChild (document.createTextNode ("\n"));
     //
     if (colorRamp)
     {
@@ -419,6 +473,7 @@ module.exports.createColorTable = function (colorRamp, comment)
             }
         }
         //
+        level++;
         let colors = document.createElementNS (xmlns, 'g');
         colors.setAttributeNS (null, 'class', 'colors');
         colors.setAttributeNS (null, 'shape-rendering', 'geometricPrecision');
@@ -438,18 +493,26 @@ module.exports.createColorTable = function (colorRamp, comment)
                 title.textContent = `[${colorIndex}]\xA0:\xA0${hexToRgb (colorTable[colorIndex])}\xA0or\xA0${colorTable[colorIndex]}`;
                 rect.appendChild (title);
                 colors.appendChild (document.createTextNode ("\n"));
+                colors.appendChild (document.createTextNode (indentation.repeat (level)));
                 colors.appendChild (rect);
                 colorIndex++;
             }
         }
+        level--;
         colors.appendChild (document.createTextNode ("\n"));
-        svg.appendChild (colors);
+        colors.appendChild (document.createTextNode (indentation.repeat (level)));
         svg.appendChild (document.createTextNode ("\n"));
+        svg.appendChild (document.createTextNode (indentation.repeat (level)));
+        svg.appendChild (colors);
     }
     else
     {
         svg.classList.add ('disabled');
     }
+    //
+    level--;
+    svg.appendChild (document.createTextNode ("\n"));
+    svg.appendChild (document.createTextNode (indentation.repeat (level)));
     //
     return svg;
 };

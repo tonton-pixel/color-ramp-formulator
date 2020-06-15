@@ -3,14 +3,158 @@
     <head>
         <meta charset="UTF-8">
         <title>Documentation | Color Ramp Formulator</title>
-        <link rel="stylesheet" href="styles.css">
+        <style type="text/css">
+            body
+            {
+                font-family: system-ui, sans-serif;
+                font-size: 14px;
+                padding: 0 1em;
+                line-height: 1.333em;
+            }
+            .sidebar
+            {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 208px;
+                height: 100%;
+                padding: 0 16px;
+                background-color: white;
+                border-right: 1px solid #EEEEEE;
+                overflow-y: scroll;
+            }
+            .sidebar ul
+            {
+                margin-top: 0;
+            }
+            .sidebar li
+            {
+                margin-left: -24px;
+            }
+            header
+            {
+                padding-top: 0.5em;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1px solid #EEEEEE;
+            }
+            header h1
+            {
+                line-height: 1.25em;
+            }
+            header img
+            {
+                margin: 0;
+                padding: 0;
+                width: 52px;
+                height: 52px;
+            }
+            .navigation .title
+            {
+                margin-top: 1em;
+                margin-bottom: 0.75em;
+                font-size: 1.25em;
+                font-weight: bold;
+            }
+            footer
+            {
+                margin-top: 1.5em;
+                border-top: 1px solid #EEEEEE;
+            }
+            .wrapper
+            {
+                margin: 0 auto;
+                margin-left: calc(16px + 208px + 16px);
+                min-width: 640px;
+                max-width: 960px;
+            }
+            h2, h3
+            {
+                padding-top: 0.5em;
+            }
+            h2::before  
+            {
+                content: "◎\A0";
+                font-size: 95%;
+            }
+            h3::before  
+            {
+                content: "◉\A0";
+                font-size: 90%;
+            }
+            table
+            {
+                border-collapse: collapse;
+                border: 1px solid gray;
+                margin: 1.5em 0;
+                width: 100%;
+            }
+            tr
+            {
+                border: 1px solid gray;
+            }
+            th, td
+            {
+                border: 1px solid gray;
+                padding: 0.5em;
+            }
+            th
+            {
+                text-align: left;
+            }
+            td.no-wrap
+            {
+                white-space: nowrap;
+            }
+            code, pre
+            {
+                padding: 1px 2px 0 2px;
+                background-color: #EEEEEE;
+                white-space: nowrap;
+            }
+            li
+            {
+                margin: 0.333em 0;
+            }
+        </style>
     </head>
     <body>
-        <div class="wrapper">
-            <h1><img src="icon-256.png" width="64px" alt="Color Ramp Formulator icon">&nbsp;Color Ramp Formulator</h1>
-            <h2>Documentation</h2>
-            <h3>Description</h3>
-            <p><strong>Color Ramp Formulator</strong> is a desktop application used to generate algorithmically-defined color ramps, making use of <a href="formula.html">formulas</a>, such as:</p>
+        <aside class="sidebar">
+            <header>
+                <h1>Color&nbsp;Ramp<br>Formulator</h1><img src="icon-256.png" alt="Color Ramp Formulator icon">
+            </header>
+            <nav class="navigation">
+                <p class="title">Documentation</p>
+                <ul>
+                    <li><a href="#description">Description</a></li>
+                    <li><a href="#color-models">Color models</a></li>
+                    <li><a href="#formula-format">Formula format</a></li>
+                    <ul>
+                        <li><a href="#input-variables">Input variables</a></li>
+                        <li><a href="#math-constants">Math constants</a></li>
+                        <li><a href="#math-functions">Math functions</a></li>
+                        <li><a href="#components-helper-functions">Components helper functions</a></li>
+                        <li><a href="#rgb-colors-helper-functions">RGB colors helper functions</a></li>
+                        <li><a href="#extra-functions">Extra functions</a></li>
+                    </ul>
+                    <li><a href="#online-references">Online references</a></li>
+                    <ul>
+                        <li><a href="#color-algorithms">Color algorithms</a></li>
+                        <li><a href="#color-theory">Color theory</a></li>
+                        <li><a href="#color-tools">Color tools</a></li>
+                        <li><a href="#data-vizualization">Data vizualization</a></li>
+                        <li><a href="#javascript-code-evaluation">JavaScript code evaluation</a></li>
+                    </ul>
+                </ul>
+            </nav>
+            <footer>
+            </footer>
+        </aside>
+        <main class="wrapper">
+            <h2 id="description">Description</h2>
+            <p><strong>Color Ramp Formulator</strong> is a desktop application used to generate algorithmically-defined color ramps, making use of <a href="#formula-format">formulas</a>, such as:</p>
             <pre>
             cubehelix_color (t, 0, 0.55, 2, 1)
             </pre>
@@ -23,8 +167,8 @@
             <p><img src="curves-map-preview.svg" alt="Curves Map Preview image"></p>
             <p><img src="linear-gradient-preview.svg" alt="Linear Gradient Preview image"></p>
             <p><img src="color-table-preview.svg" alt="Color Table Preview image"></p>
-            <h3>Color models</h3>
-            <p>A color ramp can be calculated from a <a href="formula.html">formula</a> made of JavaScript expressions, with helper functions supporting several color models among:</p>
+            <h2 id="color-models">Color models</h2>
+            <p>A color ramp can be calculated from a <a href="#formula-format">formula</a> making use of helper functions supporting several color models among:</p>
             <ul>
                 <!-- <li><strong>Grayscale</strong>: Gray</li> -->
                 <li><strong>RGB</strong>: Red, Green, Blue</li>
@@ -41,12 +185,586 @@
             <ul>
                 <li><a href="https://en.wikipedia.org/wiki/RGB_color_model">RGB</a>, <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSL and HSV</a>, <a href="https://en.wikipedia.org/wiki/HWB_color_model">HWB</a>, are commonly used color models (HSV is also called HSB).</li>
                 <li>HCL stands for <a href="https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC">CIELCh</a> (<a href="https://www.colourphil.co.uk/lab_lch_colour_space.shtml">LCh</a>), which is a more intuitive color model than <a href="https://en.wikipedia.org/wiki/CIELAB_color_space">CIELAB</a> (<a href="https://www.colourphil.co.uk/lab_lch_colour_space.shtml">Lab</a>). It uses the standard, widely-documented algorithm which assumes a 2° observer angle and a D65 illuminant, and applies a sRGB gamma correction.</li>
-                <li>XYZ (<a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">CIEXYZ</a>) is an intermediate color model used to convert from RGB to Lab.</li>
-                <li><a href="https://en.wikipedia.org/wiki/YCbCr">YCbCr</a> makes use of the full-range format used for <a href="https://en.wikipedia.org/wiki/YCbCr#JPEG_conversion">JPEG</a> images.</li>
-                <li><a href="https://bl.ocks.org/mbostock/11413789">CubeHelix HSL</a> is a clever adaptation of the original <a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubetry.html">CubeHelix</a> algorithm by Dave Green, to make it usable as an alternate HSL color model, as identified by <a href="https://bost.ocks.org/mike/">Mike Bostock</a>.</li>
+                <li>XYZ (<a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">CIEXYZ</a>) is an intermediate color model used to convert between RGB and Lab.</li>
+                <li><a href="https://en.wikipedia.org/wiki/YCbCr">YCbCr</a> is a color space used to represent digital component video and photography, and makes use of the full-range format for <a href="https://en.wikipedia.org/wiki/YCbCr#JPEG_conversion">JPEG</a> images.</li>
+                <li><a href="https://bl.ocks.org/mbostock/11413789">CubeHelix HSL</a> is a clever adaptation of the original <a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/">CubeHelix</a> algorithm by Dave Green, to make it usable as an alternate HSL color model, as identified by <a href="https://bost.ocks.org/mike/">Mike Bostock</a>.</li>
+            </ul>
+            <h2 id="formula-format">Formula format</h2>
+            <p>A formula is just a JavaScript expression which always returns a RGB color array: [&nbsp;Red, Green, Blue&nbsp;], with each component value ranging from 0 to 255, regardless of any color model used by helper functions.</p>
+            <p>Normalizing (rounding and clipping) of each component value is automatically applied when the color ramp is actually generated.</p>
+            <h3 id="input-variables">Input variables</h3>
+            <table>
+            <tr>
+            <th>Variable</th>
+            <th>Value</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td><strong>x</strong></td>
+            <td>0 to 255</td>
+            <td>The formula is evaluated in a loop for each value of <code>x</code> between 0 and 255.</td>
+            </tr>
+            <tr>
+            <td><strong>t</strong></td>
+            <td>0.0 to 1.0</td>
+            <td>Provided as a convenience: <code>t = x / 255</code></td>
+            </tr>
+            </table>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+            <li>Either <em>x</em> or <em>t</em> can be used in a formula, or even both.</li>
+            <li>Some helper functions, such as <em>lerp ()</em>, are actually expecting a variable <em>t</em> between 0.0 and 1.0.</li>
+            </ul>
+            <h3 id="math-constants">Math constants</h3>
+            <table>
+            <tr>
+            <th>Constant</th>
+            <th>Value</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td><strong>E</strong></td>
+            <td>2.71828182845905</td>
+            <td>Euler's constant, base of natural logarithms.</td>
+            </tr>
+            <tr>
+            <td><strong>LN2</strong></td>
+            <td>0.69314718055995</td>
+            <td>Natural logarithm of 2.</td>
+            </tr>
+            <tr>
+            <td><strong>LN10</strong></td>
+            <td>2.30258509299405</td>
+            <td>Natural logarithm of 10.</td>
+            </tr>
+            <tr>
+            <td><strong>LOG2E</strong></td>
+            <td>1.44269504088869</td>
+            <td>Base 2 logarithm of E.</td>
+            </tr>
+            <tr>
+            <td><strong>LOG10E</strong></td>
+            <td>0.43429448190325</td>
+            <td>Base 10 logarithm of E.</td>
+            </tr>
+            <tr>
+            <td><strong>PI</strong></td>
+            <td>3.14159265358979</td>
+            <td>π, the ratio of the circumference of a circle to its diameter.</td>
+            </tr>
+            <tr>
+            <td><strong>SQRT1_2</strong></td>
+            <td>0.70710678118655</td>
+            <td>Square root of 1/2; equivalently, 1 over the square root of 2.</td>
+            </tr>
+            <tr>
+            <td><strong>SQRT2</strong></td>
+            <td>1.41421356237310</td>
+            <td>Square root of 2.</td>
+            </tr>
+            </table>
+            <h3 id="math-functions">Math functions</h3>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>abs</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the absolute value of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>acos</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the arccosine of (a), from 0 to π.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>asin</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the arcsine of (a), from −π/2 to π/2.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>atan</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the arctangent of (a), from −π/2 to π/2.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>atan2</strong> (a, b)</td>
+            <td>a, b: numbers</td>
+            <td>Returns the arctangent of the quotient (a/b) of its arguments (a) and (b), from −π to π.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>ceil</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the smallest integer greater than or equal to (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>cos</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the cosine of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>exp</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns E<sup>a</sup>, where E is Euler's constant, the base of the natural logarithm.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>floor</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the largest integer less than or equal to (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>log</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the natural (base E) logarithm of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>max</strong> (a[, b[, …]])</td>
+            <td>a, b, …: numbers</td>
+            <td>Returns the largest value from the numbers (a), (b), ….</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>min</strong> (a[, b[, …]])</td>
+            <td>a, b, …: numbers</td>
+            <td>Returns the smallest value from the numbers (a), (b), ….</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>pow</strong> (a, b)</td>
+            <td>a, b: numbers</td>
+            <td>Returns base to the exponent power, that is, a<sup>b</sup>.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>random</strong> ( )</td>
+            <td>&nbsp;</td>
+            <td>Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>round</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the value of (a) rounded to the nearest integer.</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>sin</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the sine of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>sqrt</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the positive square root of (a).</td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>tan</strong> (a)</td>
+            <td>a: number</td>
+            <td>Returns the tangent of (a).</td>
+            </tr>
+            </table>
+            <h3 id="components-helper-functions">Components helper functions</h3>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td><strong>bias</strong> (t, b)</td>
+            <td>t, b: numbers</td>
+            <td>Returns a value in the interval [0.0, 1.0] for a parameter (t) in the same interval.<br><em>bias</em> defines a kind of brightness curve controlled by the parameter (b) in the interval ]0.0, 1.0[.<br>For (b) equal to 0.5, <em>bias</em> is the identity function.</td>
+            </tr>
+            <tr>
+            <td><strong>coserp</strong> (a, b, t)</td>
+            <td>a, b, t: numbers</td>
+            <td>Returns a cosine interpolated value between two values (a) and (b) for a parameter (t) in the interval [0.0, 1.0].<br><em>coserp</em> is a common function name for cosine interpolation.</td>
+            </tr>
+            <tr>
+            <td><strong>cubic</strong> (coeffs, x)</td>
+            <td>coeffs: array of numbers [&nbsp;a, b, c, d&nbsp;]<br>x: number</td>
+            <td>Returns the value of the cubic function:<br>ax<sup>3</sup> + bx<sup>2</sup> + cx + d.</td>
+            </tr>
+            <tr>
+            <td><strong>distribute</strong><br>(values, bounds, position, smoothness)</td>
+            <td>values:&nbsp;array<br>bounds:&nbsp;array<br>position:&nbsp;number<br>smoothness:&nbsp;number</td>
+            <td>Returns an interpolated value at (position) from an array of (values) evenly distributed within (bounds).<br>The shape of the resulting interpolation curve is controlled by the optional parameter (smoothness) between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a smooth <em>pchip</em> interpolation.</td>
+            </tr>
+            <tr>
+            <td><strong>gain</strong> (t, g)</td>
+            <td>t, g: numbers</td>
+            <td>Returns a value in the interval [0.0, 1.0] for a parameter (t) in the same interval.<br><em>gain</em> defines a kind of contrast curve controlled by the parameter (g) in the interval ]0.0, 1.0[.<br>For (g) equal to 0.5, <em>gain</em> is the identity function.</td>
+            </tr>
+            <tr>
+            <td><strong>interpolate</strong><br>(points, position, smoothness)</td>
+            <td>points:&nbsp;array<br>position:&nbsp;number<br>smoothness:&nbsp;number</td>
+            <td>Returns an interpolated value at (position) from an array of (points) in ascending order, each point being defined as an array of two numbers: [&nbsp;position, value&nbsp;].<br>The shape of the resulting interpolation curve is controlled by the optional parameter (smoothness) between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a smooth <em>pchip</em> interpolation.</td>
+            </tr>
+            <tr>
+            <td><strong>lerp</strong> (a, b, t)</td>
+            <td>a, b, t: numbers</td>
+            <td>Returns a linearly interpolated value between two values (a) and (b) for a parameter (t) in the interval [0.0, 1.0].<br><em>lerp</em> is a common function name for <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a>.</td>
+            </tr>
+            <tr>
+            <td><strong>linear</strong> (coeffs, x)</td>
+            <td>coeffs: array of numbers [&nbsp;a, b&nbsp;]<br>x: number</td>
+            <td>Returns the value of the linear function:<br>ax + b.</td>
+            </tr>
+            <tr>
+            <td><strong>pchip</strong><br>(points, position)</td>
+            <td>points:&nbsp;array<br>position:&nbsp;number</td>
+            <td>Returns a shape-preserving interpolated value at (position) from an array of (points) in strict ascending order, each point being defined as an array of two numbers: [&nbsp;position, value&nbsp;].<br>PCHIP stands for &#8220;Piecewise Cubic Hermite Interpolation Polynomial&#8221;.</td>
+            </tr>
+            <tr>
+            <td><strong>polynomial</strong> (coeffs, x)</td>
+            <td>coeffs: array of n numbers<br>x: number</td>
+            <td>Returns the value of a generic polynomial function of degree n.</td>
+            </tr>
+            <tr>
+            <td><strong>quadratic</strong><br>(coeffs, x)</td>
+            <td>coeffs: array of numbers [&nbsp;a, b, c&nbsp;]<br>x: number</td>
+            <td>Returns the value of the quadratic function:<br>ax<sup>2</sup> + bx + c.</td>
+            </tr>
+            <tr>
+            <td><strong>smootherstep</strong><br>(a, b, t)</td>
+            <td>a, b, t: numbers</td>
+            <td>Returns a <a href="https://en.wikipedia.org/wiki/Smoothstep#Variations">smootherstep</a> interpolated value between two values (a) and (b) for a parameter (t) in the interval [0.0, 1.0].</td>
+            </tr>
+            <tr>
+            <td><strong>smoothstep</strong><br>(a, b, t)</td>
+            <td>a, b, t: numbers</td>
+            <td>Returns a <a href="https://en.wikipedia.org/wiki/Smoothstep">smoothstep</a> interpolated value between two values (a) and (b) for a parameter (t) in the interval [0.0, 1.0].</td>
+            </tr>
+            <tr>
+            <td><strong>spline</strong><br>(points, position, compatible)</td>
+            <td>points:&nbsp;array<br>position:&nbsp;number<br>compatible:&nbsp;boolean</td>
+            <td>Returns an interpolated value at (position) from a natural cubic spline passing through an array of (points) in ascending order, each point being defined as an array of two numbers: [&nbsp;position, value&nbsp;].<br>In Photoshop-compatible mode (true), extrapolated values are set to the endpoint values.</td>
+            </tr>
+            </table>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+            <li>The <em>bias</em> and <em>gain</em> functions were first described by Ken Perlin and Eric M. Hoffert (<a href="http://www.cs.jhu.edu/~subodh/458/p253-perlin.pdf">Hypertexture</a>). This script makes use of the faster alternative method designed by Christophe Schlick (<a href="http://dept-info.labri.fr/~schlick/DOC/gem2.html">Fast Alternatives to Perlin&#8217;s Bias and Gain Functions</a>).</li>
+            <li>The code for the shape-preserving <em>pchip</em> function is based on <a href="https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/moler/interp.pdf">Piecewise Cubic Hermite Interpolation</a> and <a href="http://en.wikipedia.org/wiki/Monotone_cubic_interpolation">Monotone cubic interpolation</a>.</li>
+            <li>The code for <em>spline</em> (<a href="http://en.wikipedia.org/wiki/Spline_interpolation">spline interpolation</a>) is adapted from <a href="http://www.ivank.net/blogspot/cspline/CSPL.js">CSPL.js</a> by <a href="http://blog.ivank.net/interpolation-with-cubic-splines.html">Ivan Kuckir</a>.</li>
+            </ul>
+            <h3 id="rgb-colors-helper-functions">RGB colors helper functions</h3>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>grayscale</strong> (gray)</td>
+            <td class="no-wrap">gray:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>grayscale (127.5)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>rgb</strong><br>(red, green, blue)</td>
+            <td class="no-wrap">red:&nbsp;number<br>green:&nbsp;number<br>blue:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>rgb (0, 255, 0)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsb</strong><br>(hue, saturation, brightness)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>saturation:&nbsp;number<br>brightness:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsb (120, 100, 100)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsv</strong><br>(hue, saturation, value)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>saturation:&nbsp;number<br>value:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsv (120, 100, 100)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hwb</strong><br>(hue, whiteness, blackness)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>whiteness:&nbsp;number<br>blackness:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hwb (120, 0, 0)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsl</strong><br>(hue, saturation, lightness)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>saturation:&nbsp;number<br>lightness:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsl (120, 100, 50)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hcl</strong><br>(hue, chroma, luminance)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>chroma:&nbsp;number<br>luminance:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hcl (136, 119.8, 87.7)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>lch</strong><br>(luminance, chroma, hue)</td>
+            <td class="no-wrap">luminance:&nbsp;number<br>chroma:&nbsp;number<br>hue:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>lch (87.7, 119.8, 136)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>lab</strong><br>(luminance, a, b)</td>
+            <td class="no-wrap">luminance:&nbsp;number<br>a:&nbsp;number<br>b:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>lab (87.7, -86.2, 83.2)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>xyz</strong><br>(x, y, z)</td>
+            <td class="no-wrap">x:&nbsp;number<br>y:&nbsp;number<br>z:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>xyz (35.7, 71.5, 11.9)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>ycbcr</strong><br>(y, cb, cr)</td>
+            <td class="no-wrap">y:&nbsp;number<br>cb:&nbsp;number<br>cr:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>ycbcr (149, 43, 21)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>cubehelix</strong><br>(hue, saturation, lightness)</td>
+            <td class="no-wrap">hue:&nbsp;number<br>saturation:&nbsp;number<br>lightness:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>cubehelix (110, 192, 59)</code></td>
+            </tr>
+            </table>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+            <li>The <em>hsb</em> and <em>hsv</em> functions are the same, only the name of the third parameter differs (<em>brightness</em> or <em>value</em>).</li>
+            <li>The <em>hcl</em> and <em>lch</em> functions are the same, except that their parameters are in reverse order.</li>
+            </ul>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>grayscale_t</strong> (gray_t)</td>
+            <td class="no-wrap">gray_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>grayscale_t (0.5)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>rgb_t</strong><br>(red_t, green_t, blue_t)</td>
+            <td class="no-wrap">red_t:&nbsp;number<br>green_t:&nbsp;number<br>blue_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>rgb_t (0, 1, 0)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsb_t</strong><br>(hue_t, saturation_t, brightness_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>saturation_t:&nbsp;number<br>brightness_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsb_t (1/3, 1, 1)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsv_t</strong><br>(hue_t, saturation_t, value_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>saturation_t:&nbsp;number<br>value_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsv_t (1/3, 1, 1)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hwb_t</strong><br>(hue_t, whiteness_t, blackness_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>whiteness_t:&nbsp;number<br>blackness_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hwb_t (1/3, 0, 0)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hsl_t</strong><br>(hue_t, saturation_t, lightness_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>saturation_t:&nbsp;number<br>lightness_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hsl_t (1/3, 1, 0.5)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>hcl_t</strong><br>(hue_t, chroma_t luminance_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>chroma_t:&nbsp;number<br>luminance_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>hcl_t (0.3778, 0.9359, 0.8770)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>lch_t</strong><br>(luminance_t, chroma_t, hue_t)</td>
+            <td class="no-wrap">luminance_t:&nbsp;number<br>chroma_t:&nbsp;number<br>hue_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>lch_t (0.8770, 0.9359, 0.3778)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>lab_t</strong><br>(luminance_t, a_t, b_t)</td>
+            <td class="no-wrap">luminance_t:&nbsp;number<br>a_t:&nbsp;number<br>b_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>lab_t (0.8770, -0.6734, 0.6500)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>xyz_t</strong><br>(x_t, y_t, z_t)</td>
+            <td class="no-wrap">x_t:&nbsp;number<br>y_t:&nbsp;number<br>z_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>xyz_t (0.357, 0.715, 0.119)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>ycbcr_t</strong><br>(y_t, cb_t, cr_t)</td>
+            <td class="no-wrap">y_t:&nbsp;number<br>cb_t:&nbsp;number<br>cr_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>ycbcr_t (0.59, 0.17, 0.00)</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>cubehelix_t</strong><br>(hue_t, saturation_t, lightness_t)</td>
+            <td class="no-wrap">hue_t:&nbsp;number<br>saturation_t:&nbsp;number<br>lightness_t:&nbsp;number</td>
+            <td>Returns a RGB color array.<br>Ex: <code>cubehelix_t (0.305, 1.922, 0.590)</code></td>
+            </tr>
+            </table>
+            <p><strong>Notes</strong>:</p>
+            <ul>
+            <li>The <em>hsb_t</em> and <em>hsv_t</em> functions are the same, only the name of the third parameter differs (<em>brightness_t</em> or <em>value_t</em>).</li>
+            <li>The <em>hcl_t</em> and <em>lch_t</em> functions are the same, except that their parameters are in reverse order.</li>
+            </ul>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td><strong>interpolate_colors</strong><br>(stops, location, color_model, smoothness)</td>
+            <td>stops:&nbsp;array<br>location:&nbsp;number<br>color_model:&nbsp;string<br>smoothness:&nbsp;number (or array of 3 numbers)</td>
+            <td>Returns an interpolated color at (location) from an array of (stops) in ascending order, each stop being defined as an array of two elements: [&nbsp;position, color&nbsp;], according to (color_model) among: <code>"rgb"</code>, <code>"lab"</code>, <code>"xyz"</code>, <code>"ycbcr"</code>, <code>"hsv"</code>, <code>"hsb"</code>, <code>hwb"</code>, <code>"hsl"</code>, <code>"hcl"</code>, <code>"lch"</code>, or <code>"cubehelix"</code>.<br>A hue mode is also appended as a suffix to the hue-based color models, among: <code>"-inc"</code> (or <code>"-asc"</code>), <code>"-dec"</code> (or <code>"-desc"</code>), <code>"-near"</code> (or <code>"-short"</code>), <code>"-far"</code> (or <code>"-long"</code>).<br>The (smoothness) parameter is an optional value between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a <em>pchip</em> interpolation; alternatively, an array of three such values can be passed to independently control the smoothness of each component of the color model.</td>
+            </tr>
+            <tr>
+            <td><strong>distribute_colors</strong><br>(colors, bounds, location, color_model, somoothness)</td>
+            <td>colors:&nbsp;array<br>bounds:&nbsp;array<br>location:&nbsp;number<br>color_model:&nbsp;string<br>smoothness:&nbsp;number (or array of 3 numbers)</td>
+            <td>Returns an interpolated color at (location) from an array of (colors) evenly distributed within (bounds), according to (color_model) among: <code>"rgb"</code>, <code>"lab"</code>, <code>"xyz"</code>, <code>"ycbcr"</code>, <code>"hsv"</code>, <code>"hsb"</code>, <code>hwb"</code>, <code>"hsl"</code>, <code>"hcl"</code>, <code>"lch"</code>, or <code>"cubehelix"</code>.<br>A hue mode is also appended as a suffix to the hue-based color models, among: <code>"-inc"</code> (or <code>"-asc"</code>), <code>"-dec"</code> (or <code>"-desc"</code>), <code>"-near"</code> (or <code>"-short"</code>), <code>"-far"</code> (or <code>"-long"</code>).<br>The (smoothness) parameter is an optional value between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a <em>pchip</em> interpolation; alternatively, an array of three such values can be passed to independently control the smoothness of each component of the color model.</td>
+            </tr>
+            <tr>
+            <td><strong>discrete_colors</strong><br>(colors, bounds, location, average)</td>
+            <td>colors:&nbsp;array<br>bounds:&nbsp;array<br>location:&nbsp;number<br>average:&nbsp;boolean</td>
+            <td>Returns a color at (location) within (bounds) from an array of (colors). The last optional parameter (average), false by default, allows more visually equal ranges by generating extra transitions between consecutive colors.</td>
+            </tr>
+            <tr>
+            <td><strong>cubehelix_color</strong><br>(t, start, rotations, saturation, gamma, lightness)</td>
+            <td>t:&nbsp;number<br>start:&nbsp;number<br>rotations:&nbsp;number<br>saturation:&nbsp;number<br>gamma:&nbsp;number<br>lightness:&nbsp;number (or array of 2 numbers)</td>
+            <td>Returns a "CubeHelix" color at position (t) in the interval [0.0, 1.0], according to the parameters: (start), (rotations), (saturation), and (gamma), as described in the document: <a href="https://astron-soc.in/bulletin/11June/289392011.pdf">A colour scheme for the display of astronomical intensity images</a>, by Dave Green. All parameters beyond (t) are optional, with default values provided: <code>0.5</code>, <code>-1.5</code>, <code>1</code>, and <code>1</code>, respectively.<br>An extra optional parameter (lightness), with default value: <code>[ 0, 1 ]</code>, can also be used to adjust the lightness range (black to white by default).</td>
+            </tr>
+            <tr>
+            <td><strong>wavelength_color</strong> (w)</td>
+            <td>w:&nbsp;number</td>
+            <td>Returns a color corresponding to the wavelength of light (w) expressed in nanometers, visible to the human eye from around <code>380</code> to <code>780</code>.</td>
+            </tr>
+            </table>
+            <p>When calling the functions <em>interpolate_colors</em>, <em>distribute_colors</em>, and <em>discrete_colors</em>, each RGB color can be defined in several ways:</p>
+            <ul>
+            <li>as a RGB color array; ex: <code>[&nbsp;0, 255, 0&nbsp;]</code>,</li>
+            <li>as a color string in HTML/CSS hexadecimal notation; ex: <code>"#00FF00"</code> or <code>"#0F0"</code>,</li>
+            <li>as a CSS/SVG/W3C or X11 color name; ex: <code>"lime"</code> or <code>"svg/lime"</code> or <code>"x11/green"</code>.</li>
+            </ul>
+            <p>See the <a href="http://www.tonton-pixel.com/goodies/color-names/index.html">Color Names</a> page for a list of available W3C and X11 color names, sorted alphabetically.</p>
+            <p>A RGB color can also be obtained by using one of the specialized color conversion functions: <em>grayscale</em>, <em>rgb</em>, <em>hsb</em>, etc., or <em>grayscale_t</em>, <em>rgb_t</em>, <em>hsb_t</em>, etc.</p>
+            <h3 id="extra-functions">Extra functions</h3>
+            <table>
+            <tr>
+            <th>Function</th>
+            <th>Parameters</th>
+            <th>Description</th>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>rgb_color_t</strong> (rgb_t)</td>
+            <td class="no-wrap">rgb_t:&nbsp;array</td>
+            <td>Returns a scaled ([0.0, 1.0] to [0, 255]) RGB color array.<br>Ex: <code>rgb_color_t ([ 0, 1, 0 ])</code></td>
+            </tr>
+            <tr>
+            <td class="no-wrap"><strong>rgb_colors_t</strong> (colors_t)</td>
+            <td class="no-wrap">colors_t:&nbsp;array</td>
+            <td>Returns an array of scaled ([0.0, 1.0] to [0, 255]) RGB color arrays.<br>Ex: <code>rgb_colors_t ([ [ 0, 0, 0 ], [ 1, 1, 1 ] ])</code></td>
+            </tr>
+            </table>
+            <h2 id="online-references">Online references</h2>
+            <h3 id="color-algorithms">Color algorithms</h3>
+            <ul>
+                <li><a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/">Dave Green's `cubehelix' colour scheme</a></li>
+                <li><a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubewedges.html">Examples of Dave Green's `cubehelix' colour scheme</a></li>
+                <li><a href="https://astron-soc.in/bulletin/11June/289392011.pdf">A colour scheme for the display of astronomical intensity images (PDF)</a></li>
+                <li><a href="https://ifweassume.blogspot.com/2013/05/cubehelix-or-how-i-learned-to-love.html">Cubehelix, or How I Learned to Love Black & White Printers</a></li>
+                <li><a href="http://devmag.org.za/2012/07/29/how-to-choose-colours-procedurally-algorithms/">How to Choose Colours Procedurally (Algorithms) – Dev.Mag</a></li>
+                <li><a href="https://uxplanet.org/algorithm-for-automatic-harmonious-color-selection-for-the-image-fc26dde69ca1">Algorithm for automatic harmonious color selection for the image</a></li>
+                <li><a href="https://uxplanet.org/designing-systematic-colors-b5d2605b15c">Designing Systematic Colors - UX Planet</a></li>
+                <li><a href="https://gka.github.io/chroma.js/">chroma.js api docs!</a></li>
+                <li><a href="http://www.physics.sfasu.edu/astro/color/spectra.html">Approximate RGB values for Visible Wavelengths</a></li>
+                <li><a href="http://wwwvis.informatik.uni-stuttgart.de/~weiskopf/publications/vis09_blending.pdf">Hue-Preserving Color Blending (PDF)</a></li>
+                <li><a href="https://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/">Perceptual rainbow palette – the method | MyCarta</a></li>
+                <li><a href="https://mycarta.wordpress.com/2014/10/24/colormap-compromise/">Colormap compromise | MyCarta</a></li>
+                <li><a href="https://bl.ocks.org/mbostock/310c99e53880faec2434">A Less-Angry Rainbow - bl.ocks.org</a></li>
+            </ul>
+            <ul>
+                <li><a href="https://webdesign.tutsplus.com/tutorials/how-to-manipulate-colors-in-javascript-using-chromajs--cms-29059">How to Manipulate Colors in JavaScript Using Chroma.js</a></li>
+                <li><a href="https://www.vis4.net/blog/2013/09/mastering-multi-hued-color-scales/">Mastering Multi-hued Color Scales with Chroma.js</a></li>
+                <li><a href="https://www.vis4.net/blog/2011/12/avoid-equidistant-hsv-colors/">How To Avoid Equidistant HSV Colors</a></li>
+                <li><a href="https://ninedegreesbelow.com/photography/gimp-srgb-lch-color-palettes.html">Making a useful LCh color palette</a></li>
+                <li><a href="http://applied-r.com/color-ramp-functions/">R Graphics: Color Ramp Functions | Applied R Code</a></li>
+                <li><a href="http://applied-r.com/r-graphics-heat-colors/">R Graphics: Heat Colors | Applied R Code</a></li>
+            </ul>
+            <ul>
+                <li><a href="https://github.com/Jabher/cubic-spline">GitHub - Jabher/cubic-spline</a></li>
+                <li><a href="https://fgiesen.wordpress.com/2012/08/15/linear-interpolation-past-present-and-future/">Linear interpolation past, present and future</a></li>
+                <li><a href="https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/moler/interp.pdf">Interpolation (PDF)</a></li>
+            </ul>
+            <h3 id="color-theory">Color theory</h3>
+            <ul>
+                <li><a href="https://experilous.com/1/product/make-it-colorful/">Experilous: Make It Colorful</a></li>
+                <li><a href="https://terpconnect.umd.edu/~toh/ColorLesson/">The science and mathematics of color</a></li>
+                <li><a href="http://paulbourke.net/miscellaneous/colourspace/">Colour Spaces</a></li>
+                <li><a href="https://lodev.org/cgtutor/color.html">Light and Color</a></li>
+                <li><a href="http://www.cs.uml.edu/~haim/ColorCenter/">Color Center</a></li>
+            </ul>
+            <ul>
+                <li><a href="https://en.wikipedia.org/wiki/RGB_color_model">RGB color model - Wikipedia</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSL and HSV - Wikipedia</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/HWB_color_model">HWB color model - Wikipedia</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/CIELAB_color_space">CIELAB color space - Wikipedia</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">CIE 1931 color space - Wikipedia</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/YCbCr">YCbCr - Wikipedia</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Color_gradient">Color gradient - Wikipedia</a></li>
+            </ul>
+            <h3 id="color-tools">Color tools</h3>
+            <ul>
+                <li><a href="https://blog.prototypr.io/free-color-tools-for-designers-88fdb4cf70f0">Free Color Tools For Designers - Prototypr</a></li>
+                <li><a href="https://blog.prototypr.io/free-color-tools-for-designers-vol-2-c38e652f7a11">Free Color Tools for Designers — Vol. 2 🌈 - Prototypr</a></li>
+            </ul>
+            <ul>
+                <li><a href="http://colorizer.org/">Colorizer - Color picker and converter (RGB HSL HSB/HSV CMYK HEX LAB)</a></li>
+                <li><a href="http://www.colorexplorer.com/tools.aspx">Analysis & Conversion • Color Explorer</a></li>
+                <li><a href="https://htmlcolors.com/color-converter">Color Converter | Html Colors</a></li>
+                <li><a href="https://htmlcolors.com/color-mixer">Color Mixer | Html Colors</a></li>
+                <li><a href="https://htmlcolors.com/gradient-generator">Gradient Generator | Html Colors</a></li>
+                <li><a href="http://www.zonums.com/online/color_ramp/">Color Ramps Generator</a></li>
+                <li><a href="https://colordesigner.io/tools">Tools - Colordesigner</a></li>
+                <li><a href="https://mycolor.space/">ColorSpace - Color Palettes Generator and Color Gradient Tool</a></li>
+                <li><a href="https://tutsplus.github.io/how-to-manipulate-colors-in-javascript-using-chroma.js/">Quick Tip: How to Manipulate Colors in JavaScript using Chroma.js</a></li>
+                <li><a href="https://hihayk.github.io/scale/">Scale — color scale generator</a></li>
+                <li><a href="http://colormind.io/">Colormind - the AI powered color palette generator</a></li>
+                <li><a href="https://htmlcolorcodes.com/resources/best-color-palette-generators/">Best Color Palette Generators — HTML Color Codes</a></li>
+                <li><a href="https://hypejunction.github.io/color-wizard/">Systematic Color Palette Generator</a></li>
+                <li><a href="http://davidjohnstone.net/pages/lch-lab-colour-gradient-picker">Lch and Lab colour and gradient picker — David Johnstone</a></li>
+                <li><a href="http://davidjohnstone.net/pages/cubehelix-gradient-picker">Cubehelix gradient picker — David Johnstone</a></li>
+                <li><a href="https://vis4.net/palettes/">Chroma.js Color Palette Helper</a></li>
+                <li><a href="https://vis4.net/labs/multihue/">Chroma.js Color Scale Helper</a></li>
+                <li><a href="http://tristen.ca/hcl-picker/">Colorpicker for data | tristen</a></li>
+                <li><a href="http://www.perbang.dk/rgbgradient/">RGB Color Gradient Maker</a></li>
+                <li><a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubetry.html">Dave Green's `cubehelix' colour schemes</a></li>
+                <li><a href="http://mperdikeas.github.io/cubehelix/index.html">Demo of the cubehelix NPM library</a></li>
+                <li><a href="http://soliton.vm.bytemark.co.uk/pub/cptutils-online/select.html">cptutils online | select</a></li>
+            </ul>
+            <h3 id="data-vizualization">Data vizualization</h3>
+            <ul>
+                <li><a href="https://earthobservatory.nasa.gov/blogs/elegantfigures/2013/08/05/subtleties-of-color-part-1-of-6/">Elegant Figures - Subtleties of Color (Part 1 of 6)</a></li>
+                <li><a href="https://earthobservatory.nasa.gov/blogs/elegantfigures/2013/08/06/subtleties-of-color-part-2-of-6/">Elegant Figures - Subtleties of Color (Part 2 of 6)</a></li>
+                <li><a href="https://earthobservatory.nasa.gov/blogs/elegantfigures/2013/08/12/subtleties-of-color-part-3-of-6/">Elegant Figures - Subtleties of Color (Part 3 of 6)</a></li>
+                <li><a href="https://earthobservatory.nasa.gov/blogs/elegantfigures/2013/08/19/subtleties-of-color-connecting-color-to-meaning/">Elegant Figures - Subtleties of Color (Part 4 of 6)</a></li>
+                <li><a href="https://earthobservatory.nasa.gov/blogs/elegantfigures/2013/08/28/subtleties-of-color-part-5-of-6/">Elegant Figures - Subtleties of Color (Part 5 of 6)</a></li>
+                <li><a href="https://earthobservatory.nasa.gov/blogs/elegantfigures/2013/09/10/subtleties-of-color-part-6-of-6/">Elegant Figures - Subtleties of Color (Part 6 of 6)</a></li>
+                <li><a href="https://earthobservatory.nasa.gov/blogs/elegantfigures/2013/09/16/963/">Elegant Figures - Subtleties of Color (Part 6.5 of 6)</a></li>
+                <li><a href="https://seaborn.pydata.org/tutorial/color_palettes.html">Choosing color palettes</a></li>
+                <li><a href="https://medvis.org/2012/08/21/rainbow-colormaps-what-are-they-good-for-absolutely-nothing/">Rainbow Colormaps – What are they good for? Absolutely nothing! | medvis.org</a></li>
+                <li><a href="https://medvis.org/2016/02/23/better-than-the-rainbow-the-matplotlib-alternative-colormaps/">Better than the rainbow: The Matplotlib alternative colormaps | medvis.org</a></li>
+                <li><a href="http://www.kennethmoreland.com/color-maps/ColorMapsExpanded.pdf">Diverging Color Maps for Scientific Visualization(Expanded) (PDF)</a></li>
+                <li><a href="https://jakevdp.github.io/blog/2014/10/16/how-bad-is-your-colormap/">How Bad Is Your Colormap?</a></li>
+                <li><a href="https://www.researchgate.net/publication/268813843_Color_Coding_for_Data_Visualization">Color Coding for Data Visualization</a></li>
+                <li><a href="https://peterkovesi.com/projects/colourmaps/">CET Perceptually Uniform Colour Maps</a></li>
+                <li><a href="https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html">Overview of the ‘pals’ package</a></li>
+                <li><a href="https://mycarta.wordpress.com/2012/05/29/the-rainbow-is-dead-long-live-the-rainbow-series-outline/">The rainbow is dead…long live the rainbow! – series outline | MyCarta</a></li>
+                <li><a href="https://mycarta.wordpress.com/color-palettes/">Color Palettes | MyCarta</a></li>
+                <li><a href="https://github.com/ResearchComputing/USGS_2015_06_23-25/raw/master/25_June/ColorTheory_References/Why%20Should%20Engineers%20and%20Scientists%20Be%20Worried%20About%20Color.pdf">Why Should Engineers and Scientists Be Worried About Color (PDF)</a></li>
+                <li><a href="https://ai.googleblog.com/2019/08/turbo-improved-rainbow-colormap-for.html">Google AI Blog: Turbo, An Improved Rainbow Colormap for Visualization</a></li>
+            </ul>
+            <ul>
+                <li><a href="http://soliton.vm.bytemark.co.uk/pub/cpt-city/">cpt-city | An archive of colour gradients</a></li>
+                <li><a href="http://soliton.vm.bytemark.co.uk/pub/cpt-city/notes/formats.html">cpt-city | Supported formats</a></li>
+            </ul>
+            <h3 id="javascript-code-evaluation">JavaScript code evaluation</h3>
+            <ul>
+                <li><a href="https://esprima.org/">Esprima</a></li>
+                <li><a href="https://github.com/jquery/esprima/blob/master/docs/getting-started.md">esprima/getting-started.md at master · jquery/esprima · GitHub</a></li>
+                <li><a href="https://github.com/jquery/esprima/blob/master/docs/syntactic-analysis.md">esprima/syntactic-analysis.md at master · jquery/esprima · GitHub</a></li>
+                <li><a href="https://github.com/jquery/esprima/blob/master/docs/lexical-analysis.md">esprima/lexical-analysis.md at master · jquery/esprima · GitHub</a></li>
+            </ul>
+            <ul>
+                <li><a href="https://github.com/browserify/static-eval">GitHub - browserify/static-eval: evaluate statically-analyzable expressions</a></li>
+                <li><a href="https://maustin.net/articles/2017-10/static_eval">maustin.net | Unsafe Code Execution in static-eval</a></li>
+                <li><a href="https://licenciaparahackear.github.io/en/posts/static-eval-sandbox-escape-original-writeup/">static-eval sandbox escape original writeup | Licencia para Hackear</a></li>
+                <li><a href="https://licenciaparahackear.github.io/en/posts/bypassing-a-restrictive-js-sandbox/">Bypassing a restrictive JS sandbox | Licencia para Hackear</a></li>
             </ul>
             <hr>
             <p>© Copyright 2020 Michel MARIANI.</p>
-        </div>
+        </main>
     </body>
 </html>

@@ -278,6 +278,46 @@ calculateButton.addEventListener
     }
 );
 //
+let importExportMenu =
+remote.Menu.buildFromTemplate
+(
+    [
+        {
+            label: "Import",
+            id: "import",
+            submenu:
+            [
+                { label: "Color Ramp (.json)...", click: () => { webContents.send ('import-color-ramp'); } },
+                { label: "Color Table (.act)...", click: () => { webContents.send ('import-color-table'); } },
+                { label: "Curves Map (.amp)...", click: () => { webContents.send ('import-curves-map'); } },
+                { label: "Lookup Table (.lut)...", click: () => { webContents.send ('import-lookup-table'); } }
+            ]
+        },
+        {
+            label: "Export",
+            id: "export",
+            enabled: false,
+            submenu:
+            [
+                { label: "Color Ramp (.json)...", click: () => { webContents.send ('export-color-ramp'); } },
+                { label: "Color Table (.act)...", click: () => { webContents.send ('export-color-table'); } },
+                { label: "Curves Map (.amp)...", click: () => { webContents.send ('export-curves-map'); } },
+                { label: "Lookup Table (.lut)...", click: () => { webContents.send ('export-lookup-table'); } }
+            ]
+        }
+    ]
+);
+//
+importExportMenuButton.addEventListener
+(
+    'click',
+    (event) =>
+    {
+        importExportMenu.getMenuItemById ('export').enabled = (currentColorRamp !== null);
+        pullDownMenus.popup (event.currentTarget, importExportMenu);
+    }
+);
+//
 let defaultColorRampFolderPath = prefs.defaultColorRampFolderPath;
 //
 const headerClutSize = 32;      // NIH Image (ImageJ) header
@@ -404,7 +444,7 @@ function importLookupTable ()
 {
     fileDialogs.loadAnyFile
     (
-        "Import Lookup table data file (.lut):",
+        "Import lookup table data file (.lut):",
         [
             { name: "Lookup table data file (*.lut)", extensions: [ 'lut' ] }
         ],
@@ -444,46 +484,6 @@ function importLookupTable ()
         }
     );
 }
-//
-let importExportMenu =
-remote.Menu.buildFromTemplate
-(
-    [
-        {
-            label: "Import",
-            id: "import",
-            submenu:
-            [
-                { label: "Color Ramp (.json)...", click: () => { webContents.send ('import-color-ramp'); } },
-                { label: "Color Table (.act)...", click: () => { webContents.send ('import-color-table'); } },
-                { label: "Curves Map (.amp)...", click: () => { webContents.send ('import-curves-map'); } },
-                { label: "Lookup Table (.lut)...", click: () => { webContents.send ('import-lookup-table'); } }
-            ]
-        },
-        {
-            label: "Export",
-            id: "export",
-            enabled: false,
-            submenu:
-            [
-                { label: "Color Ramp (.json)...", click: () => { webContents.send ('export-color-ramp'); } },
-                { label: "Color Table (.act)...", click: () => { webContents.send ('export-color-table'); } },
-                { label: "Curves Map (.amp)...", click: () => { webContents.send ('export-curves-map'); } },
-                { label: "Lookup Table (.lut)...", click: () => { webContents.send ('export-lookup-table'); } }
-            ]
-        }
-    ]
-);
-//
-importExportMenuButton.addEventListener
-(
-    'click',
-    (event) =>
-    {
-        importExportMenu.getMenuItemById ('export').enabled = (currentColorRamp !== null);
-        pullDownMenus.popup (event.currentTarget, importExportMenu);
-    }
-);
 //
 ipcRenderer.on ('import-color-ramp', () => { importColorRamp (); });
 ipcRenderer.on ('import-color-table', () => { importColorTable (); });
