@@ -31,6 +31,28 @@ rgb_t
 )
 ```
 
+### Green Sequential (Discrete)
+
+<p><img src="images/green-sequential-discrete-curves-map.svg" alt="Green Sequential (Discrete) Curves Map"></p>
+<p><img src="images/green-sequential-discrete-linear-gradient.svg" alt="Green Sequential (Discrete) Linear Gradient"></p>
+
+```javascript
+discrete_colors
+(
+    [
+        "#085A32",
+        "#118649",
+        "#18A85A",
+        "#52B974",
+        "#9ECF8A",
+        "#D2E3A2",
+        "#F0F1BA",
+        "#F7F8E5"
+    ],
+    [ 0, 255 ], x
+)
+```
+
 ### Iron (YCbCr)
 
 <p><img src="images/iron-ycbcr-curves-map.svg" alt="Iron (YCbCr) Curves Map"></p>
