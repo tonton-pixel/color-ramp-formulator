@@ -10,9 +10,8 @@ This application is built with [Electron](https://www.electronjs.org/), and work
 
 ### CubeHelix (Destiny)
 
-<img src="images/cubehelix-destiny-curves-map.svg" alt="CubeHelix (Destiny) Curves Map">
-<br>
-<img src="images/cubehelix-destiny-linear-gradient.svg" alt="CubeHelix (Destiny) Linear Gradient">
+<p><img src="images/cubehelix-destiny-curves-map.svg" alt="CubeHelix (Destiny) Curves Map"></p>
+<p><img src="images/cubehelix-destiny-linear-gradient.svg" alt="CubeHelix (Destiny) Linear Gradient"></p>
 
 ```javascript
 cubehelix_color (1 - t, 0, 0.4, 0.8, 1, [ 0.15, 0.85 ])
@@ -20,9 +19,8 @@ cubehelix_color (1 - t, 0, 0.4, 0.8, 1, [ 0.15, 0.85 ])
 
 ### Diverging
 
-<img src="images/diverging-curves-map.svg" alt="Diverging Curves Map">
-<br>
-<img src="images/diverging-linear-gradient.svg" alt="Diverging Linear Gradient">
+<p><img src="images/diverging-curves-map.svg" alt="Diverging Curves Map"></p>
+<p><img src="images/diverging-linear-gradient.svg" alt="Diverging Linear Gradient"></p>
 
 ```javascript
 rgb_t
@@ -35,9 +33,8 @@ rgb_t
 
 ### Iron (YCbCr)
 
-<img src="images/iron-ycbcr-curves-map.svg" alt="Iron (YCbCr) Curves Map">
-<br>
-<img src="images/iron-ycbcr-linear-gradient.svg" alt="Iron (YCbCr) Linear Gradient">
+<p><img src="images/iron-ycbcr-curves-map.svg" alt="Iron (YCbCr) Curves Map"></p>
+<p><img src="images/iron-ycbcr-linear-gradient.svg" alt="Iron (YCbCr) Linear Gradient"></p>
 
 ```javascript
 ycbcr_t
@@ -50,9 +47,8 @@ ycbcr_t
 
 ### Parakeet (CubeHelix)
 
-<img src="images/parakeet-cubehelix-curves-map.svg" alt="Parakeet (CubeHelix) Curves Map">
-<br>
-<img src="images/parakeet-cubehelix-linear-gradient.svg" alt="Parakeet (CubeHelix) Linear Gradient">
+<p><img src="images/parakeet-cubehelix-curves-map.svg" alt="Parakeet (CubeHelix) Curves Map"></p>
+<p><img src="images/parakeet-cubehelix-linear-gradient.svg" alt="Parakeet (CubeHelix) Linear Gradient"></p>
 
 ```javascript
 interpolate_colors
@@ -69,9 +65,8 @@ interpolate_colors
 
 ### Radiancy (HSL)
 
-<img src="images/radiancy-hsl-curves-map.svg" alt="Radiancy (HSL) Curves Map">
-<br>
-<img src="images/radiancy-hsl-linear-gradient.svg" alt="Radiancy (HSL) Linear Gradient">
+<p><img src="images/radiancy-hsl-curves-map.svg" alt="Radiancy (HSL) Curves Map"></p>
+<p><img src="images/radiancy-hsl-linear-gradient.svg" alt="Radiancy (HSL) Linear Gradient"></p>
 
 ```javascript
 distribute_colors
@@ -84,9 +79,8 @@ distribute_colors
 
 ### Two-Sided Color Bar
 
-<img src="images/two-sided-color-bar-curves-map.svg" alt="Two-Sided Color Bar Curves Map">
-<br>
-<img src="images/two-sided-color-bar-linear-gradient.svg" alt="Two-Sided Color Bar Linear Gradient">
+<p><img src="images/two-sided-color-bar-curves-map.svg" alt="Two-Sided Color Bar Curves Map"></p>
+<p><img src="images/two-sided-color-bar-linear-gradient.svg" alt="Two-Sided Color Bar Linear Gradient"></p>
 
 ```javascript
 hsv
@@ -99,9 +93,8 @@ hsv
 
 ### Yellow to Blue
 
-<img src="images/yellow-to-blue-curves-map.svg" alt="Yellow to Blue Curves Map">
-<br>
-<img src="images/yellow-to-blue-linear-gradient.svg" alt="Yellow to Blue Linear Gradient">
+<p><img src="images/yellow-to-blue-curves-map.svg" alt="Yellow to Blue Curves Map"></p>
+<p><img src="images/yellow-to-blue-linear-gradient.svg" alt="Yellow to Blue Linear Gradient"></p>
 
 ```javascript
 hcl_t
@@ -114,9 +107,8 @@ hcl_t
 
 ### Yellow to Red (Wavelengths)
 
-<img src="images/yellow-to-red-wavelengths-curves-map.svg" alt="Yellow to Red (Wavelengths) Curves Map">
-<br>
-<img src="images/yellow-to-red-wavelengths-linear-gradient.svg" alt="Yellow to Red (Wavelengths) Linear Gradient">
+<p><img src="images/yellow-to-red-wavelengths-curves-map.svg" alt="Yellow to Red (Wavelengths) Curves Map"></p>
+<p><img src="images/yellow-to-red-wavelengths-linear-gradient.svg" alt="Yellow to Red (Wavelengths) Linear Gradient"></p>
 
 ```javascript
 wavelength_color (lerp (580, 645, t))
