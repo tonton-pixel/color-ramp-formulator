@@ -31,6 +31,20 @@ rgb_t
 )
 ```
 
+### Fancy (Ternary)
+
+<p><img src="images/fancy-ternary-curves-map.svg" alt="Fancy (Ternary) Curves Map"></p>
+<p><img src="images/fancy-ternary-linear-gradient.svg" alt="Fancy (Ternary) Linear Gradient"></p>
+
+```javascript
+rgb
+(
+    (x < 127.5) ? 255 - (2 * x) : (2 * x) - 255,
+    (x < 127.5) ? 1.5 * x : 127.5 + (0.5 * x),
+    (x < 127.5) ? 127.5 + (0.5 * (255 - x)) : 1.5 * (255 - x)
+)
+```
+
 ### Green Sequential (Discrete)
 
 <p><img src="images/green-sequential-discrete-curves-map.svg" alt="Green Sequential (Discrete) Curves Map"></p>
