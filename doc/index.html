@@ -3,127 +3,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Documentation | Color Ramp Formulator</title>
-        <style type="text/css">
-            body
-            {
-                font-family: system-ui, sans-serif;
-                font-size: 14px;
-                padding: 0 1em;
-                line-height: 1.333em;
-            }
-            .sidebar
-            {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 208px;
-                height: 100%;
-                padding: 0 16px;
-                background-color: white;
-                border-right: 1px solid #EEEEEE;
-                overflow-y: scroll;
-            }
-            .sidebar ul
-            {
-                margin-top: 0;
-            }
-            .sidebar li
-            {
-                margin-left: -24px;
-            }
-            header
-            {
-                padding-top: 0.5em;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-                border-bottom: 1px solid #EEEEEE;
-            }
-            header h1
-            {
-                line-height: 1.25em;
-            }
-            header img
-            {
-                margin: 0;
-                padding: 0;
-                width: 52px;
-                height: 52px;
-            }
-            .navigation .title
-            {
-                margin-top: 1em;
-                margin-bottom: 0.75em;
-                font-size: 1.25em;
-                font-weight: bold;
-            }
-            footer
-            {
-                margin-top: 1.5em;
-                border-top: 1px solid #EEEEEE;
-            }
-            .wrapper
-            {
-                margin: 0 auto;
-                margin-left: calc(16px + 208px + 16px);
-                min-width: 640px;
-                max-width: 960px;
-            }
-            h2, h3
-            {
-                padding-top: 0.5em;
-            }
-            h2::before  
-            {
-                content: "◎\A0";
-                font-size: 95%;
-            }
-            h3::before  
-            {
-                content: "◉\A0";
-                font-size: 90%;
-            }
-            table
-            {
-                border-collapse: collapse;
-                border: 1px solid gray;
-                margin: 1.5em 0;
-                width: 100%;
-            }
-            tr
-            {
-                border: 1px solid gray;
-            }
-            th, td
-            {
-                border: 1px solid gray;
-                padding: 0.5em;
-            }
-            th
-            {
-                text-align: left;
-            }
-            td.no-wrap
-            {
-                white-space: nowrap;
-            }
-            code, pre
-            {
-                padding: 1px 2px 0 2px;
-                background-color: #EEEEEE;
-                white-space: nowrap;
-            }
-            li
-            {
-                margin: 0.333em 0;
-            }
-        </style>
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body>
         <aside class="sidebar">
             <header>
-                <h1>Color&nbsp;Ramp<br>Formulator</h1><img src="icon-256.png" alt="Color Ramp Formulator icon">
+                <h1>Color&nbsp;Ramp<br>Formulator</h1><img class="icon" src="icon.svg" alt="Color Ramp Formulator icon">
             </header>
             <nav class="navigation">
                 <p class="title">Documentation</p>
@@ -654,7 +539,7 @@
                 <li><a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/">Dave Green's `cubehelix' colour scheme</a></li>
                 <li><a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubewedges.html">Examples of Dave Green's `cubehelix' colour scheme</a></li>
                 <li><a href="https://astron-soc.in/bulletin/11June/289392011.pdf">A colour scheme for the display of astronomical intensity images (PDF)</a></li>
-                <li><a href="https://ifweassume.blogspot.com/2013/05/cubehelix-or-how-i-learned-to-love.html">Cubehelix, or How I Learned to Love Black & White Printers</a></li>
+                <li><a href="https://ifweassume.blogspot.com/2013/05/cubehelix-or-how-i-learned-to-love.html">Cubehelix, or How I Learned to Love Black &amp; White Printers</a></li>
                 <li><a href="http://devmag.org.za/2012/07/29/how-to-choose-colours-procedurally-algorithms/">How to Choose Colours Procedurally (Algorithms) – Dev.Mag</a></li>
                 <li><a href="https://uxplanet.org/algorithm-for-automatic-harmonious-color-selection-for-the-image-fc26dde69ca1">Algorithm for automatic harmonious color selection for the image</a></li>
                 <li><a href="https://uxplanet.org/designing-systematic-colors-b5d2605b15c">Designing Systematic Colors - UX Planet</a></li>
@@ -664,6 +549,8 @@
                 <li><a href="https://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/">Perceptual rainbow palette – the method | MyCarta</a></li>
                 <li><a href="https://mycarta.wordpress.com/2014/10/24/colormap-compromise/">Colormap compromise | MyCarta</a></li>
                 <li><a href="https://bl.ocks.org/mbostock/310c99e53880faec2434">A Less-Angry Rainbow - bl.ocks.org</a></li>
+                <li><a href="https://www.kennethmoreland.com/color-advice/">Color Map Advice for Scientific Visualization</a></li>
+                <li><a href="http://www.kennethmoreland.com/color-maps/ColorMapsExpanded.pdf">Diverging Color Maps for Scientific Visualization (Expanded) (PDF)</a></li>
             </ul>
             <ul>
                 <li><a href="https://webdesign.tutsplus.com/tutorials/how-to-manipulate-colors-in-javascript-using-chromajs--cms-29059">How to Manipulate Colors in JavaScript Using Chroma.js</a></li>
@@ -685,6 +572,7 @@
                 <li><a href="http://paulbourke.net/miscellaneous/colourspace/">Colour Spaces</a></li>
                 <li><a href="https://lodev.org/cgtutor/color.html">Light and Color</a></li>
                 <li><a href="http://www.cs.uml.edu/~haim/ColorCenter/">Color Center</a></li>
+                <li><a href="https://en.wikibooks.org/wiki/Color_Theory/Color_gradient">Color Theory/Color gradient - Wikibooks</a></li>
             </ul>
             <ul>
                 <li><a href="https://en.wikipedia.org/wiki/RGB_color_model">RGB color model - Wikipedia</a></li>
@@ -702,7 +590,7 @@
             </ul>
             <ul>
                 <li><a href="http://colorizer.org/">Colorizer - Color picker and converter (RGB HSL HSB/HSV CMYK HEX LAB)</a></li>
-                <li><a href="http://www.colorexplorer.com/tools.aspx">Analysis & Conversion • Color Explorer</a></li>
+                <li><a href="http://www.colorexplorer.com/tools.aspx">Analysis &amp; Conversion • Color Explorer</a></li>
                 <li><a href="https://htmlcolors.com/color-converter">Color Converter | Html Colors</a></li>
                 <li><a href="https://htmlcolors.com/color-mixer">Color Mixer | Html Colors</a></li>
                 <li><a href="https://htmlcolors.com/gradient-generator">Gradient Generator | Html Colors</a></li>
@@ -736,7 +624,6 @@
                 <li><a href="https://seaborn.pydata.org/tutorial/color_palettes.html">Choosing color palettes</a></li>
                 <li><a href="https://medvis.org/2012/08/21/rainbow-colormaps-what-are-they-good-for-absolutely-nothing/">Rainbow Colormaps – What are they good for? Absolutely nothing! | medvis.org</a></li>
                 <li><a href="https://medvis.org/2016/02/23/better-than-the-rainbow-the-matplotlib-alternative-colormaps/">Better than the rainbow: The Matplotlib alternative colormaps | medvis.org</a></li>
-                <li><a href="http://www.kennethmoreland.com/color-maps/ColorMapsExpanded.pdf">Diverging Color Maps for Scientific Visualization(Expanded) (PDF)</a></li>
                 <li><a href="https://jakevdp.github.io/blog/2014/10/16/how-bad-is-your-colormap/">How Bad Is Your Colormap?</a></li>
                 <li><a href="https://www.researchgate.net/publication/268813843_Color_Coding_for_Data_Visualization">Color Coding for Data Visualization</a></li>
                 <li><a href="https://peterkovesi.com/projects/colourmaps/">CET Perceptually Uniform Colour Maps</a></li>

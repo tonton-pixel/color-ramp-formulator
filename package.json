@@ -1,15 +1,15 @@
 {
     "name": "color-ramp-formulator",
     "productName": "Color Ramp Formulator",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "description": "Algorithmically-defined color ramps generator, making use of formulas.",
     "main": "main.js",
     "scripts": {
         "start": "electron .",
-        "build-darwin": "electron-packager . --asar.unpackDir=doc --out=build --platform=darwin --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.icns --overwrite",
-        "build-linux": "electron-packager . --asar.unpackDir=doc --out=build --platform=linux --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.png --overwrite",
-        "build-mas": "electron-packager . --asar.unpackDir=doc --out=build --platform=mas --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.icns --overwrite",
-        "build-win32": "electron-packager . --asar.unpackDir=doc --out=build --platform=win32 --ignore=/~.* --ignore=^/screenshots --icon=icons/icon.ico --overwrite"
+        "build-darwin": "electron-packager . --asar.unpackDir=doc --out=build --platform=darwin --ignore=/~.* --ignore=^/screenshots --ignore=^/images --icon=icons/icon.icns --overwrite",
+        "build-linux": "electron-packager . --asar.unpackDir=doc --out=build --platform=linux --ignore=/~.* --ignore=^/screenshots --ignore=^/images --icon=icons/icon.png --overwrite",
+        "build-mas": "electron-packager . --asar.unpackDir=doc --out=build --platform=mas --ignore=/~.* --ignore=^/screenshots --ignore=^/images --icon=icons/icon.icns --overwrite",
+        "build-win32": "electron-packager . --asar.unpackDir=doc --out=build --platform=win32 --ignore=/~.* --ignore=^/screenshots --ignore=^/images --icon=icons/icon.ico --overwrite"
     },
     "keywords": [
         "algorithmic",

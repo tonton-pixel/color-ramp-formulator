@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.3.0
+
+- Added support for import/export of color ramps in TSV (tab-separated values) data file format.
+- Added examples to `README.md`.
+- Improved documentation.
+
 ## 1.2.0
 
 - Updated documentation, merged into a single page with navigation sidebar.

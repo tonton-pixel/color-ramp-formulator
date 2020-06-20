@@ -224,7 +224,9 @@ else
                 id: "import",
                 submenu:
                 [
-                    { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('import-color-ramp'); } },
+                    { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('import-color-ramp', 'json'); } },
+                    { label: "Color Ramp (.tsv)...", click: () => { mainWindow.webContents.send ('import-color-ramp', 'tsv'); } },
+                    { type: 'separator' },
                     { label: "Color Table (.act)...", click: () => { mainWindow.webContents.send ('import-color-table'); } },
                     { label: "Curves Map (.amp)...", click: () => { mainWindow.webContents.send ('import-curves-map'); } },
                     { label: "Lookup Table (.lut)...", click: () => { mainWindow.webContents.send ('import-lookup-table'); } }
@@ -236,7 +238,9 @@ else
                 enabled: false,
                 submenu:
                 [
-                    { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('export-color-ramp'); } },
+                    { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('export-color-ramp', 'json'); } },
+                    { label: "Color Ramp (.tsv)...", click: () => { mainWindow.webContents.send ('export-color-ramp', 'tsv'); } },
+                    { type: 'separator' },
                     { label: "Color Table (.act)...", click: () => { mainWindow.webContents.send ('export-color-table'); } },
                     { label: "Curves Map (.amp)...", click: () => { mainWindow.webContents.send ('export-curves-map'); } },
                     { label: "Lookup Table (.lut)...", click: () => { mainWindow.webContents.send ('export-lookup-table'); } }

@@ -1,0 +1,116 @@
+@charset "utf-8";
+
+body
+{
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    padding: 0 1em;
+    line-height: 1.333em;
+}
+.sidebar
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 208px;
+    height: 100%;
+    padding: 0 16px;
+    background-color: white;
+    border-right: 1px solid #EEEEEE;
+    overflow-y: scroll;
+}
+.sidebar ul
+{
+    margin-top: 0;
+}
+.sidebar li
+{
+    margin-left: -24px;
+}
+header
+{
+    padding-top: 0.5em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #EEEEEE;
+}
+header h1
+{
+    line-height: 1.25em;
+}
+header .icon
+{
+    margin: 0;
+    padding: 0;
+    width: 52px;
+    height: 52px;
+}
+.navigation .title
+{
+    margin-top: 1em;
+    margin-bottom: 0.75em;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+footer
+{
+    margin-top: 1.5em;
+    border-top: 1px solid #EEEEEE;
+}
+.wrapper
+{
+    margin: 0 auto;
+    margin-left: calc(16px + 208px + 16px);
+    min-width: 640px;
+    max-width: 960px;
+}
+h2, h3
+{
+    padding-top: 0.5em;
+}
+h2::before  
+{
+    content: "◎\A0";
+    font-size: 95%;
+}
+h3::before  
+{
+    content: "◉\A0";
+    font-size: 90%;
+}
+table
+{
+    border-collapse: collapse;
+    border: 1px solid gray;
+    margin: 1.5em 0;
+    width: 100%;
+}
+tr
+{
+    border: 1px solid gray;
+}
+th, td
+{
+    border: 1px solid gray;
+    padding: 0.5em;
+}
+th
+{
+    text-align: left;
+}
+td.no-wrap
+{
+    white-space: nowrap;
+}
+code, pre
+{
+    padding: 1px 2px 0 2px;
+    background-color: #EEEEEE;
+    white-space: nowrap;
+}
+li
+{
+    margin: 0.333em 0;
+}

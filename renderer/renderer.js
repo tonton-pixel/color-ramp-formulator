@@ -172,7 +172,7 @@ loadButton.addEventListener
                     formulaString.value = colorRamp.formula;
                     calculateButton.click ();
                 }
-                catch (err)
+                catch (e)
                 {
                     alert (`Invalid formula file format:\n${path.basename (filePath)}`);
                 }
@@ -221,6 +221,21 @@ formulaString.addEventListener
     }
 );
 //
+function tabSeparate (colorRamp)
+{
+    const useHeader = true;
+    let lines = [ ];
+    if (useHeader)
+    {
+        lines.push ([ "Red", "Green", "Blue" ].join ("\t"));
+    }
+    for (let color of colorRamp)
+    {
+        lines.push (color.join ("\t"));
+    }
+    return lines.join ("\n");
+}
+//
 function smartStringify (colorRamp, level = 0)
 {
     let indentation = "    ";
@@ -231,10 +246,17 @@ function smartStringify (colorRamp, level = 0)
     }
     return `${indentation.repeat (level)}[\n${colorStrings.join (",\n")}\n${indentation.repeat (level)}]`;
 }
+//
 // To be later moved to lib/color-ramps.js?
+//
 function isRGBArray (rgb)
 {
     return Array.isArray (rgb) && (rgb.length === 3) && rgb.every (component => (typeof component === 'number') && (!isNaN (component)));
+}
+//
+function normalize (component)
+{
+    return Math.min (Math.max (0, Math.round (component)), 255);
 }
 //
 calculateButton.addEventListener
@@ -269,9 +291,9 @@ calculateButton.addEventListener
                 ipcRenderer.send ('enable-export-menu', true);
                 updatePreviews ();
             }
-            catch (error)
+            catch (e)
             {
-                currentErrorString = error;
+                currentErrorString = e;
                 updatePreviews ();
             }
         }
@@ -287,7 +309,9 @@ remote.Menu.buildFromTemplate
             id: "import",
             submenu:
             [
-                { label: "Color Ramp (.json)...", click: () => { webContents.send ('import-color-ramp'); } },
+                { label: "Color Ramp (.json)...", click: () => { webContents.send ('import-color-ramp', 'json'); } },
+                { label: "Color Ramp (.tsv)...", click: () => { webContents.send ('import-color-ramp', 'tsv'); } },
+                { type: 'separator' },
                 { label: "Color Table (.act)...", click: () => { webContents.send ('import-color-table'); } },
                 { label: "Curves Map (.amp)...", click: () => { webContents.send ('import-curves-map'); } },
                 { label: "Lookup Table (.lut)...", click: () => { webContents.send ('import-lookup-table'); } }
@@ -299,7 +323,9 @@ remote.Menu.buildFromTemplate
             enabled: false,
             submenu:
             [
-                { label: "Color Ramp (.json)...", click: () => { webContents.send ('export-color-ramp'); } },
+                { label: "Color Ramp (.json)...", click: () => { webContents.send ('export-color-ramp', 'json'); } },
+                { label: "Color Ramp (.tsv)...", click: () => { webContents.send ('export-color-ramp', 'tsv'); } },
+                { type: 'separator' },
                 { label: "Color Table (.act)...", click: () => { webContents.send ('export-color-table'); } },
                 { label: "Curves Map (.amp)...", click: () => { webContents.send ('export-curves-map'); } },
                 { label: "Lookup Table (.lut)...", click: () => { webContents.send ('export-lookup-table'); } }
@@ -331,35 +357,69 @@ function convertColorRampFileToFormula (name, colorRamp)
     formulaString.value = `discrete_colors\n(\n${smartStringify (colorRamp, 1)},\n    [ 0, 255 ], x\n)`;
 }
 //
-function importColorRamp ()
+function importColorRamp (fileType)
 {
     fileDialogs.loadAnyFile
     (
-        "Import color ramp data file (.json):",
+        `Import color ramp data file (.${fileType}):`,
         [
-            { name: "Color ramp data file (*.json)", extensions: [ 'json' ] }
+            { name: `Color ramp data file (*.${fileType})`, extensions: [ fileType ] }
         ],
         defaultColorRampFolderPath,
         {
-            '.json': 'utf8'
+            '.json': 'utf8',
+            '.tsv': 'utf8'
         },
         (data, filePath) =>
         {
-            let colorRamp = JSON.parse (data.replace (/^\uFEFF/, ""));
-            if (colorRamps.isClut (colorRamp))
+            let colorRamp;
+            if (fileType === 'tsv')
             {
-                convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
-                calculateButton.click ();
+                colorRamp = [ ];
+                let lines = data.replace (/^\uFEFF/, "").split (/\r?\n/);
+                for (let line of lines)
+                {
+                    let color = line.split ("\t").map (component => parseFloat (component));
+                    if (isRGBArray (color))
+                    {
+                        colorRamp.push (color);
+                    }
+                }
+                if (colorRamps.isClut (colorRamp))
+                {
+                    convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
+                    calculateButton.click ();
+                }
+                else
+                {
+                    alert (`Invalid color ramp data file format:\n${path.basename (filePath)}`);
+                }
             }
-            else if (colorRamps.isMapping (colorRamp))
+            else // if (fileType === 'json')
             {
-                colorRamp = colorRamps.mappingToClut (colorRamp);
-                convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
-                calculateButton.click ();
-            }
-            else
-            {
-                alert (`Invalid color ramp data file format:\n${path.basename (filePath)}`);
+                try
+                {
+                    colorRamp = JSON.parse (data.replace (/^\uFEFF/, ""));
+                    if (colorRamps.isClut (colorRamp))
+                    {
+                        convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
+                        calculateButton.click ();
+                    }
+                    else if (colorRamps.isMapping (colorRamp))
+                    {
+                        colorRamp = colorRamps.mappingToClut (colorRamp);
+                        convertColorRampFileToFormula (path.parse (filePath).name, colorRamp);
+                        calculateButton.click ();
+                    }
+                    else
+                    {
+                        alert (`Invalid color ramp data file format:\n${path.basename (filePath)}`);
+                    }
+                }
+                catch (e)
+                {
+                    alert (`Invalid color ramp data file format:\n${path.basename (filePath)}`);
+                }
             }
             defaultColorRampFolderPath = path.dirname (filePath);
         }
@@ -485,7 +545,7 @@ function importLookupTable ()
     );
 }
 //
-ipcRenderer.on ('import-color-ramp', () => { importColorRamp (); });
+ipcRenderer.on ('import-color-ramp', (event, args) => { importColorRamp (args); });
 ipcRenderer.on ('import-color-table', () => { importColorTable (); });
 ipcRenderer.on ('import-curves-map', () => { importCurvesMap (); });
 ipcRenderer.on ('import-lookup-table', () => { importLookupTable (); });
@@ -518,19 +578,19 @@ function colorRampToData (colorRamp, interleaved)
     return data.join ("");
 }
 //
-function exportColorRamp ()
+function exportColorRamp (fileType)
 {
     if (currentColorRamp)
     {
         fileDialogs.saveTextFile
         (
-            "Export color ramp data file (.json):",
-            [ { name: "Color ramp data file (*.json)", extensions: [ 'json' ] } ],
-            formulaName.value ? path.join (defaultColorRampFolderPath, `${formulaName.value}.json`) : defaultColorRampFolderPath,
+            `Export color ramp data file (.${fileType}):`,
+            [ { name: `Color ramp data file (*.${fileType})`, extensions: [ fileType ] } ],
+            formulaName.value ? path.join (defaultColorRampFolderPath, `${formulaName.value}.${fileType}`) : defaultColorRampFolderPath,
             (filePath) =>
             {
                 defaultColorRampFolderPath = path.dirname (filePath);
-                return smartStringify (currentColorRamp);
+                return fileType === 'tsv' ? tabSeparate (currentColorRamp) : smartStringify (currentColorRamp);
             }
         );
     }
@@ -590,7 +650,7 @@ function exportLookupTable ()
     }
 }
 //
-ipcRenderer.on ('export-color-ramp', () => { exportColorRamp (); });
+ipcRenderer.on ('export-color-ramp', (event, args) => { exportColorRamp (args); });
 ipcRenderer.on ('export-color-table', () => { exportColorTable (); });
 ipcRenderer.on ('export-curves-map', () => { exportCurvesMap (); });
 ipcRenderer.on ('export-lookup-table', () => { exportLookupTable (); });
@@ -858,11 +918,6 @@ colorTablePreview.addEventListener
         }
     }
 );
-//
-function normalize (component)
-{
-    return Math.min (Math.max (0, Math.round (component)), 255);
-}
 //
 window.addEventListener // *Not* document.addEventListener
 (
