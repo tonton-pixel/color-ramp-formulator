@@ -103,49 +103,49 @@ else
         }
     }
     //
-    const infos =
-    [
-        "-- Application --",
-        "",
-        [ "Name", appName ],
-        [ "Version", appVersion ],
-        [ "Date", appDate ],
-        "",
-        [ "Locale", app.getLocale () ],
-        [ "Packaged", app.isPackaged ],
-        "",
-        "-- Framework --",
-        "",
-        [ "System Version", process.getSystemVersion () ],
-        [ "Platform", process.platform ],
-        [ "Architecture", process.arch ],
-        [ "Default App", process.defaultApp || false ],
-        [ "Mac App Store App", process.mas || false ],
-        [ "Windows Store App", process.windowsStore || false ],
-        [ "Electron Version", process.versions.electron ],
-        [ "Node Version", process.versions.node ],
-        [ "V8 Version", process.versions.v8 ],
-        [ "Chromium Version", process.versions.chrome ],
-        [ "ICU Version", process.versions.icu ],
-        [ "Unicode Version", process.versions.unicode ],
-        // [ "CLDR Version", process.versions.cldr ],
-        // [ "Time Zone Version", process.versions.tz ],
-        "",
-        "-- Operating System --",
-        "",
-        [ "OS Type", os.type () ],
-        [ "OS Platform", os.platform () ],
-        [ "OS Release", os.release () ],
-        [ "CPU Architecture", os.arch () ],
-        [ "CPU Endianness", os.endianness () ],
-        [ "CPU Logical Cores", os.cpus ().length ],
-        [ "CPU Model", os.cpus ()[0].model ],
-        [ "CPU Speed (MHz)", os.cpus ()[0].speed ]
-    ];
-    //
-    const systemInfo = infos.map (info => (Array.isArray (info) ? `${info[0]}: ${info[1]}` : info) + "\n").join ("");
-    //
-    const script = `document.body.querySelector ('.system-info').value = ${JSON.stringify (systemInfo)};`;
+    function getSystemInfo ()
+    {
+        const infos =
+        [
+            "-- Application --",
+            "",
+            [ "Name", appName ],
+            [ "Version", appVersion ],
+            [ "Date", appDate ],
+            "",
+            [ "Locale", app.getLocale () ],
+            [ "Packaged", app.isPackaged ],
+            "",
+            "-- Framework --",
+            "",
+            [ "System Version", process.getSystemVersion () ],
+            [ "Platform", process.platform ],
+            [ "Architecture", process.arch ],
+            [ "Default App", process.defaultApp || false ],
+            [ "Mac App Store App", process.mas || false ],
+            [ "Windows Store App", process.windowsStore || false ],
+            [ "Electron Version", process.versions.electron ],
+            [ "Node Version", process.versions.node ],
+            [ "V8 Version", process.versions.v8 ],
+            [ "Chromium Version", process.versions.chrome ],
+            [ "ICU Version", process.versions.icu ],
+            [ "Unicode Version", process.versions.unicode ],
+            // [ "CLDR Version", process.versions.cldr ],
+            // [ "Time Zone Version", process.versions.tz ],
+            "",
+            "-- Operating System --",
+            "",
+            [ "OS Type", os.type () ],
+            [ "OS Platform", os.platform () ],
+            [ "OS Release", os.release () ],
+            [ "CPU Architecture", os.arch () ],
+            [ "CPU Endianness", os.endianness () ],
+            [ "CPU Logical Cores", os.cpus ().length ],
+            [ "CPU Model", os.cpus ()[0].model ],
+            [ "CPU Speed (MHz)", os.cpus ()[0].speed ]
+        ];
+        return infos.map (info => (Array.isArray (info) ? `${info[0]}: ${info[1]}` : info) + "\n").join ("");
+    }
     //
     let systemInfoWindow = null;
     //
@@ -177,6 +177,7 @@ else
                 systemInfoWindow.removeMenu ();
             }
             systemInfoWindow.loadFile (path.join (__dirname, 'system-info-index.html'));
+            const script = `document.body.querySelector ('.system-info').value = ${JSON.stringify (getSystemInfo ())};`;
             systemInfoWindow.webContents.on ('dom-ready', () => { systemInfoWindow.webContents.executeJavaScript (script); });
             systemInfoWindow.once ('ready-to-show', () => { systemInfoWindow.show (); });
             systemInfoWindow.on ('close', () => { systemInfoWindow = null; });
@@ -185,11 +186,6 @@ else
         {
             systemInfoWindow.show ();
         }
-    }
-    //
-    function copySystemInfo ()
-    {
-        clipboard.writeText (systemInfo);
     }
     //
     let defaultWidth;

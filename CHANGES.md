@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.4.1
+
+- Fixed missing `Locale` value in the `System Info` dialog.
+
 ## 1.4.0
 
 - Added display of `System Info` dialog from the `Help` menu.
