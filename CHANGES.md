@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.4.0
+
+- Added display of `System Info` dialog from the `Help` menu.
+- Updated `Electron` to version `9.0.5`.
+
 ## 1.3.0
 
 - Added support for import/export of color ramps in TSV (tab-separated values) data file format.

@@ -76,11 +76,12 @@ else
                     title: `License | ${appName}`,
                     width: 384,
                     height: (process.platform !== 'darwin') ? 480 : 540,
-                    parent: browserWindow,
                     minimizable: false,
                     maximizable: false,
                     resizable: false,
                     fullscreenable: false,
+                    parent: browserWindow,
+                    modal: true,
                     show: false,
                     webPreferences:
                     {
@@ -102,48 +103,92 @@ else
         }
     }
     //
+    const infos =
+    [
+        "-- Application --",
+        "",
+        [ "Name", appName ],
+        [ "Version", appVersion ],
+        [ "Date", appDate ],
+        "",
+        [ "Locale", app.getLocale () ],
+        [ "Packaged", app.isPackaged ],
+        "",
+        "-- Framework --",
+        "",
+        [ "System Version", process.getSystemVersion () ],
+        [ "Platform", process.platform ],
+        [ "Architecture", process.arch ],
+        [ "Default App", process.defaultApp || false ],
+        [ "Mac App Store App", process.mas || false ],
+        [ "Windows Store App", process.windowsStore || false ],
+        [ "Electron Version", process.versions.electron ],
+        [ "Node Version", process.versions.node ],
+        [ "V8 Version", process.versions.v8 ],
+        [ "Chromium Version", process.versions.chrome ],
+        [ "ICU Version", process.versions.icu ],
+        [ "Unicode Version", process.versions.unicode ],
+        // [ "CLDR Version", process.versions.cldr ],
+        // [ "Time Zone Version", process.versions.tz ],
+        "",
+        "-- Operating System --",
+        "",
+        [ "OS Type", os.type () ],
+        [ "OS Platform", os.platform () ],
+        [ "OS Release", os.release () ],
+        [ "CPU Architecture", os.arch () ],
+        [ "CPU Endianness", os.endianness () ],
+        [ "CPU Logical Cores", os.cpus ().length ],
+        [ "CPU Model", os.cpus ()[0].model ],
+        [ "CPU Speed (MHz)", os.cpus ()[0].speed ]
+    ];
+    //
+    const systemInfo = infos.map (info => (Array.isArray (info) ? `${info[0]}: ${info[1]}` : info) + "\n").join ("");
+    //
+    const script = `document.body.querySelector ('.system-info').value = ${JSON.stringify (systemInfo)};`;
+    //
+    let systemInfoWindow = null;
+    //
+    function showSystemInfo (menuItem, browserWindow, event)
+    {
+        if (!systemInfoWindow)
+        {
+            systemInfoWindow = new BrowserWindow
+            (
+                {
+                    title: `System Info | ${appName}`,
+                    width: 480,
+                    height: settings.window.minHeight,
+                    minimizable: false,
+                    maximizable: false,
+                    resizable: false,
+                    fullscreenable: false,
+                    parent: browserWindow,
+                    modal: true,
+                    show: false,
+                    webPreferences:
+                    {
+                        devTools: false
+                    }
+                }
+            );
+            if (process.platform !== 'darwin')
+            {
+                systemInfoWindow.removeMenu ();
+            }
+            systemInfoWindow.loadFile (path.join (__dirname, 'system-info-index.html'));
+            systemInfoWindow.webContents.on ('dom-ready', () => { systemInfoWindow.webContents.executeJavaScript (script); });
+            systemInfoWindow.once ('ready-to-show', () => { systemInfoWindow.show (); });
+            systemInfoWindow.on ('close', () => { systemInfoWindow = null; });
+        }
+        else
+        {
+            systemInfoWindow.show ();
+        }
+    }
+    //
     function copySystemInfo ()
     {
-        const infos =
-        [
-            "-- Application --",
-            "",
-            [ "Name", appName ],
-            [ "Version", appVersion ],
-            [ "Date", appDate ],
-            "",
-            [ "Locale", app.getLocale () ],
-            [ "Packaged", app.isPackaged ],
-            "",
-            "-- Framework --",
-            "",
-            [ "System Version", process.getSystemVersion () ],
-            [ "Platform", process.platform ],
-            [ "Architecture", process.arch ],
-            [ "Default App", process.defaultApp || false ],
-            [ "Mac App Store App", process.mas || false ],
-            [ "Windows Store App", process.windowsStore || false ],
-            [ "Electron Version", process.versions.electron ],
-            [ "Node Version", process.versions.node ],
-            [ "V8 Version", process.versions.v8 ],
-            [ "Chromium Version", process.versions.chrome ],
-            [ "ICU Version", process.versions.icu ],
-            [ "Unicode Version", process.versions.unicode ],
-            // [ "CLDR Version", process.versions.cldr ],
-            // [ "Time Zone Version", process.versions.tz ],
-            "",
-            "-- Operating System --",
-            "",
-            [ "OS Type", os.type () ],
-            [ "OS Platform", os.platform () ],
-            [ "OS Release", os.release () ],
-            [ "CPU Architecture", os.arch () ],
-            [ "CPU Endianness", os.endianness () ],
-            [ "CPU Logical Cores", os.cpus ().length ],
-            [ "CPU Model", os.cpus ()[0].model ],
-            [ "CPU Speed (MHz)", os.cpus ()[0].speed ]
-        ];
-        let systemInfo = infos.map (info => (Array.isArray (info) ? `${info[0]}: ${info[1]}` : info) + "\n").join ("");
         clipboard.writeText (systemInfo);
     }
     //
@@ -274,9 +319,7 @@ else
             { label: "Open User Data Directory", click: () => { shell.openPath (app.getPath ('userData')); } },
             { label: "Open Temporary Directory", click: () => { shell.openPath (app.getPath ('temp')); } },
             { type: 'separator' },
-            { label: "Show Executable File", click: () => { shell.showItemInFolder (app.getPath ('exe')); } },
-            { type: 'separator' },
-            { label: "Copy System Info to Clipboard", click: copySystemInfo }
+            { label: "Show Executable File", click: () => { shell.showItemInFolder (app.getPath ('exe')); } }
         ]
     };
     const darwinWindowMenu =
@@ -310,6 +353,7 @@ else
         submenu:
         [
             { label: "License...", click: showLicense },
+            { label: "System Info...", click: showSystemInfo },
             { type: 'separator' },
             { label: "Documentation", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'index.html')); } },
             { type: 'separator' },
@@ -324,6 +368,7 @@ else
         [
             { label: "About...", click: showAboutBox },
             { label: "License...", click: showLicense },
+            { label: "System Info...", click: showSystemInfo },
             { type: 'separator' },
             { label: "Documentation", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'index.html')); } },
             { type: 'separator' },
