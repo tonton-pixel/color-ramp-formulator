@@ -1,6 +1,6 @@
 //
 const electron = require ('electron');
-const { app, BrowserWindow, clipboard, dialog, globalShortcut, ipcMain, Menu, shell } = electron;
+const { app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu, shell } = electron;
 //
 let mainWindow = null;
 //
@@ -39,11 +39,11 @@ else
     const os = require ('os');
     const path = require ('path');
     //
-    const isPackaged = !process.defaultApp;
+    const appPackaged = app.isPackaged;
     //
     const appName = app.name;
     const appVersion = app.getVersion ();
-    const appDate = (isPackaged ? fs.statSync (process.resourcesPath).ctime : new Date ()).toISOString ();
+    const appDate = (appPackaged ? fs.statSync (process.resourcesPath).ctime : new Date ()).toISOString ();
     //
     let appDirname = app.getAppPath ();
     let unpackedDirname = `${appDirname}.unpacked`;
@@ -158,7 +158,7 @@ else
                 {
                     title: `System Info | ${appName}`,
                     width: 480,
-                    height: settings.window.minHeight,
+                    height: settings.window.defaultHeight,
                     minimizable: false,
                     maximizable: false,
                     resizable: false,
@@ -352,6 +352,7 @@ else
             { label: "System Info...", click: showSystemInfo },
             { type: 'separator' },
             { label: "Documentation", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'index.html')); } },
+            { label: "Gallery of Examples", click: () => { mainWindow.webContents.send ('open-examples-gallery'); } },
             { type: 'separator' },
             { label: settings.repository.label, click: () => { shell.openExternal (settings.repository.URL); } },
             { label: settings.releases.label, click: () => { shell.openExternal (settings.releases.URL); } }
@@ -367,6 +368,7 @@ else
             { label: "System Info...", click: showSystemInfo },
             { type: 'separator' },
             { label: "Documentation", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'index.html')); } },
+            { label: "Gallery of Examples", click: () => { mainWindow.webContents.send ('open-examples-gallery'); } },
             { type: 'separator' },
             { label: settings.repository.label, click: () => { shell.openExternal (settings.repository.URL); } },
             { label: settings.releases.label, click: () => { shell.openExternal (settings.releases.URL); } }
@@ -378,7 +380,7 @@ else
     menuTemplate.push (fileMenu);
     menuTemplate.push (editMenu);
     menuTemplate.push (viewMenu);
-    if ((!isPackaged) || settings.developerFeatures)
+    if ((!appPackaged) || settings.developerFeatures)
     {
         menuTemplate.push (developerMenu);
     }

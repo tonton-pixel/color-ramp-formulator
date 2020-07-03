@@ -15,23 +15,25 @@
                 <ul>
                     <li><a href="#description">Description</a></li>
                     <li><a href="#color-models">Color models</a></li>
-                    <li><a href="#formula-format">Formula format</a></li>
-                    <ul>
-                        <li><a href="#input-variables">Input variables</a></li>
-                        <li><a href="#math-constants">Math constants</a></li>
-                        <li><a href="#math-functions">Math functions</a></li>
-                        <li><a href="#components-helper-functions">Components helper functions</a></li>
-                        <li><a href="#rgb-colors-helper-functions">RGB colors helper functions</a></li>
-                        <li><a href="#extra-functions">Extra functions</a></li>
-                    </ul>
-                    <li><a href="#online-references">Online references</a></li>
-                    <ul>
-                        <li><a href="#color-algorithms">Color algorithms</a></li>
-                        <li><a href="#color-theory">Color theory</a></li>
-                        <li><a href="#color-tools">Color tools</a></li>
-                        <li><a href="#data-vizualization">Data vizualization</a></li>
-                        <li><a href="#javascript-code-evaluation">JavaScript code evaluation</a></li>
-                    </ul>
+                    <li><a href="#formula-format">Formula format</a>
+                        <ul>
+                            <li><a href="#input-variables">Input variables</a></li>
+                            <li><a href="#math-constants">Math constants</a></li>
+                            <li><a href="#math-functions">Math functions</a></li>
+                            <li><a href="#components-helper-functions">Components helper functions</a></li>
+                            <li><a href="#rgb-colors-helper-functions">RGB colors helper functions</a></li>
+                            <li><a href="#extra-functions">Extra functions</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#online-references">Online references</a>
+                        <ul>
+                            <li><a href="#color-algorithms">Color algorithms</a></li>
+                            <li><a href="#color-theory">Color theory</a></li>
+                            <li><a href="#color-tools">Color tools</a></li>
+                            <li><a href="#data-vizualization">Data vizualization</a></li>
+                            <li><a href="#javascript-code-evaluation">JavaScript code evaluation</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
             <footer>
@@ -40,17 +42,19 @@
         <main class="wrapper">
             <h2 id="description">Description</h2>
             <p><strong>Color Ramp Formulator</strong> is a desktop application used to generate algorithmically-defined color ramps, making use of <a href="#formula-format">formulas</a>, such as:</p>
-            <pre>
-            cubehelix_color (t, 0, 0.55, 2, 1)
-            </pre>
+            <pre class="formula">cubehelix_color (t, 0, 0.55, 2, 1)</pre>
             <p>The result is a <strong>color ramp</strong>, which is defined as an ordered set of 256 RGB colors, and the data it represents can be displayed as a list, or previewed in three different ways:</p>
             <ul>
-                <li>as a <strong>curves map,</strong></li>
-                <li>as a <strong>linear gradient,</strong></li>
-                <li>as a <strong>color table.</strong></li>
+                <li>as a <strong>curves map</strong>:</li>
             </ul>
             <p><img src="curves-map-preview.svg" alt="Curves Map Preview image"></p>
+            <ul>
+                <li>as a <strong>linear gradient</strong>:</li>
+            </ul>
             <p><img src="linear-gradient-preview.svg" alt="Linear Gradient Preview image"></p>
+            <ul>
+                <li>as a <strong>color table</strong>:</li>
+            </ul>
             <p><img src="color-table-preview.svg" alt="Color Table Preview image"></p>
             <h2 id="color-models">Color models</h2>
             <p>A color ramp can be calculated from a <a href="#formula-format">formula</a> making use of helper functions supporting several color models among:</p>

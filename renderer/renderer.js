@@ -27,6 +27,154 @@ const { createCurvesMap, createLinearGradient, createColorTable } = require ('./
 //
 const ColorFormula = require ('./lib/color-formula.js');
 //
+document.title = appName;
+//
+const serializer = new XMLSerializer ();
+//
+let examples = [ ];
+//
+let examplesDirname = path.join (__dirname, 'examples');
+let examplesFilenames = fs.readdirSync (examplesDirname);
+examplesFilenames.sort ((a, b) => a.replace (/\.json$/i, "").localeCompare (b.replace (/\.json$/i, "")));
+for (let examplesFilename of examplesFilenames)
+{
+    let filename = path.join (examplesDirname, examplesFilename);
+    if (fs.statSync (filename).isDirectory ())
+    {
+        let dirname = filename;
+        let itemsFilenames = fs.readdirSync (dirname);
+        itemsFilenames.sort ((a, b) => a.replace (/\.json$/i, "").localeCompare (b.replace (/\.json$/i, "")));
+        let items = [ ];
+        for (let itemsFilename of itemsFilenames)
+        {
+            let filename = path.join (dirname, itemsFilename);
+            if (fs.statSync (filename).isFile ())
+            {
+                let jsonFilename = itemsFilename.match (/(.*)\.json$/i);
+                if (jsonFilename && (jsonFilename[1][0] !== '~'))
+                {
+                    items.push ({ label: jsonFilename[1], string: fs.readFileSync (filename, 'utf8').replace (/^\uFEFF/, "") });
+                }
+            }
+        }
+        examples.push ({ label: examplesFilename, items: items });
+    }
+    else if (fs.statSync (filename).isFile ())
+    {
+        let jsonFilename = examplesFilename.match (/(.*)\.json$/i);
+        if (jsonFilename && (jsonFilename[1][0] !== '~'))
+        {
+            examples.push ({ label: jsonFilename[1], string: fs.readFileSync (filename, 'utf8').replace (/^\uFEFF/, "") });
+        }
+    }
+}
+//
+function escapedContent (string)
+{
+    let span = document.createElement ('span');
+    span.textContent = string;
+    let escaped = span.innerHTML;
+    span.remove ();
+    return escaped;
+}
+//
+function escapedAttribute (string)
+{
+    let span = document.createElement ('span');
+    span.setAttribute ('dummy', string);
+    let escaped = span.outerHTML.match (/"(.*)"/u)[1];
+    span.remove ();
+    return escaped;
+}
+//
+let galleryPath = path.join (app.getPath ('userData'), 'examples-gallery');
+let galleryIndexPath = path.join (galleryPath, 'index.html');
+//
+let imagesDirname = 'images';
+//
+let isExamplesGalleryGenerated = false;
+//
+function openExamplesGallery ()
+{
+    if (!isExamplesGalleryGenerated)
+    {
+        let galleryNavigation = [ ];
+        let galleryContents = [ ];
+        //
+        let categoryIndex = 0;
+        galleryNavigation.push ('<ul>');
+        for (let example of examples)
+        {
+            let exampleIndex = 0;
+            galleryNavigation.push (`<li><a href="#${encodeURIComponent (example.label)}">${escapedContent (example.label)}</a>`);
+            galleryNavigation.push ('<ul>');
+            galleryContents.push (`<h2 id="${encodeURIComponent (example.label)}">${escapedContent (example.label)}</h2>`);
+            for (let item of example.items)
+            {
+                let data = JSON.parse (item.string).colorRamp;
+                galleryNavigation.push (`<li><a href="#${encodeURIComponent (item.label)}">${escapedContent (item.label)}</a></li>`);
+                galleryContents.push (`<h3 id="${encodeURIComponent (item.label)}">${escapedContent (data.name)}</h3>`);
+                let curvesMapFileName = `${categoryIndex}-${exampleIndex}-curves-map.svg`;
+                galleryContents.push (`<p><img src="${path.join (imagesDirname, curvesMapFileName)}" width="260" height="260" alt="${escapedAttribute (data.name)} - Curves Map Preview"></p>`);
+                let LinearGradientFileName = `${categoryIndex}-${exampleIndex}-linear-gradient.svg`;
+                galleryContents.push (`<p><img src="${path.join (imagesDirname, LinearGradientFileName)}" width="260" height="52" alt="${escapedAttribute (data.name)} - Linear Gradient Preview"></p>`);
+                galleryContents.push (`<pre class="formula">\n${escapedContent (data.formula)}\n</pre>`);
+                exampleIndex++;
+            }
+            galleryNavigation.push ('</ul>');
+            galleryNavigation.push (`</li>`);
+            categoryIndex++;
+        }
+        galleryNavigation.push ('</ul>');
+        //
+        let galleryTemplatePath = path.join (__dirname, 'gallery-template');
+        //
+        fs.rmdirSync (galleryPath, { recursive: true });
+        fs.mkdirSync (path.join (galleryPath, imagesDirname), { recursive: true });
+        let files = fs.readdirSync (galleryTemplatePath);
+        for (let file of files)
+        {
+            fs.copyFileSync (path.join (galleryTemplatePath, file), path.join (galleryPath, file));
+        }
+        let galleryPage = fs.readFileSync (galleryIndexPath, 'utf8');
+        galleryPage = galleryPage.replace ("{{navigation}}", galleryNavigation.join ("\n"));
+        galleryPage = galleryPage.replace ("{{contents}}", galleryContents.join ("\n"));
+        fs.writeFileSync (galleryIndexPath, galleryPage);
+        //
+        categoryIndex = 0;
+        for (let example of examples)
+        {
+            let exampleIndex = 0;
+            for (let item of example.items)
+            {
+                let data = JSON.parse (item.string).colorRamp;
+                let colorFormula = new ColorFormula (data.formula);
+                let colorRamp = [ ];
+                for (let x = 0; x < 256; x++)
+                {
+                    let rgbColor = colorFormula.evaluate (x, x / 255);
+                    if (isRGBArray (rgbColor))
+                    {
+                        colorRamp.push (rgbColor.map (component => normalize (component)));
+                    }
+                }
+                let curvesMapFileName = `${categoryIndex}-${exampleIndex}-curves-map.svg`;
+                let curvesMapPath = path.join (galleryPath, imagesDirname, curvesMapFileName);
+                let LinearGradientFileName = `${categoryIndex}-${exampleIndex}-linear-gradient.svg`;
+                let linearGradientPath = path.join (galleryPath, imagesDirname, LinearGradientFileName);
+                fs.writeFileSync (curvesMapPath, serializer.serializeToString (createCurvesMap (colorRamp, 8)));
+                fs.writeFileSync (linearGradientPath, serializer.serializeToString (createLinearGradient (colorRamp, true)));
+                exampleIndex++;
+            }
+            categoryIndex++;
+        }
+        isExamplesGalleryGenerated = true;
+    }
+    shell.openPath (galleryIndexPath);
+}
+//
+ipcRenderer.on ('open-examples-gallery', () => openExamplesGallery ());
+//
 const defaultPrefs =
 {
     zoomLevel: 0,
@@ -91,43 +239,6 @@ clearButton.addEventListener
         updatePreviews ();
     }
 );
-//
-let examplesDirname = path.join (__dirname, 'examples');
-let examplesFilenames = fs.readdirSync (examplesDirname);
-examplesFilenames.sort ((a, b) => a.replace (/\.json$/i, "").localeCompare (b.replace (/\.json$/i, "")));
-let examples = [ ];
-for (let examplesFilename of examplesFilenames)
-{
-    let filename = path.join (examplesDirname, examplesFilename);
-    if (fs.statSync (filename).isDirectory ())
-    {
-        let dirname = filename;
-        let itemsFilenames = fs.readdirSync (dirname);
-        itemsFilenames.sort ((a, b) => a.replace (/\.json$/i, "").localeCompare (b.replace (/\.json$/i, "")));
-        let items = [ ];
-        for (let itemsFilename of itemsFilenames)
-        {
-            let filename = path.join (dirname, itemsFilename);
-            if (fs.statSync (filename).isFile ())
-            {
-                let jsonFilename = itemsFilename.match (/(.*)\.json$/i);
-                if (jsonFilename && (jsonFilename[1][0] !== '~'))
-                {
-                    items.push ({ label: jsonFilename[1], string: fs.readFileSync (filename, 'utf8').replace (/^\uFEFF/, "") });
-                }
-            }
-        }
-        examples.push ({ label: examplesFilename, items: items });
-    }
-    else if (fs.statSync (filename).isFile ())
-    {
-        let jsonFilename = examplesFilename.match (/(.*)\.json$/i);
-        if (jsonFilename && (jsonFilename[1][0] !== '~'))
-        {
-            examples.push ({ label: jsonFilename[1], string: fs.readFileSync (filename, 'utf8').replace (/^\uFEFF/, "") });
-        }
-    }
-}
 //
 let examplesMenu = exampleMenus.makeMenu
 (
@@ -781,8 +892,6 @@ function saveSVG (svg, defaultFilename)
         }
     );
 }
-//
-let serializer = new XMLSerializer ();
 //
 function saveCurvesMapSVG (menuItem)
 {

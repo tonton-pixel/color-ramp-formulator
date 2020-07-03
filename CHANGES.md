@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.5.0
+
+- Added a dynamically-generated `Gallery of Examples` page, accessible from the `Help` menu.
+- Improved performance of the helper function `rgb_colors_t ()`.
+- Updated `Electron Packager` to version `15.0.0`.
+
 ## 1.4.1
 
 - Fixed missing `Locale` value in the `System Info` dialog.

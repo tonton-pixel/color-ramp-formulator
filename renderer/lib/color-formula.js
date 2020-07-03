@@ -1116,7 +1116,7 @@ function rgb_color_t (rgb_t)
 //
 function rgb_colors_t (colors_t)
 {
-    return colors_t.map (color => rgb_color_t (color));
+    return colors_t.map (color => color.map (component => component * 255));
 }
 //
 const variables =
