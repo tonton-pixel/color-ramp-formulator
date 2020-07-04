@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.6.0
+
+- Added a dynamically-generated `Lists of Color Names` page, accessible from the `Help` menu.
+
 ## 1.5.0
 
 - Added a dynamically-generated `Gallery of Examples` page, accessible from the `Help` menu.

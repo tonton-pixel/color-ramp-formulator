@@ -353,6 +353,7 @@ else
             { type: 'separator' },
             { label: "Documentation", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'index.html')); } },
             { label: "Gallery of Examples", click: () => { mainWindow.webContents.send ('open-examples-gallery'); } },
+            { label: "Lists of Color Names", click: () => { mainWindow.webContents.send ('open-color-names'); } },
             { type: 'separator' },
             { label: settings.repository.label, click: () => { shell.openExternal (settings.repository.URL); } },
             { label: settings.releases.label, click: () => { shell.openExternal (settings.releases.URL); } }
@@ -369,6 +370,7 @@ else
             { type: 'separator' },
             { label: "Documentation", click: () => { shell.openPath (path.join (unpackedDirname, 'doc', 'index.html')); } },
             { label: "Gallery of Examples", click: () => { mainWindow.webContents.send ('open-examples-gallery'); } },
+            { label: "Lists of Color Names", click: () => { mainWindow.webContents.send ('open-color-names'); } },
             { type: 'separator' },
             { label: settings.repository.label, click: () => { shell.openExternal (settings.repository.URL); } },
             { label: settings.releases.label, click: () => { shell.openExternal (settings.releases.URL); } }

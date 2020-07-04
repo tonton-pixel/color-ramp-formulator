@@ -104,6 +104,23 @@ td.no-wrap
 {
     white-space: nowrap;
 }
+td.wide-cell
+{
+    width: 100%; 
+}
+span.code
+{
+    font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
+    font-size: 13px;
+    white-space: nowrap;
+    padding: 1px 2px;
+}
+div.swatch
+{
+    border: 1px solid #DDDDDD;
+    border-radius: 5px;
+    height: 32px;
+}
 code, pre
 {
     padding: 1px 2px 0 2px;

@@ -22,6 +22,7 @@ const pullDownMenus = require ('./lib/pull-down-menus.js');
 const exampleMenus = require ('./lib/example-menus');
 const json = require ('./lib/json2.js');
 //
+const colorUtils = require ('./lib/color-utils.js');
 const colorRamps = require ('./lib/color-ramps.js');
 const { createCurvesMap, createLinearGradient, createColorTable } = require ('./lib/color-ramp-preview.js');
 //
@@ -30,6 +31,24 @@ const ColorFormula = require ('./lib/color-formula.js');
 document.title = appName;
 //
 const serializer = new XMLSerializer ();
+//
+function escapedContent (string)
+{
+    let span = document.createElement ('span');
+    span.textContent = string;
+    let escaped = span.innerHTML;
+    span.remove ();
+    return escaped;
+}
+//
+function escapedAttribute (string)
+{
+    let span = document.createElement ('span');
+    span.setAttribute ('dummy', string);
+    let escaped = span.outerHTML.match (/"(.*)"/u)[1];
+    span.remove ();
+    return escaped;
+}
 //
 let examples = [ ];
 //
@@ -69,28 +88,8 @@ for (let examplesFilename of examplesFilenames)
     }
 }
 //
-function escapedContent (string)
-{
-    let span = document.createElement ('span');
-    span.textContent = string;
-    let escaped = span.innerHTML;
-    span.remove ();
-    return escaped;
-}
-//
-function escapedAttribute (string)
-{
-    let span = document.createElement ('span');
-    span.setAttribute ('dummy', string);
-    let escaped = span.outerHTML.match (/"(.*)"/u)[1];
-    span.remove ();
-    return escaped;
-}
-//
 let galleryPath = path.join (app.getPath ('userData'), 'examples-gallery');
 let galleryIndexPath = path.join (galleryPath, 'index.html');
-//
-let imagesDirname = 'images';
 //
 let isExamplesGalleryGenerated = false;
 //
@@ -100,6 +99,8 @@ function openExamplesGallery ()
     {
         let galleryNavigation = [ ];
         let galleryContents = [ ];
+        //
+        let imagesDirname = 'images';
         //
         let categoryIndex = 0;
         galleryNavigation.push ('<ul>');
@@ -127,7 +128,7 @@ function openExamplesGallery ()
         }
         galleryNavigation.push ('</ul>');
         //
-        let galleryTemplatePath = path.join (__dirname, 'gallery-template');
+        let galleryTemplatePath = path.join (__dirname, 'doc-template');
         //
         fs.rmdirSync (galleryPath, { recursive: true });
         fs.mkdirSync (path.join (galleryPath, imagesDirname), { recursive: true });
@@ -137,6 +138,8 @@ function openExamplesGallery ()
             fs.copyFileSync (path.join (galleryTemplatePath, file), path.join (galleryPath, file));
         }
         let galleryPage = fs.readFileSync (galleryIndexPath, 'utf8');
+        galleryPage = galleryPage.replace ("{{title}}", "Gallery of Examples"),
+        galleryPage = galleryPage.replace ("{{navigation-title}}", "Gallery of Examples"),
         galleryPage = galleryPage.replace ("{{navigation}}", galleryNavigation.join ("\n"));
         galleryPage = galleryPage.replace ("{{contents}}", galleryContents.join ("\n"));
         fs.writeFileSync (galleryIndexPath, galleryPage);
@@ -168,12 +171,76 @@ function openExamplesGallery ()
             }
             categoryIndex++;
         }
+        //
         isExamplesGalleryGenerated = true;
     }
     shell.openPath (galleryIndexPath);
 }
 //
 ipcRenderer.on ('open-examples-gallery', () => openExamplesGallery ());
+//
+const colorNames = require ('./lib/color-names.json');
+//
+let colorNamesPath = path.join (app.getPath ('userData'), 'color-names');
+let colorNamesIndexPath = path.join (colorNamesPath, 'index.html');
+//
+let isColorNamesGenerated = false;
+//
+function openColorNames ()
+{
+    if (!isColorNamesGenerated)
+    {
+        let colorNamesNavigation = [ ];
+        let colorNamesContents = [ ];
+        //
+        colorNamesNavigation.push ('<ul>');
+        for (let set of colorNames)
+        {
+            let setName = set.name.toLowerCase ();
+            colorNamesNavigation.push (`<li><a href="#${encodeURIComponent (set.name)}" title="${set.description}">${set.name}</a>`);
+            colorNamesContents.push (`<h2 id="${encodeURIComponent (set.name)}">${set.name}</h2>`);
+            colorNamesContents.push ("<table>");
+            for (let color of set.colors)
+            {
+                let colorName = color.name.toLowerCase ().replace (/ /g, "_");
+                if (setName.startsWith ("x11"))
+                {
+                    colorName = `x11/${colorName}`;
+                }
+                colorNamesContents.push ("<tr>");
+                colorNamesContents.push (`<td><span class="code">${colorName}</span></td>`);
+                colorNamesContents.push (`<td><span class="code">${color.hex}</span></td>`);
+                colorNamesContents.push (`<td><span class="code">[ ${colorUtils.hexToRgb (color.hex).join (", ")} ]</span></td>`);
+                colorNamesContents.push (`<td class="wide-cell"><div class="swatch" style="background-color: ${color.hex};">&nbsp;</div></td>`);
+                colorNamesContents.push ("</tr>");
+            }
+            colorNamesContents.push ("</table>");
+            colorNamesNavigation.push (`</li>`);
+        }
+        colorNamesNavigation.push ('</ul>');
+        //
+        let colorNamesTemplatePath = path.join (__dirname, 'doc-template');
+        //
+        fs.rmdirSync (colorNamesPath, { recursive: true });
+        fs.mkdirSync (colorNamesPath, { recursive: true });
+        let files = fs.readdirSync (colorNamesTemplatePath);
+        for (let file of files)
+        {
+            fs.copyFileSync (path.join (colorNamesTemplatePath, file), path.join (colorNamesPath, file));
+        }
+        let colorNamesPage = fs.readFileSync (colorNamesIndexPath, 'utf8');
+        colorNamesPage = colorNamesPage.replace ("{{title}}", "Lists of Color Names"),
+        colorNamesPage = colorNamesPage.replace ("{{navigation-title}}", "Lists of Color Names"),
+        colorNamesPage = colorNamesPage.replace ("{{navigation}}", colorNamesNavigation.join ("\n"));
+        colorNamesPage = colorNamesPage.replace ("{{contents}}", colorNamesContents.join ("\n"));
+        fs.writeFileSync (colorNamesIndexPath, colorNamesPage);
+        //
+        isColorNamesGenerated = true;
+    }
+    shell.openPath (colorNamesIndexPath);
+}
+//
+ipcRenderer.on ('open-color-names', () => openColorNames ());
 //
 const defaultPrefs =
 {
