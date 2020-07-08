@@ -28,8 +28,6 @@ const { createCurvesMap, createLinearGradient, createColorTable } = require ('./
 //
 const ColorFormula = require ('./lib/color-formula.js');
 //
-document.title = appName;
-//
 const serializer = new XMLSerializer ();
 //
 function escapedContent (string)
@@ -315,6 +313,7 @@ let examplesMenu = exampleMenus.makeMenu
         let colorRamp = JSON.parse (example.string).colorRamp;
         formulaName.value = colorRamp.name;
         formulaString.value = colorRamp.formula;
+        formulaString.scrollTop = 0;
         calculateButton.click ();
     }
 );
@@ -348,6 +347,7 @@ loadButton.addEventListener
                     let colorRamp = JSON.parse (text.replace (/^\uFEFF/, "")).colorRamp;
                     formulaName.value = colorRamp.name;
                     formulaString.value = colorRamp.formula;
+                    formulaString.scrollTop = 0;
                     calculateButton.click ();
                 }
                 catch (e)

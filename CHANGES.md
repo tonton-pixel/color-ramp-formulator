@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.7.0
+
+- Fixed resetting formula field scroll to top.
+- Updated reference links in documentation.
+- Updated `Electron` to version `9.1.0`.
+
 ## 1.6.0
 
 - Added a dynamically-generated `Lists of Color Names` page, accessible from the `Help` menu.
