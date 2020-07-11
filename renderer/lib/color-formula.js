@@ -984,9 +984,15 @@ function discrete_colors (colors, bounds, location, average)
         let highIndex = Math.floor ((map (location, bounds[0], bounds[1], 0, 255) + 0.75) * colors.length / 256);
         if (lowIndex !== highIndex)
         {
-            let lowRgb = colorUtils.colorToRgb (colors[constrain (lowIndex, 0, colors.length - 1)]);
-            let highRgb = colorUtils.colorToRgb (colors[constrain (highIndex, 0, colors.length - 1)]);
-            rgb = [ (lowRgb[0] + highRgb[0]) / 2, (lowRgb[1] + highRgb[1]) / 2, (lowRgb[2] + highRgb[2]) / 2 ];
+            let lowXyz = colorUtils.rgbToXyz (colorUtils.colorToRgb (colors[constrain (lowIndex, 0, colors.length - 1)]));
+            let highXyz = colorUtils.rgbToXyz (colorUtils.colorToRgb (colors[constrain (highIndex, 0, colors.length - 1)]));
+            let averageXyz =
+            [
+                (lowXyz[0] + highXyz[0]) / 2,
+                (lowXyz[1] + highXyz[1]) / 2,
+                (lowXyz[2] + highXyz[2]) / 2
+            ]
+            rgb = colorUtils.xyzToRgb (averageXyz);
         }
         else
         {

@@ -153,7 +153,7 @@ function openExamplesGallery ()
                 let colorRamp = [ ];
                 for (let x = 0; x < 256; x++)
                 {
-                    let rgbColor = colorFormula.evaluate (x, x / 255);
+                    let rgbColor = colorUtils.colorToRgb (colorFormula.evaluate (x, x / 255));
                     if (isRGBArray (rgbColor))
                     {
                         colorRamp.push (rgbColor.map (component => normalize (component)));
@@ -200,16 +200,24 @@ function openColorNames ()
             colorNamesContents.push ("<table>");
             for (let color of set.colors)
             {
-                let colorName = color.name.toLowerCase ().replace (/ /g, "_");
+                let colorName = (color.name.en || color.name).toLowerCase ().replace (/ /g, "_");
                 if (setName.startsWith ("x11"))
                 {
                     colorName = `x11/${colorName}`;
+                }
+                else if (setName.startsWith ("xkcd"))
+                {
+                    colorName = `xkcd/${colorName}`;
+                }
+                else if (setName.startsWith ("mac"))
+                {
+                    colorName = `mac/${colorName}`;
                 }
                 colorNamesContents.push ("<tr>");
                 colorNamesContents.push (`<td><span class="code">${colorName}</span></td>`);
                 colorNamesContents.push (`<td><span class="code">${color.hex}</span></td>`);
                 colorNamesContents.push (`<td><span class="code">[ ${colorUtils.hexToRgb (color.hex).join (", ")} ]</span></td>`);
-                colorNamesContents.push (`<td class="wide-cell"><div class="swatch" style="background-color: ${color.hex};">&nbsp;</div></td>`);
+                colorNamesContents.push (`<td class="wide-cell"><div class="swatch" style="background-color: ${color.hex};"></div></td>`);
                 colorNamesContents.push ("</tr>");
             }
             colorNamesContents.push ("</table>");
@@ -455,7 +463,7 @@ calculateButton.addEventListener
                 let colorRamp = [ ];
                 for (let x = 0; x < 256; x++)
                 {
-                    let rgbColor = colorFormula.evaluate (x, x / 255);
+                    let rgbColor = colorUtils.colorToRgb (colorFormula.evaluate (x, x / 255));
                     if (isRGBArray (rgbColor))
                     {
                         colorRamp.push (rgbColor.map (component => normalize (component)));

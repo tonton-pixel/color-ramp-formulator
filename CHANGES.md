@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.8.0
+
+- Added support for named color strings: `XKCD Color Names` and `Mac OS X Crayons`.
+- Allowed formulas to alternatively return a named color string or hex color string instead of a standard RGB color array.
+- Used XYZ instead of RGB color model for averaging in the `discrete_colors ()` helper function.
+
 ## 1.7.0
 
 - Fixed resetting formula field scroll to top.
