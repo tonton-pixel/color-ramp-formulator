@@ -1851,7 +1851,7 @@ let namedColorsSets =
             "yellowybrown": [ 174, 139, 12 ],
             "yellowygreen": [ 191, 241, 40 ]
         },
-        "fallbackColor": "snow",
+        "fallbackColor": "white",
         "info":
         [
             "https://blog.xkcd.com/2010/05/03/color-survey-results/",
@@ -1913,7 +1913,7 @@ let namedColorsSets =
             "tungsten": [ 51, 51, 51 ],
             "turquoise": [ 0, 255, 255 ]
         },
-        "fallbackColor": "white",
+        "fallbackColor": "snow",
         "info":
         [
         ]

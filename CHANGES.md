@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.9.0
+
+- Added a new color helper function: `transform_color ()`.
+- Added new formula examples, and updated documentation accordingly.
+
 ## 1.8.0
 
 - Added support for named color strings: `XKCD Color Names` and `Mac OS X Crayons`.

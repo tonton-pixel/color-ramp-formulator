@@ -511,14 +511,19 @@
             <td>w:&nbsp;number</td>
             <td>Returns a color corresponding to the wavelength of light (w) expressed in nanometers, visible to the human eye from around <code>380</code> to <code>780</code>.</td>
             </tr>
+            <tr>
+            <td><strong>transform_color</strong><br>(color, hue_shift, saturation_multiplier, lightness_multiplier)</td>
+            <td>color:&nbsp;array of 3 numbers, or string<br>hue_shift:&nbsp;number<br>saturation_multiplier:&nbsp;number<br>lightness_multiplier:&nbsp;number</td>
+            <td>Returns a transformed color of (color), according to <em>differential</em> HSL parameters: (hue_shift), (saturation_multiplier), (lightness_multiplier). All parameters beyond (color) are optional, with default values provided: <code>0</code>, <code>1</code>, and <code>1</code>, respectively.<br>The parameter (hue_shift) is expressed in degrees.</td>
+            </tr>
             </table>
-            <p>When calling the functions <em>interpolate_colors</em>, <em>distribute_colors</em>, and <em>discrete_colors</em>, each RGB color can be defined in several ways:</p>
+            <p>When calling the functions <em>interpolate_colors</em>, <em>distribute_colors</em>, <em>discrete_colors</em>, and <em>transform_color</em>, each RGB color can be defined in several ways:</p>
             <ul>
             <li>as a RGB color array; ex: <code>[&nbsp;0, 255, 0&nbsp;]</code>,</li>
-            <li>as a color string in HTML/CSS hexadecimal notation; ex: <code>"#00FF00"</code> or <code>"#0F0"</code>,</li>
-            <li>as a CSS/SVG/W3C or X11 color name; ex: <code>"lime"</code> or <code>"svg/lime"</code> or <code>"x11/green"</code>.</li>
+            <li>as a color hex string in HTML/CSS hexadecimal notation; ex: <code>"#00FF00"</code> or <code>"#0F0"</code>,</li>
+            <li>as a color name string belonging to the sets: W3C (default), X11, XKCD, and Mac OS; ex: <code>"lime"</code> or <code>"w3c/lime"</code> or <code>"x11/green"</code> or <code>"xkcd/fluorescent_green"</code>, or <code>"mac/spring"</code>.</li>
             </ul>
-            <p>See the <strong>Lists of Color Names</strong> page for a list of available W3C and X11 color names, sorted alphabetically.</p>
+            <p>See the <strong>Lists of Color Names</strong> page for a list of all available color names, sorted alphabetically.</p>
             <p>A RGB color can also be obtained by using one of the specialized color conversion functions: <em>grayscale</em>, <em>rgb</em>, <em>hsb</em>, etc., or <em>grayscale_t</em>, <em>rgb_t</em>, <em>hsb_t</em>, etc.</p>
             <h3 id="extra-functions">Extra functions</h3>
             <table>
@@ -580,6 +585,7 @@
                         palette</a></li>
                 <li><a href="http://applied-r.com/color-ramp-functions/">R Graphics: Color Ramp Functions | Applied R Code</a></li>
                 <li><a href="http://applied-r.com/r-graphics-heat-colors/">R Graphics: Heat Colors | Applied R Code</a></li>
+                <li><a href="https://beesbuzz.biz/code/16-hsv-color-transforms">Code: Affine HSV color manipulation</a></li>
             </ul>
             <ul>
                 <li><a href="https://github.com/Jabher/cubic-spline">GitHub - Jabher/cubic-spline</a></li>
@@ -704,6 +710,7 @@
                 <li><a href="http://www.mrao.cam.ac.uk/~dag/CUBEHELIX/cubetry.html">Dave Green's `cubehelix' colour schemes</a></li>
                 <li><a href="http://mperdikeas.github.io/cubehelix/index.html">Demo of the cubehelix NPM library</a></li>
                 <li><a href="http://soliton.vm.bytemark.co.uk/pub/cptutils-online/select.html">cptutils online | select</a></li>
+                <li><a href="https://colorbrewer2.org/">ColorBrewer: Color Advice for Maps</a></li>
             </ul>
             <h3 id="data-vizualization">Data vizualization</h3>
             <ul>

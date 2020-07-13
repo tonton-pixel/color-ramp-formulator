@@ -1125,6 +1125,16 @@ function rgb_colors_t (colors_t)
     return colors_t.map (color => color.map (component => component * 255));
 }
 //
+function transform_color (rgb, hue_shift = 0, saturation_multiplier = 1, lightness_multiplier = 1)
+{
+    let hsl = colorUtils.rgbToCubehelixHsl (colorUtils.colorToRgb (rgb).map (component => limit (component, 0, 255)));
+    hsl[0] += hue_shift;
+    hsl[1] *= saturation_multiplier;
+    hsl[2] *= lightness_multiplier;
+    rgb = colorUtils.cubehelixHslToRgb (hsl);
+    return rgb;
+}
+//
 const variables =
 [
     'x',
@@ -1212,7 +1222,9 @@ const functions =
     'wavelength_color',
     //
     'rgb_color_t',
-    'rgb_colors_t'
+    'rgb_colors_t',
+    //
+    'transform_color'
 ];
 //
 module.exports = function (formula)
@@ -1346,7 +1358,9 @@ module.exports = function (formula)
             wavelength_color,
             //
             rgb_color_t,
-            rgb_colors_t
+            rgb_colors_t,
+            //
+            transform_color
         );
         return result;
     };
