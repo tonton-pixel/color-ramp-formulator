@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## 1.10.0
 
-- Added Steps and Reverse options.
+- Added `Steps` and `Reverse` options.
 - Improved import of color ramp data files.
 - Updated formula examples.
 - Used unique window dimensions.
