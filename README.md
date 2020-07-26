@@ -4,7 +4,9 @@
 
 This application is built with [Electron](https://www.electronjs.org/), and works on macOS, Linux and Windows operating systems.
 
-<img src="screenshots/color-ramp-formulator.png" width="675" alt="Color Ramp Formulator screenshot">
+<img src="screenshots/color-ramp-formulator.png" width="720" alt="Color Ramp Formulator screenshot">
+
+<img src="screenshots/color-ramp-formulator-steps.png" width="720" alt="Color Ramp Formulator (Steps) screenshot">
 
 ## Examples
 

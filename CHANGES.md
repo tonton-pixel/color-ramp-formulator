@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.10.0
+
+- Added Steps and Reverse options.
+- Improved import of color ramp data files.
+- Updated formula examples.
+- Used unique window dimensions.
+- Improved user interface layout.
+- Cleaned up code and file structure.
+- Updated `Electron` to version `9.1.1`.
+
 ## 1.9.0
 
 - Added a new color helper function: `transform_color ()`.

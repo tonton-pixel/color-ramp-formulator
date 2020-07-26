@@ -897,58 +897,6 @@ function distribute_colors (colors, bounds, location, color_model, smoothness)
     return rgb;
 }
 //
-function segmentIndex (index, count)
-{
-    return Math.floor ((index + 0.5) * count / 256);
-}
-//
-function sampleIndex (index, count, alignment)
-{
-    if (!alignment)
-    {
-        alignment = "fill";
-    }
-    switch (alignment.toLowerCase ())
-    {
-        case "f":
-        case "fill":
-            index = index * 255 / (count - 1);
-            break;
-        case "l":
-        case "left":
-            index = (index + 0) * 255 / count;
-            break;
-        case "c":
-        case "center":
-            index = (index + 0.5) * 255 / count;
-            break;
-        case "r":
-        case "right":
-            index = (index + 1) * 255 / count;
-            break;
-        default:
-            throw new Error ("sampleIndex: invalid alignment: " + alignment);
-            break;
-    }
-    return index;
-}
-//
-function steps (index, count, alignment)
-{
-    if (count)
-    {
-        if ((count > 1) && (count <= 256))
-        {
-            index = sampleIndex (segmentIndex (index, count), count, alignment)
-        }
-        else
-        {
-            throw new Error ("steps: invalid number of steps: " + count);
-        }
-    }
-    return index;
-}
-//
 // From p5.js: https://github.com/processing/p5.js/blob/master/src/math/calculation.js
 //
 // Constrains a value between a minimum and maximum value.
@@ -1115,6 +1063,18 @@ function wavelength_color (w)
     return [ red, green, blue ];
 }
 //
+function transform_color (rgb, hue_shift = 0, saturation_multiplier = 1, lightness_multiplier = 1, legacy = false)
+{
+    let rgbTo = legacy ? colorUtils.rgbToHsl : colorUtils.rgbToCubehelixHsl;
+    let toRgb = legacy ? colorUtils.hslToRgb : colorUtils.cubehelixHslToRgb;
+    let hsl = rgbTo (colorUtils.colorToRgb (rgb).map (component => limit (component, 0, 255)));
+    hsl[0] += hue_shift;
+    hsl[1] *= saturation_multiplier;
+    hsl[2] *= lightness_multiplier;
+    rgb = toRgb (hsl);
+    return rgb;
+}
+//
 function rgb_color_t (rgb_t)
 {
     return rgb_t.map (component => component * 255);
@@ -1123,16 +1083,6 @@ function rgb_color_t (rgb_t)
 function rgb_colors_t (colors_t)
 {
     return colors_t.map (color => color.map (component => component * 255));
-}
-//
-function transform_color (rgb, hue_shift = 0, saturation_multiplier = 1, lightness_multiplier = 1)
-{
-    let hsl = colorUtils.rgbToCubehelixHsl (colorUtils.colorToRgb (rgb).map (component => limit (component, 0, 255)));
-    hsl[0] += hue_shift;
-    hsl[1] *= saturation_multiplier;
-    hsl[2] *= lightness_multiplier;
-    rgb = colorUtils.cubehelixHslToRgb (hsl);
-    return rgb;
 }
 //
 const variables =
@@ -1220,11 +1170,10 @@ const functions =
     'discrete_colors',
     'cubehelix_color',
     'wavelength_color',
+    'transform_color',
     //
     'rgb_color_t',
-    'rgb_colors_t',
-    //
-    'transform_color'
+    'rgb_colors_t'
 ];
 //
 module.exports = function (formula)
@@ -1356,11 +1305,10 @@ module.exports = function (formula)
             discrete_colors,
             cubehelix_color,
             wavelength_color,
+            transform_color,
             //
             rgb_color_t,
-            rgb_colors_t,
-            //
-            transform_color
+            rgb_colors_t
         );
         return result;
     };

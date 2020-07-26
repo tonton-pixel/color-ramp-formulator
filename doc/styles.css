@@ -18,6 +18,7 @@ body
     background-color: white;
     border-right: 1px solid #EEEEEE;
     overflow-y: scroll;
+    overscroll-behavior: contain;
 }
 .sidebar ul
 {
@@ -65,6 +66,7 @@ footer
     margin-left: calc(16px + 208px + 16px);
     min-width: 640px;
     max-width: 960px;
+    overscroll-behavior: contain;
 }
 h2, h3
 {

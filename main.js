@@ -158,7 +158,7 @@ else
                 {
                     title: `System Info | ${appName}`,
                     width: 480,
-                    height: settings.window.defaultHeight,
+                    height: (process.platform !== 'darwin') ? 640 : 675,
                     minimizable: false,
                     maximizable: false,
                     resizable: false,
@@ -262,7 +262,7 @@ else
             { type: 'separator' },
             {
                 label: "Import",
-                id: "import",
+                id: 'import',
                 submenu:
                 [
                     { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('import-color-ramp', 'json'); } },
@@ -275,16 +275,16 @@ else
             },
             {
                 label: "Export",
-                id: "export",
+                id: 'export',
                 enabled: false,
                 submenu:
                 [
                     { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('export-color-ramp', 'json'); } },
                     { label: "Color Ramp (.tsv)...", click: () => { mainWindow.webContents.send ('export-color-ramp', 'tsv'); } },
                     { type: 'separator' },
-                    { label: "Color Table (.act)...", click: () => { mainWindow.webContents.send ('export-color-table'); } },
-                    { label: "Curves Map (.amp)...", click: () => { mainWindow.webContents.send ('export-curves-map'); } },
-                    { label: "Lookup Table (.lut)...", click: () => { mainWindow.webContents.send ('export-lookup-table'); } }
+                    { label: "Color Table (.act)...", id: 'export-act', click: () => { mainWindow.webContents.send ('export-color-table'); } },
+                    { label: "Curves Map (.amp)...", id: 'export-amp', click: () => { mainWindow.webContents.send ('export-curves-map'); } },
+                    { label: "Lookup Table (.lut)...", id: 'export-lut', click: () => { mainWindow.webContents.send ('export-lookup-table'); } }
                 ]
             }
         ]
@@ -399,9 +399,12 @@ else
         ipcMain.on
         (
             'enable-export-menu',
-            (event, enabled) =>
+            (event, enabled, enabled256) =>
             {
                 menu.getMenuItemById ('export').enabled = enabled;
+                menu.getMenuItemById ('export-act').enabled = enabled256;
+                menu.getMenuItemById ('export-amp').enabled = enabled256;
+                menu.getMenuItemById ('export-lut').enabled = enabled256;
                 Menu.setApplicationMenu (menu); // Shouldn't be necessary, but...
             }
         );
@@ -409,17 +412,8 @@ else
         const Storage = require ('./lib/storage.js');
         const mainStorage = new Storage ('main-preferences');
         //
-        const { screen } = electron;
-        let workAreaWidth = screen.getPrimaryDisplay ().workArea.width;
-        let workAreaHeight = screen.getPrimaryDisplay ().workArea.height;
-        //
-        defaultWidth = settings.window.largerDefaultWidth;
-        defaultHeight = settings.window.largerDefaultHeight;
-        if ((defaultWidth > workAreaWidth) || (defaultHeight > workAreaHeight))
-        {
-            defaultWidth = settings.window.defaultWidth;
-            defaultHeight = settings.window.defaultHeight;
-        }
+        defaultWidth = settings.window.defaultWidth;
+        defaultHeight = settings.window.defaultHeight;
         //
         const defaultPrefs =
         {

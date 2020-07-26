@@ -2,6 +2,6 @@
     "colorRamp":
     {
         "name": "Navajo White (Transformed)",
-        "formula": "transform_color (\"navajo_white\", 0, lerp (1, 2, t), lerp (1, 1/3, t))"
+        "formula": "transform_color\n(\n    \"navajo_white\",\n    0, lerp (1, 2, t), lerp (1, 1/3, t)\n)"
     }
 }

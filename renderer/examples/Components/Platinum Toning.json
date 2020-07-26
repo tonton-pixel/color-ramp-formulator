@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Platinum Toning",
+        "formula": "rgb_t\n(\n    bias (t, 0.525),\n    bias (t, 0.5),\n    bias (t, 0.475)\n)"
+    }
+}

@@ -8,12 +8,10 @@
     "maxZoomLevel": 4,
     "window":
     {
-        "largerDefaultWidth": 1200,
-        "largerDefaultHeight": 800,
-        "defaultWidth": 900,
-        "defaultHeight": 675,
-        "minWidth": 675,
-        "minHeight": 675,
+        "defaultWidth": 960,
+        "defaultHeight": 720,
+        "minWidth": 720,
+        "minHeight": 720,
         "backgroundColor": "#F5F5F5",
         "titleTemplate": "{{app}}",
         "zoomSuffixTemplate": " ({{zoom}}%)",

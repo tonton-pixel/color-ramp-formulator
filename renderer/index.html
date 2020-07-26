@@ -19,14 +19,31 @@
                         <button class="save-button" type="button">Save...</button>
                     </span>
                 </div>
-                <div class="labelled"><span>Name:</span><input class="formula-name" type="text" size="80"></div>
-                <div class="labelled"><span>Formula:</span><textarea class="formula-string" cols="80" rows="12"></textarea></div>
-                <div class="interface">
+                <div class="labelled"><span>Name:</span><input class="formula-name" type="text" size="68"></div>
+                <div class="labelled"><span>Formula:</span><textarea class="formula-string" cols="68" rows="12"></textarea></div>
+                <div class="interface-formula">
                     <span class="dummy">&nbsp;</span>
                     <button class="calculate-button" type="button">Calculate</button>
                     <button class="pull-down-menu import-export-menu-button" type="button"><svg class="gear"><use href="images/actions.svg#gear"></use></svg></button>
                 </div>
-                <div class="labelled"><span>Color Ramp:</span><div class="color-ramp-list"></div></div>
+                <div class="interface-color-ramp">
+                    <span class="steps-options">
+                        <label class="checkbox"><input class="use-steps" type="checkbox">&nbsp;Steps:&nbsp;
+                            <select class="steps-select" title="Number of discrete steps">
+                            </select>
+                            <span>&nbsp;</span>
+                            <select class="alignment-select" title="Sampling alignment of discrete steps">
+                                <option value="fill">Fill</option>
+                                <option disabled>────</option>
+                                <option value="start">Start</option>
+                                <option value="center">Center</option>
+                                <option value="end">End</option>
+                            </select>
+                        </label>
+                    </span>
+                    <label class="checkbox"><input class="reverse" type="checkbox">&nbsp;Reverse</label>
+                </div>
+                <div class="color-ramp-list"></div>
             </div>
             <div class="color-ramp-panel">
                 <div class="preview-area">

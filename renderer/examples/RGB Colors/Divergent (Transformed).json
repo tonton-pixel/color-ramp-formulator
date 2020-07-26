@@ -1,7 +1,0 @@
-{
-    "colorRamp":
-    {
-        "name": "Divergent (Transformed)",
-        "formula": "transform_color\n(\n    rgb_t (0.7, 0.1, 0.1),\n    t < 0.5 ? 0 : -135,\n    lerp (1, 0, t < 0.5 ? t * 2 : (1 - t) * 2),\n    lerp (1, 10/3, t < 0.5 ? t * 2 : (1 - t) * 2)\n)"
-    }
-}

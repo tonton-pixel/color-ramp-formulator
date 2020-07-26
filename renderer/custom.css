@@ -32,6 +32,7 @@ body
 .section.is-shown
 {
     display: flex;
+    align-items: center;
 }
 
 .formula-panel,
@@ -108,100 +109,34 @@ body
     overscroll-behavior: contain;
 }
 
-.color-ramp-list
-{
-    font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
-    font-size: 13px;
-    line-height: 1.333em;
-    background-color: white;
-    border: 1px solid #a9a9a9;
-    height: calc(16em + 2px);
-    overflow: auto;
-    overscroll-behavior: contain;
-}
-
-.color-ramp-list .list
-{
-    background-color: white;
-    border: none;
-}
-
-.color-ramp-list .list .row
-{
-    height: 2em;
-    border: none;
-    user-select: text;
-    cursor: text;
-}
-
-.color-ramp-list .list .row .index,
-.color-ramp-list .list .row .hex,
-.color-ramp-list .list .row .rgb,
-.color-ramp-list .list .row .color,
-.color-ramp-list .list .row .error
-{
-    padding: 0 0.4em;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-}
-
-.color-ramp-list .list .row .index
-{
-    text-align: right;
-}
-
-.color-ramp-list .list .row .hex
-{
-    text-align: left;
-}
-
-.color-ramp-list .list .row .rgb
-{
-    text-align: left;
-}
-
-.color-ramp-list .list .row .color
-{
-    width: 100%;
-    user-select: none;
-    cursor: default;
-}
-
-.color-ramp-list .list .row .color .swatch
-{
-    height: 19px;
-    border: 1px solid var(--color-border);
-    border-radius: 0.25em;
-}
-
-.color-ramp-list .list .row .error
-{
-    color: var(--color-error);
-    text-align: left;
-    overflow-wrap: break-word;
-    white-space: normal;
-    max-width: 0;
-}
-
-.interface
+.interface-formula
 {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    margin-top: 12px;
-    margin-bottom: -8px;
+    margin-top: 8px;
+}
+
+.calculate-button
+{
+}
+
+.interface-color-ramp
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 4px;
 }
 
 .dummy
 {
     width: 48px;
-}
-
-.calculate-button
-{
 }
 
 .import-export-menu-button
@@ -217,11 +152,98 @@ body
     vertical-align: bottom;
 }
 
+.color-ramp-list
+{
+    font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
+    font-size: 13px;
+    line-height: 1.333em;
+    background-color: white;
+    border: 1px solid #a9a9a9;
+    height: calc(16em + 2px + 1px);
+    margin: 8px 0;
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+}
+
+.color-ramp-list .info
+{
+    background-color: white;
+    border-width: 0;
+}
+
+.color-ramp-list .info .row .error
+{
+    color: var(--color-error);
+    text-align: left;
+    padding: 0.25em 0.5em;
+    user-select: text;
+    cursor: text;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 0;
+}
+
+.color-ramp-list .list
+{
+    background-color: white;
+    border-width: 0 0 1px 0;
+}
+
+.color-ramp-list .list .row
+{
+    height: 2em;
+    border: none;
+    user-select: text;
+    cursor: text;
+}
+
+.color-ramp-list .list .row .index,
+.color-ramp-list .list .row .hex,
+.color-ramp-list .list .row .rgb,
+.color-ramp-list .list .row .color
+{
+    padding: 0 0.4em;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.color-ramp-list .list .row .index
+{
+    text-align: right;
+    min-width: 4em;
+}
+
+.color-ramp-list .list .row .hex
+{
+    text-align: left;
+}
+
+.color-ramp-list .list .row .rgb
+{
+    text-align: left;
+    min-width: 11em;
+}
+
+.color-ramp-list .list .row .color
+{
+    width: 100%;
+    min-width: 5em;
+    user-select: none;
+    cursor: default;
+}
+
+.color-ramp-list .list .row .color .swatch
+{
+    height: 19px;
+    border: 1px solid var(--color-border);
+    border-radius: 0.25em;
+}
+
 .preview-area
 {
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 .preview-area div
