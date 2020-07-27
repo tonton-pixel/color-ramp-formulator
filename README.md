@@ -4,9 +4,9 @@
 
 This application is built with [Electron](https://www.electronjs.org/), and works on macOS, Linux and Windows operating systems.
 
-<img src="screenshots/color-ramp-formulator.png" width="720" alt="Color Ramp Formulator screenshot">
+<img src="screenshots/color-ramp-formulator.png" width="960" alt="Color Ramp Formulator screenshot">
 
-<img src="screenshots/color-ramp-formulator-steps.png" width="720" alt="Color Ramp Formulator (Steps) screenshot">
+<img src="screenshots/color-ramp-formulator-steps.png" width="960" alt="Color Ramp Formulator (Steps) screenshot">
 
 ## Examples
 
@@ -80,6 +80,19 @@ ycbcr_t
     lerp (0.059, 0.886, t),
     cubic ([ 5.99477, -8.68926, 2.53768, 0.550188 ], t),
     cubic ([ 0.683558, -2.49828, 1.94276, 0.383144 ], t)
+)
+```
+
+### Navajo White (Transformed)
+
+<p><img src="images/navajo-white-transformed-curves-map.svg" alt="Navajo White (Transformed) Curves Map"></p>
+<p><img src="images/navajo-white-transformed-linear-gradient.svg" alt="Navajo White (Transformed) Linear Gradient"></p>
+
+```javascript
+transform_color
+(
+    "navajo_white",
+    0, lerp (1, 2, t), lerp (1, 1/3, t)
 )
 ```
 
