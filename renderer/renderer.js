@@ -47,9 +47,57 @@ function normalize (component)
     return Math.min (Math.max (0, Math.round (component)), 255);
 }
 //
-function transpose (array)
+function calculateColorRamp (formula, steps, reverse)
 {
-    return array[0].map ((_, column) => array.map (row => row[column]));
+    let colorRamp = [ ];
+    let colorFormula = new ColorFormula (formula);
+    if (steps)
+    {
+        let count = steps.count;
+        let alignment = steps.alignment;
+        if (reverse)
+        {
+            if (alignment === 'start')
+            {
+                alignment = 'end';
+            }
+            else if (alignment === 'end')
+            {
+                alignment = 'start';
+            }
+        }
+        for (let index = 0; index < count; index++)
+        {
+            let sampleIndex = getSampleIndex (index, count, alignment);
+            let x = reverse ? 255 - sampleIndex : sampleIndex;
+            let rgbColor = colorUtils.colorToRgb (colorFormula.evaluate (x, x / 255));
+            if (isRGBArray (rgbColor))
+            {
+                colorRamp.push (rgbColor.map (component => normalize (component)));
+            }
+            else
+            {
+                throw new Error ("Not a valid color ramp element.");
+            }
+        }
+    }
+    else
+    {
+        for (let index = 0; index < 256; index++)
+        {
+            let x = reverse ? 255 - index : index;
+            let rgbColor = colorUtils.colorToRgb (colorFormula.evaluate (x, x / 255));
+            if (isRGBArray (rgbColor))
+            {
+                colorRamp.push (rgbColor.map (component => normalize (component)));
+            }
+            else
+            {
+                throw new Error ("Not a valid color ramp element.");
+            }
+        }
+    }
+    return colorRamp;
 }
 //
 const serializer = new XMLSerializer ();
@@ -142,6 +190,11 @@ function openExamplesGallery ()
                 let LinearGradientFileName = `${categoryIndex}-${exampleIndex}-linear-gradient.svg`;
                 galleryContents.push (`<p><img src="${path.join (imagesDirname, LinearGradientFileName)}" width="260" height="52" alt="${escapedAttribute (data.name)} - Linear Gradient Preview"></p>`);
                 galleryContents.push (`<pre class="formula">\n${escapedContent (data.formula)}\n</pre>`);
+                if (data.steps)
+                {
+                    galleryContents.push (`<div class="info"><ul><li>Steps count: ${data.steps.count}</li><li>Steps alignment: ${data.steps.alignment}</li></ul></div>`);
+                }
+                if (data.reverse) galleryContents.push (`<div class="info"><ul><li>Reverse: ${Boolean (data.reverse)}</li></ul></div>`);
                 exampleIndex++;
             }
             galleryNavigation.push ('</ul>');
@@ -173,16 +226,7 @@ function openExamplesGallery ()
             for (let item of example.items)
             {
                 let data = JSON.parse (item.string).colorRamp;
-                let colorFormula = new ColorFormula (data.formula);
-                let colorRamp = [ ];
-                for (let x = 0; x < 256; x++)
-                {
-                    let rgbColor = colorUtils.colorToRgb (colorFormula.evaluate (x, x / 255));
-                    if (isRGBArray (rgbColor))
-                    {
-                        colorRamp.push (rgbColor.map (component => normalize (component)));
-                    }
-                }
+                let colorRamp = calculateColorRamp (data.formula, data.steps, data.reverse);
                 let curvesMapFileName = `${categoryIndex}-${exampleIndex}-curves-map.svg`;
                 let curvesMapPath = path.join (galleryPath, imagesDirname, curvesMapFileName);
                 let LinearGradientFileName = `${categoryIndex}-${exampleIndex}-linear-gradient.svg`;
@@ -277,8 +321,8 @@ const defaultPrefs =
     zoomLevel: 0,
     formulaName: "Linear Grayscale",
     formulaString: "[ x, x, x ]",
-    useStepsCheckbox: false,
-    stepsSelect: 8,
+    stepsCheckbox: false,
+    countSelect: 8,
     alignmentSelect: "fill",
     reverseCheckbox: false,
     gridUnitCount: 8,
@@ -315,12 +359,12 @@ const loadButton = document.body.querySelector ('.load-button');
 const saveButton = document.body.querySelector ('.save-button');
 const formulaName = document.body.querySelector ('.formula-name');
 const formulaString = document.body.querySelector ('.formula-string');
-const calculateButton = document.body.querySelector ('.calculate-button');
-const importExportMenuButton = document.body.querySelector ('.import-export-menu-button');
-const useStepsCheckbox = document.body.querySelector ('.use-steps');
-const stepsSelect = document.body.querySelector ('.steps-select');
+const stepsCheckbox = document.body.querySelector ('.steps');
+const countSelect = document.body.querySelector ('.count-select');
 const alignmentSelect = document.body.querySelector ('.alignment-select');
 const reverseCheckbox = document.body.querySelector ('.reverse');
+const calculateButton = document.body.querySelector ('.calculate-button');
+const importExportMenuButton = document.body.querySelector ('.import-export-menu-button');
 const colorRampList = document.body.querySelector ('.color-ramp-list');
 const curvesMapPreview = document.body.querySelector ('.curves-map-preview');
 const linearGradientPreview = document.body.querySelector ('.linear-gradient-preview');
@@ -328,20 +372,32 @@ const colorTablePreview = document.body.querySelector ('.color-table-preview');
 //
 let currentErrorString = null;
 let currentColorRamp = null;
-let previewColorRamp = null;
 //
 let appComment = ` Generated by ${appName} v${appVersion} `;
+//
+function setFormulaFields (name, formula, steps, reverse)
+{
+    formulaName.value = name;
+    formulaString.value = formula;
+    stepsCheckbox.checked = steps;
+    if (steps)
+    {
+        countSelect.value = steps.count.toString ();
+        alignmentSelect.value = steps.alignment;
+    }
+    countSelect.disabled = !stepsCheckbox.checked;
+    alignmentSelect.disabled = !stepsCheckbox.checked;
+    reverseCheckbox.checked = reverse;
+}
 //
 clearButton.addEventListener
 (
     'click',
     (event) =>
     {
-        formulaName.value = "";
-        formulaString.value = "";
+        setFormulaFields ("", "");
         currentErrorString = null;
         currentColorRamp = null;
-        previewColorRamp = null;
         ipcRenderer.send ('enable-export-menu', false, false);
         updatePreviews ();
     }
@@ -353,8 +409,7 @@ let examplesMenu = exampleMenus.makeMenu
     (example) =>
     {
         let colorRamp = JSON.parse (example.string).colorRamp;
-        formulaName.value = colorRamp.name;
-        formulaString.value = colorRamp.formula;
+        setFormulaFields (colorRamp.name, colorRamp.formula, colorRamp.steps, colorRamp.reverse);
         formulaString.scrollTop = 0;
         calculateButton.click ();
     }
@@ -378,8 +433,8 @@ loadButton.addEventListener
     {
         fileDialogs.loadTextFile
         (
-            "Load formula file:",
-            [ { name: "Formula file (*.json)", extensions: [ 'json' ] } ],
+            "Load formula data file:",
+            [ { name: "Formula data file (*.json)", extensions: [ 'json' ] } ],
             defaultFormulaFolderPath,
             'utf8',
             (text, filePath) =>
@@ -387,14 +442,13 @@ loadButton.addEventListener
                 try
                 {
                     let colorRamp = JSON.parse (text.replace (/^\uFEFF/, "")).colorRamp;
-                    formulaName.value = colorRamp.name;
-                    formulaString.value = colorRamp.formula;
+                    setFormulaFields (colorRamp.name, colorRamp.formula, colorRamp.steps, colorRamp.reverse);
                     formulaString.scrollTop = 0;
                     calculateButton.click ();
                 }
                 catch (e)
                 {
-                    alert (`Invalid formula file format:\n${path.basename (filePath)}`);
+                    alert (`Invalid formula data file format:\n${path.basename (filePath)}`);
                 }
                 defaultFormulaFolderPath = path.dirname (filePath);
             }
@@ -409,14 +463,26 @@ saveButton.addEventListener
     {
         fileDialogs.saveTextFile
         (
-            "Save formula file:",
-            [ { name: "Formula file (*.json)", extensions: [ 'json' ] } ],
+            "Save formula data file:",
+            [ { name: "Formula data file (*.json)", extensions: [ 'json' ] } ],
             formulaName.value ? path.join (defaultFormulaFolderPath, `${formulaName.value}.json`) : defaultFormulaFolderPath,
             (filePath) =>
             {
                 defaultFormulaFolderPath = path.dirname (filePath);
-                let colorRamp = { "colorRamp" : { "name": formulaName.value, "formula": formulaString.value } };
-                return json.stringify (colorRamp, null, 4);
+                let colorRamp =
+                {
+                    "name": formulaName.value,
+                    "formula": formulaString.value
+                };
+                if (stepsCheckbox.checked)
+                {
+                    colorRamp["steps"] = { "count": parseInt (countSelect.value), "alignment" : alignmentSelect.value };
+                }
+                if (reverseCheckbox.checked)
+                {
+                    colorRamp["reverse"] = true;
+                }
+                return json.stringify ({ "colorRamp" : colorRamp }, null, 4);
             }
         );
     }
@@ -467,6 +533,76 @@ function smartStringify (colorRamp, level = 0)
     return `${indentation.repeat (level)}[\n${colorStrings.join (",\n")}\n${indentation.repeat (level)}]`;
 }
 //
+stepsCheckbox.checked = prefs.stepsCheckbox;
+stepsCheckbox.addEventListener
+(
+    'input',
+    event =>
+    {
+        countSelect.disabled = !event.currentTarget.checked;
+        alignmentSelect.disabled = !event.currentTarget.checked;
+        if (currentColorRamp)
+        {
+            calculateButton.click ();
+        }
+    }
+);
+//
+for (let count = 1; count < 256; count++)
+{
+    let option = document.createElement ('option');
+    option.textContent = count.toString ();
+    countSelect.appendChild (option);
+}
+countSelect.value = prefs.countSelect.toString ();
+if (countSelect.selectedIndex < 0) // -1: no element is selected
+{
+    countSelect.selectedIndex = 0;
+}
+countSelect.disabled = !stepsCheckbox.checked;
+countSelect.addEventListener
+(
+    'input',
+    event =>
+    {
+        if (currentColorRamp)
+        {
+            calculateButton.click ();
+        }
+    }
+);
+//
+alignmentSelect.value = prefs.alignmentSelect;
+if (alignmentSelect.selectedIndex < 0) // -1: no element is selected
+{
+    alignmentSelect.selectedIndex = 0;
+}
+alignmentSelect.disabled = !stepsCheckbox.checked;
+alignmentSelect.addEventListener
+(
+    'input',
+    event =>
+    {
+        if (currentColorRamp)
+        {
+            calculateButton.click ();
+        }
+    }
+);
+//
+reverseCheckbox.checked = prefs.reverseCheckbox;
+reverseCheckbox.addEventListener
+(
+    'input',
+    event =>
+    {
+        if (currentColorRamp)
+        {
+            calculateButton.click ();
+        }
+    }
+);
+//
 function getSampleIndex (index, count, alignment)
 {
     if (!alignment)
@@ -501,72 +637,21 @@ calculateButton.addEventListener
     {
         currentErrorString = null;
         currentColorRamp = null;
-        previewColorRamp = null;
         ipcRenderer.send ('enable-export-menu', false, false);
         updatePreviews ();
         let formula = formulaString.value.trim ();
         if (formula)
         {
+            let steps;
+            if (stepsCheckbox.checked)
+            {
+                steps = { count: parseInt (countSelect.value), alignment: alignmentSelect.value };
+            }
+            let reverse = reverseCheckbox.checked;
             try
             {
-                let colorFormula = new ColorFormula (formula);
-                let colorRamp = [ ];
-                if (useStepsCheckbox.checked)
-                {
-                    let steps = stepsSelect.value;
-                    for (let index = 0; index < steps; index++)
-                    {
-                        let alignment = alignmentSelect.value;
-                        if (reverseCheckbox.checked)
-                        {
-                            if (alignment === 'start')
-                            {
-                                alignment = 'end';
-                            }
-                            else if (alignment === 'end')
-                            {
-                                alignment = 'start';
-                            }
-                        }
-                        let sampleIndex = getSampleIndex (index, steps, alignment);
-                        let x = reverseCheckbox.checked ? 255 - sampleIndex : sampleIndex;
-                        let rgbColor = colorUtils.colorToRgb (colorFormula.evaluate (x, x / 255));
-                        if (isRGBArray (rgbColor))
-                        {
-                            colorRamp.push (rgbColor.map (component => normalize (component)));
-                        }
-                        else
-                        {
-                            throw new Error ("Not a valid color ramp element.");
-                        }
-                    }
-                    currentColorRamp = colorRamp;
-                    previewColorRamp = [ ];
-                    for (let index = 0; index < 256; index++)
-                    {
-                        previewColorRamp.push (colorRamp[Math.floor ((index + 0.5) * colorRamp.length / 256)]);
-                    }
-                    ipcRenderer.send ('enable-export-menu', true, false);
-                }
-                else
-                {
-                    for (let index = 0; index < 256; index++)
-                    {
-                        let x = reverseCheckbox.checked ? 255 - index : index;
-                        let rgbColor = colorUtils.colorToRgb (colorFormula.evaluate (x, x / 255));
-                        if (isRGBArray (rgbColor))
-                        {
-                            colorRamp.push (rgbColor.map (component => normalize (component)));
-                        }
-                        else
-                        {
-                            throw new Error ("Not a valid color ramp element.");
-                        }
-                    }
-                    currentColorRamp = colorRamp;
-                    previewColorRamp = colorRamp;
-                    ipcRenderer.send ('enable-export-menu', true, true);
-                }
+                currentColorRamp = calculateColorRamp (formula, steps, reverse);
+                ipcRenderer.send ('enable-export-menu', true, !steps);
                 updatePreviews ();
             }
             catch (e)
@@ -625,76 +710,6 @@ importExportMenuButton.addEventListener
     }
 );
 //
-useStepsCheckbox.checked = prefs.useStepsCheckbox;
-useStepsCheckbox.addEventListener
-(
-    'input',
-    event =>
-    {
-        stepsSelect.disabled = !event.currentTarget.checked;
-        alignmentSelect.disabled = !event.currentTarget.checked;
-        if (currentColorRamp)
-        {
-            calculateButton.click ();
-        }
-    }
-);
-//
-for (let count = 1; count < 256; count++)
-{
-    let option = document.createElement ('option');
-    option.textContent = count.toString ();
-    stepsSelect.appendChild (option);
-}
-stepsSelect.value = prefs.stepsSelect.toString ();
-if (stepsSelect.selectedIndex < 0) // -1: no element is selected
-{
-    stepsSelect.selectedIndex = 0;
-}
-stepsSelect.disabled = !useStepsCheckbox.checked;
-stepsSelect.addEventListener
-(
-    'input',
-    event =>
-    {
-        if (currentColorRamp)
-        {
-            calculateButton.click ();
-        }
-    }
-);
-//
-alignmentSelect.value = prefs.alignmentSelect;
-if (alignmentSelect.selectedIndex < 0) // -1: no element is selected
-{
-    alignmentSelect.selectedIndex = 0;
-}
-alignmentSelect.disabled = !useStepsCheckbox.checked;
-alignmentSelect.addEventListener
-(
-    'input',
-    event =>
-    {
-        if (currentColorRamp)
-        {
-            calculateButton.click ();
-        }
-    }
-);
-//
-reverseCheckbox.checked = prefs.reverseCheckbox;
-reverseCheckbox.addEventListener
-(
-    'input',
-    event =>
-    {
-        if (currentColorRamp)
-        {
-            calculateButton.click ();
-        }
-    }
-);
-//
 let defaultColorRampFolderPath = prefs.defaultColorRampFolderPath;
 //
 const headerClutSize = 32;      // NIH Image (ImageJ) header
@@ -702,10 +717,14 @@ const rawClutFileSize = 768;    // (256 * 3) or (3 * 256)
 const rawElementSize = rawClutFileSize / 3;
 const footerClutSize = 4;       // Photoshop Save for Web CLUT footer (undocumented)
 //
+function transpose (array)
+{
+    return array[0].map ((_, column) => array.map (row => row[column]));
+}
+//
 function convertColorRampToFormula (name, colorRamp)
 {
-    formulaName.value = name;
-    formulaString.value = `discrete_colors\n(\n${smartStringify (colorRamp, 1)},\n    [ 0, 255 ], x\n)`;
+    setFormulaFields (name, `discrete_colors\n(\n${smartStringify (colorRamp, 1)},\n    [ 0, 255 ], x\n)`);
 }
 //
 function importColorRamp (fileType)
@@ -1091,7 +1110,7 @@ function updateCurvesMapPreview ()
     {
         curvesMapPreview.firstChild.remove ();
     }
-    curvesMapPreview.appendChild (createCurvesMap (previewColorRamp, currentGridUnitCount));
+    curvesMapPreview.appendChild (createCurvesMap (currentColorRamp, currentGridUnitCount));
 }
 //
 function updateLinearGradientPreview ()
@@ -1100,7 +1119,7 @@ function updateLinearGradientPreview ()
     {
         linearGradientPreview.firstChild.remove ();
     }
-    linearGradientPreview.appendChild (createLinearGradient (previewColorRamp, currentContinuousGradient));
+    linearGradientPreview.appendChild (createLinearGradient (currentColorRamp, currentContinuousGradient));
 }
 //
 function updateColorTablePreview ()
@@ -1109,7 +1128,7 @@ function updateColorTablePreview ()
     {
         colorTablePreview.firstChild.remove ();
     }
-    colorTablePreview.appendChild (createColorTable (previewColorRamp));
+    colorTablePreview.appendChild (createColorTable (currentColorRamp));
 }
 //
 function updatePreviews ()
@@ -1141,7 +1160,7 @@ function saveSVG (svg, defaultFilename)
 //
 function saveCurvesMapSVG (menuItem)
 {
-    saveSVG (serializer.serializeToString (createCurvesMap (previewColorRamp, currentGridUnitCount, appComment)), "curves-map");
+    saveSVG (serializer.serializeToString (createCurvesMap (currentColorRamp, currentGridUnitCount, appComment)), "curves-map");
 }
 //
 let setGridUnitCount = (menuItem) => { currentGridUnitCount = parseInt (menuItem.id); updateCurvesMapPreview ();};
@@ -1182,7 +1201,7 @@ curvesMapPreview.addEventListener
     'contextmenu',
     (event) =>
     {
-        if (previewColorRamp)
+        if (currentColorRamp)
         {
             event.preventDefault ();
             let factor = webFrame.getZoomFactor ();
@@ -1193,7 +1212,7 @@ curvesMapPreview.addEventListener
 //
 function saveLinearGradientSVG (menuItem)
 {
-    saveSVG (serializer.serializeToString (createLinearGradient (previewColorRamp, currentContinuousGradient, appComment)), "linear-gradient");
+    saveSVG (serializer.serializeToString (createLinearGradient (currentColorRamp, currentContinuousGradient, appComment)), "linear-gradient");
 }
 //
 let setContinuousGradient = (menuItem) => { currentContinuousGradient = menuItem.id; updateLinearGradientPreview ();};
@@ -1231,7 +1250,7 @@ linearGradientPreview.addEventListener
     'contextmenu',
     (event) =>
     {
-        if (previewColorRamp)
+        if (currentColorRamp)
         {
             event.preventDefault ();
             let factor = webFrame.getZoomFactor ();
@@ -1242,7 +1261,7 @@ linearGradientPreview.addEventListener
 //
 function saveColorTableSVG (menuItem)
 {
-    saveSVG (serializer.serializeToString (createColorTable (previewColorRamp, appComment)), "color-table");
+    saveSVG (serializer.serializeToString (createColorTable (currentColorRamp, appComment)), "color-table");
 }
 //
 let colorTableMenuTemplate =
@@ -1265,7 +1284,7 @@ colorTablePreview.addEventListener
     'contextmenu',
     (event) =>
     {
-        if (previewColorRamp)
+        if (currentColorRamp)
         {
             event.preventDefault ();
             let factor = webFrame.getZoomFactor ();
@@ -1284,8 +1303,8 @@ window.addEventListener // *Not* document.addEventListener
             zoomLevel: webFrame.getZoomLevel (),
             formulaName: formulaName.value,
             formulaString: formulaString.value,
-            useStepsCheckbox: useStepsCheckbox.checked,
-            stepsSelect: parseInt (stepsSelect.value),
+            stepsCheckbox: stepsCheckbox.checked,
+            countSelect: parseInt (countSelect.value),
             alignmentSelect: alignmentSelect.value,
             reverseCheckbox: reverseCheckbox.checked,
             gridUnitCount: currentGridUnitCount,

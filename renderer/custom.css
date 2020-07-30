@@ -109,34 +109,24 @@ body
     overscroll-behavior: contain;
 }
 
+.interface-color-ramp,
 .interface-formula
 {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
     width: 100%;
     margin-top: 8px;
-}
-
-.calculate-button
-{
-}
-
-.interface-color-ramp
-{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: 16px;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .dummy
 {
     width: 48px;
+}
+
+.calculate-button
+{
 }
 
 .import-export-menu-button

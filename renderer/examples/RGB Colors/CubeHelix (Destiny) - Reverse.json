@@ -1,0 +1,8 @@
+{
+    "colorRamp":
+    {
+        "name": "CubeHelix (Destiny) - Reverse",
+        "formula": "cubehelix_color (t, 0, 0.4, 0.8, 1, [ 0.15, 0.85 ])",
+        "reverse": true
+    }
+}

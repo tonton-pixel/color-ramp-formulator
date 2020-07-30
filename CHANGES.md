@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 1.11.0
+
+- Moved `Steps` and `Reverse` options to scope of formulas.
+- Refactored color ramps code.
+- Updated formula examples.
+- Updated `README.md`.
+- Updated `Electron` to version `9.1.2`.
+
 ## 1.10.0
 
 - Added `Steps` and `Reverse` options.

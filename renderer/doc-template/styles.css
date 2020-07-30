@@ -142,6 +142,17 @@ pre.formula
     overflow: auto;
     /* overscroll-behavior-y: contain; */
 }
+.info
+{
+    font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
+    font-size: 14px;
+    border: 1px dotted black;
+    margin: 1em 0;
+}
+.info li
+{
+    margin: 0;
+}
 li
 {
     margin: 0.333em 0;

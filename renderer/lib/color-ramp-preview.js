@@ -66,48 +66,30 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
     if (colorRamp)
     {
         svg.classList.remove ('disabled');
+        let previewColorRamp;
+        if (colorRamp.length < 256)
+        {
+            previewColorRamp = [ ];
+            for (let index = 0; index < 256; index++)
+            {
+                previewColorRamp.push (colorRamp[Math.floor ((index + 0.5) * colorRamp.length / 256)]);
+            }
+        }
+        else
+        {
+            previewColorRamp = colorRamp;
+        }
         let curves =
         { 
             red: [ ], 
             green: [ ],
             blue: [ ]
         };
-        if (Array.isArray (colorRamp) && (colorRamp.length === 3)) // curves
+        for (let color of previewColorRamp)
         {
-            let redCurve = colorRamp[0];
-            let greenCurve = colorRamp[1];
-            let blueCurve = colorRamp[2];
-            if
-            (
-                (Array.isArray (redCurve) && (redCurve.length === 256))
-                &&
-                (Array.isArray (greenCurve) && (greenCurve.length === 256))
-                &&
-                (Array.isArray (blueCurve) && (blueCurve.length === 256))
-            )
-            {
-                curves.red = redCurve.map (red => normalize (red));
-                curves.green = greenCurve.map (green => normalize (green));
-                curves.blue = blueCurve.map (blue => normalize (blue));
-            }
-        }
-        else if (Array.isArray (colorRamp) && (colorRamp.length === 256)) // color table
-        {
-            for (let color of colorRamp)
-            {
-                if ((typeof color === 'string') && (/^#[0-9a-fA-F]{6}$/.test (color)))
-                {
-                    curves.red.push (parseInt (color.slice (1, 3), 16));
-                    curves.green.push (parseInt (color.slice (3, 5), 16));
-                    curves.blue.push (parseInt (color.slice (5, 7), 16));
-                }
-                else if (Array.isArray (color) && (color.length === 3))
-                {
-                    curves.red.push (normalize (color[0]));
-                    curves.green.push (normalize (color[1]));
-                    curves.blue.push (normalize (color[2]));
-                }
-            }
+            curves.red.push (normalize (color[0]));
+            curves.green.push (normalize (color[1]));
+            curves.blue.push (normalize (color[2]));
         }
         //
         level++;
@@ -272,40 +254,23 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
     if (colorRamp)
     {
         svg.classList.remove ('disabled');
-        let colors = [ ];
-        if (Array.isArray (colorRamp) && (colorRamp.length === 3)) // curves
+        let previewColorRamp;
+        if (colorRamp.length < 256)
         {
-            let redCurve = colorRamp[0];
-            let greenCurve = colorRamp[1];
-            let blueCurve = colorRamp[2];
-            if
-            (
-                (Array.isArray (redCurve) && (redCurve.length === 256))
-                &&
-                (Array.isArray (greenCurve) && (greenCurve.length === 256))
-                &&
-                (Array.isArray (blueCurve) && (blueCurve.length === 256))
-            )
+            previewColorRamp = [ ];
+            for (let index = 0; index < 256; index++)
             {
-                for (let index = 0; index < 256; index++)
-                {
-                    colors.push (rgbToHex ([ redCurve[index], greenCurve[index], blueCurve[index] ]));
-                }
+                previewColorRamp.push (colorRamp[Math.floor ((index + 0.5) * colorRamp.length / 256)]);
             }
         }
-        else if (Array.isArray (colorRamp) && (colorRamp.length === 256)) // color table
+        else
         {
-            for (let color of colorRamp)
-            {
-                if ((typeof color === 'string') && (/^#[0-9a-fA-F]{6}$/.test (color)))
-                {
-                    colors.push (color.toUpperCase ());
-                }
-                else if (Array.isArray (color) && (color.length === 3))
-                {
-                    colors.push (rgbToHex (color));
-                }
-            }
+            previewColorRamp = colorRamp;
+        }
+        let colors = [ ];
+        for (let color of previewColorRamp)
+        {
+            colors.push (rgbToHex (color));
         }
         //
         level++;
@@ -437,40 +402,23 @@ module.exports.createColorTable = function (colorRamp, comment)
     if (colorRamp)
     {
         svg.classList.remove ('disabled');
-        let colorTable = [ ];
-        if (Array.isArray (colorRamp) && (colorRamp.length === 3)) // curves
+        let previewColorRamp;
+        if (colorRamp.length < 256)
         {
-            let redCurve = colorRamp[0];
-            let greenCurve = colorRamp[1];
-            let blueCurve = colorRamp[2];
-            if
-            (
-                (Array.isArray (redCurve) && (redCurve.length === 256))
-                &&
-                (Array.isArray (greenCurve) && (greenCurve.length === 256))
-                &&
-                (Array.isArray (blueCurve) && (blueCurve.length === 256))
-            )
+            previewColorRamp = [ ];
+            for (let index = 0; index < 256; index++)
             {
-                for (let index = 0; index < 256; index++)
-                {
-                    colorTable.push (rgbToHex ([ redCurve[index], greenCurve[index], blueCurve[index] ]));
-                }
+                previewColorRamp.push (colorRamp[Math.floor ((index + 0.5) * colorRamp.length / 256)]);
             }
         }
-        else if (Array.isArray (colorRamp) && (colorRamp.length === 256)) // color table
+        else
         {
-            for (let color of colorRamp)
-            {
-                if ((typeof color === 'string') && (/^#[0-9a-fA-F]{6}$/.test (color)))
-                {
-                    colorTable.push (color.toUpperCase ());
-                }
-                else if (Array.isArray (color) && (color.length === 3))
-                {
-                    colorTable.push (rgbToHex (color));
-                }
-            }
+            previewColorRamp = colorRamp;
+        }
+        let colorTable = [ ];
+        for (let color of previewColorRamp)
+        {
+            colorTable.push (rgbToHex (color));
         }
         //
         level++;
