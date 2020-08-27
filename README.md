@@ -4,9 +4,11 @@
 
 This application is built with [Electron](https://www.electronjs.org/), and works on macOS, Linux and Windows operating systems.
 
-<img src="screenshots/color-ramp-formulator.png" width="960" alt="Color Ramp Formulator screenshot">
+<img src="screenshots/color-ramp-formulator-color-table.png" width="960" alt="Color Ramp Formulator (Color Table) screenshot">
 
-<img src="screenshots/color-ramp-formulator-steps.png" width="960" alt="Color Ramp Formulator (Steps) screenshot">
+<img src="screenshots/color-ramp-formulator-daibutsu.png" width="960" alt="Color Ramp Formulator (Daibutsu) screenshot">
+
+<img src="screenshots/color-ramp-formulator-heightmap.png" width="960" alt="Color Ramp Formulator (Heightmap) screenshot">
 
 ## Examples
 
@@ -213,4 +215,4 @@ npm run build-darwin
 
 The MIT License (MIT).
 
-Copyright © 2020 Michel MARIANI.
+Copyright © 2020 Michel Mariani.

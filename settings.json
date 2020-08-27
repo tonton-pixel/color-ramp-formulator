@@ -5,7 +5,7 @@
     "developerFeatures": false,
     "smartZoom": false,
     "minZoomLevel": -2,
-    "maxZoomLevel": 4,
+    "maxZoomLevel": 2,
     "window":
     {
         "defaultWidth": 960,
@@ -19,7 +19,7 @@
     },
     "shortAppName": "App",
     "description": "Algorithmically-defined color ramps generator, making use of formulas.",
-    "copyright": "© 2020 Michel MARIANI.",
+    "copyright": "© 2020 Michel Mariani.",
     "electronApp":
     {
         "label": "Color Ramp Formulator | Apps | Electron",

@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Color Temperature",
+        "formula": "temperature_color (lerp (1000, 40000, t))"
+    }
+}

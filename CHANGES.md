@@ -2,6 +2,19 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.0.0
+
+- Added test image preview (grayscale mapping of color ramp) as an supplement to color table preview.
+- Added support for enlarged previews in pop-up dialog window (via double-click or contextual menu).
+- Darkened green (and consequently yellow and cyan) component pixels for better visibility in the curves map preview.
+- Disjoined import and export menu buttons.
+- Allowed export of binary formats even when the length of color ramp is less than 256, as a simulated distribution of discrete colors.
+- Added new components helper function: `gamma ()`.
+- Added new RGB colors helper functions: `average_colors ()`, `temperature_color ()`.
+- Updated color reference links in documentation.
+- Updated `Electron` to version `9.2.1`.
+- Updated `Electron Packager` to version `15.1.0`.
+
 ## 1.11.0
 
 - Moved `Steps` and `Reverse` options to scope of formulas.

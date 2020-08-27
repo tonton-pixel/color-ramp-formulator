@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Bluish - Intense",
+        "formula": "rgb_t\n(\n    gamma (gain (bias (t, 0.4), 0.3), 1.1),\n    gamma (gain (t, 0.4), 0.65),\n    gamma (gain (bias (t, 0.6), 0.6), 0.5)\n)"
+    }
+}

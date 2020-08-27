@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+body
+{
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    background-color: white;
+    overflow-y: hidden;
+}
+
+.preview
+{
+    margin: 12px auto;
+}
+
+.preview svg
+{
+    width: 520px;
+    height: 200%;
+}

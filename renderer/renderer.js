@@ -1,6 +1,6 @@
 //
-const { ipcRenderer, remote, shell, webFrame } = require ('electron');
-const { app, getCurrentWebContents, getGlobal } = remote;
+const { ipcRenderer, nativeImage, remote, shell, webFrame } = require ('electron');
+const { app, BrowserWindow, getCurrentWebContents, getCurrentWindow, getGlobal } = remote;
 //
 const fs = require ('fs');
 const path = require ('path');
@@ -23,7 +23,38 @@ const exampleMenus = require ('./lib/example-menus');
 const json = require ('./lib/json2.js');
 //
 const colorUtils = require ('./lib/color-utils.js');
-const { createCurvesMap, createLinearGradient, createColorTable } = require ('./lib/color-ramp-preview.js');
+const { createCurvesMap, createLinearGradient, createColorTable, createTestImage } = require ('./lib/color-ramp-preview.js');
+//
+const mapColorRamp = require ('./lib/map-color-ramp.js');
+//
+const previewImageSize = 256;
+const pixelRatio = window.devicePixelRatio || 1;
+const previewSizeOptions = { width: previewImageSize * pixelRatio, height: previewImageSize * pixelRatio };
+//
+let testImages = { };
+//
+let testImagesDirname = path.join (__dirname, 'test-images');
+let testImagesFilenames = fs.readdirSync (testImagesDirname);
+testImagesFilenames.sort ((a, b) => a.replace (/\.png$/i, "").localeCompare (b.replace (/\.png$/i, "")));
+for (let testImagesFilename of testImagesFilenames)
+{
+    let pngFilename = testImagesFilename.match (/(.*)\.png$/i);
+    if (pngFilename)
+    {
+        let pngLabel = pngFilename[1];
+        if (pngLabel[0] !== '~')
+        {
+            let pngPath = path.join (testImagesDirname, testImagesFilename);
+            let pngNativeImage = nativeImage.createFromPath (pngPath);
+            testImages[pngLabel] = 
+            {
+                path: pngPath,
+                dataURL: pngNativeImage.toDataURL (),
+                previewDataURL: pngNativeImage.resize (previewSizeOptions).toDataURL ()
+            }
+        }
+    }
+}
 //
 const ColorFormula = require ('./lib/color-formula.js');
 //
@@ -225,14 +256,27 @@ function openExamplesGallery ()
             let exampleIndex = 0;
             for (let item of example.items)
             {
+                let colorRamp256;
                 let data = JSON.parse (item.string).colorRamp;
                 let colorRamp = calculateColorRamp (data.formula, data.steps, data.reverse);
+                if (colorRamp.length < 256)
+                {
+                    colorRamp256 = [ ];
+                    for (let index = 0; index < 256; index++)
+                    {
+                        colorRamp256.push (colorRamp[Math.floor ((index + 0.5) * colorRamp.length / 256)]);
+                    }
+                }
+                else
+                {
+                    colorRamp256 = colorRamp;
+                }
                 let curvesMapFileName = `${categoryIndex}-${exampleIndex}-curves-map.svg`;
                 let curvesMapPath = path.join (galleryPath, imagesDirname, curvesMapFileName);
                 let LinearGradientFileName = `${categoryIndex}-${exampleIndex}-linear-gradient.svg`;
                 let linearGradientPath = path.join (galleryPath, imagesDirname, LinearGradientFileName);
-                fs.writeFileSync (curvesMapPath, serializer.serializeToString (createCurvesMap (colorRamp, 8)));
-                fs.writeFileSync (linearGradientPath, serializer.serializeToString (createLinearGradient (colorRamp, true)));
+                fs.writeFileSync (curvesMapPath, serializer.serializeToString (createCurvesMap (colorRamp256, 8)));
+                fs.writeFileSync (linearGradientPath, serializer.serializeToString (createLinearGradient (colorRamp256, true)));
                 exampleIndex++;
             }
             categoryIndex++;
@@ -327,8 +371,9 @@ const defaultPrefs =
     reverseCheckbox: false,
     gridUnitCount: 8,
     continuousGradient: false,
+    specificSelect: "",
     defaultFormulaFolderPath: appDefaultFolderPath,
-    defaultSVGFolderPath: appDefaultFolderPath,
+    defaultPreviewFolderPath: appDefaultFolderPath,
     defaultColorRampFolderPath: appDefaultFolderPath
 };
 let prefs = rendererStorage.get (defaultPrefs);
@@ -363,15 +408,18 @@ const stepsCheckbox = document.body.querySelector ('.steps');
 const countSelect = document.body.querySelector ('.count-select');
 const alignmentSelect = document.body.querySelector ('.alignment-select');
 const reverseCheckbox = document.body.querySelector ('.reverse');
+const importMenuButton = document.body.querySelector ('.import-menu-button');
 const calculateButton = document.body.querySelector ('.calculate-button');
-const importExportMenuButton = document.body.querySelector ('.import-export-menu-button');
+const exportMenuButton = document.body.querySelector ('.export-menu-button');
 const colorRampList = document.body.querySelector ('.color-ramp-list');
 const curvesMapPreview = document.body.querySelector ('.curves-map-preview');
 const linearGradientPreview = document.body.querySelector ('.linear-gradient-preview');
-const colorTablePreview = document.body.querySelector ('.color-table-preview');
+const specificPreview = document.body.querySelector ('.specific-preview');
+const specificSelect = document.body.querySelector ('.specific-select');
 //
 let currentErrorString = null;
 let currentColorRamp = null;
+let currentColorRamp256 = null;
 //
 let appComment = ` Generated by ${appName} v${appVersion} `;
 //
@@ -398,7 +446,10 @@ clearButton.addEventListener
         setFormulaFields ("", "");
         currentErrorString = null;
         currentColorRamp = null;
-        ipcRenderer.send ('enable-export-menu', false, false);
+        currentColorRamp256 = null;
+        ipcRenderer.send ('enable-output-menus', false);
+        exportMenuButton.disabled = true;
+        specificSelect.disabled = true;
         updatePreviews ();
     }
 );
@@ -466,6 +517,7 @@ saveButton.addEventListener
             "Save formula data file:",
             [ { name: "Formula data file (*.json)", extensions: [ 'json' ] } ],
             formulaName.value ? path.join (defaultFormulaFolderPath, `${formulaName.value}.json`) : defaultFormulaFolderPath,
+            'utf8',
             (filePath) =>
             {
                 defaultFormulaFolderPath = path.dirname (filePath);
@@ -541,10 +593,7 @@ stepsCheckbox.addEventListener
     {
         countSelect.disabled = !event.currentTarget.checked;
         alignmentSelect.disabled = !event.currentTarget.checked;
-        if (currentColorRamp)
-        {
-            calculateButton.click ();
-        }
+        calculateButton.click ();
     }
 );
 //
@@ -591,17 +640,7 @@ alignmentSelect.addEventListener
 );
 //
 reverseCheckbox.checked = prefs.reverseCheckbox;
-reverseCheckbox.addEventListener
-(
-    'input',
-    event =>
-    {
-        if (currentColorRamp)
-        {
-            calculateButton.click ();
-        }
-    }
-);
+reverseCheckbox.addEventListener ('input', event => { calculateButton.click (); });
 //
 function getSampleIndex (index, count, alignment)
 {
@@ -637,8 +676,10 @@ calculateButton.addEventListener
     {
         currentErrorString = null;
         currentColorRamp = null;
-        ipcRenderer.send ('enable-export-menu', false, false);
-        updatePreviews ();
+        currentColorRamp256 = null;
+        ipcRenderer.send ('enable-output-menus', false);
+        exportMenuButton.disabled = true;
+        specificSelect.disabled = true;
         let formula = formulaString.value.trim ();
         if (formula)
         {
@@ -651,7 +692,21 @@ calculateButton.addEventListener
             try
             {
                 currentColorRamp = calculateColorRamp (formula, steps, reverse);
-                ipcRenderer.send ('enable-export-menu', true, !steps);
+                if (currentColorRamp.length < 256)
+                {
+                    currentColorRamp256 = [ ];
+                    for (let index = 0; index < 256; index++)
+                    {
+                        currentColorRamp256.push (currentColorRamp[Math.floor ((index + 0.5) * currentColorRamp.length / 256)]);
+                    }
+                }
+                else
+                {
+                    currentColorRamp256 = currentColorRamp;
+                }
+                ipcRenderer.send ('enable-output-menus', true);
+                exportMenuButton.disabled = false;
+                specificSelect.disabled = false;
                 updatePreviews ();
             }
             catch (e)
@@ -663,50 +718,49 @@ calculateButton.addEventListener
     }
 );
 //
-let importExportMenu =
+ipcRenderer.on ('calculate', (event, args) => { calculateButton.click (); });
+//
+let importMenu =
 remote.Menu.buildFromTemplate
 (
     [
-        {
-            label: "Import",
-            id: "import",
-            submenu:
-            [
-                { label: "Color Ramp (.json)...", click: () => { webContents.send ('import-color-ramp', 'json'); } },
-                { label: "Color Ramp (.tsv)...", click: () => { webContents.send ('import-color-ramp', 'tsv'); } },
-                { type: 'separator' },
-                { label: "Color Table (.act)...", click: () => { webContents.send ('import-color-table'); } },
-                { label: "Curves Map (.amp)...", click: () => { webContents.send ('import-curves-map'); } },
-                { label: "Lookup Table (.lut)...", click: () => { webContents.send ('import-lookup-table'); } }
-            ]
-        },
-        {
-            label: "Export",
-            id: "export",
-            enabled: false,
-            submenu:
-            [
-                { label: "Color Ramp (.json)...", click: () => { webContents.send ('export-color-ramp', 'json'); } },
-                { label: "Color Ramp (.tsv)...", click: () => { webContents.send ('export-color-ramp', 'tsv'); } },
-                { type: 'separator' },
-                { label: "Color Table (.act)...", id: 'export-act', click: () => { webContents.send ('export-color-table'); } },
-                { label: "Curves Map (.amp)...", id: 'export-amp', click: () => { webContents.send ('export-curves-map'); } },
-                { label: "Lookup Table (.lut)...", id: 'export-lut', click: () => { webContents.send ('export-lookup-table'); } }
-            ]
-        }
+        { label: "Color Ramp (.json)...", click: () => { webContents.send ('import-color-ramp', 'json'); } },
+        { label: "Color Ramp (.tsv)...", click: () => { webContents.send ('import-color-ramp', 'tsv'); } },
+        { type: 'separator' },
+        { label: "Color Table (.act)...", click: () => { webContents.send ('import-color-table'); } },
+        { label: "Curves Map (.amp)...", click: () => { webContents.send ('import-curves-map'); } },
+        { label: "Lookup Table (.lut)...", click: () => { webContents.send ('import-lookup-table'); } }
     ]
 );
 //
-importExportMenuButton.addEventListener
+importMenuButton.addEventListener
 (
     'click',
     (event) =>
     {
-        importExportMenu.getMenuItemById ('export').enabled = (currentColorRamp !== null);
-        importExportMenu.getMenuItemById ('export-act').enabled = (currentColorRamp !== null) && (currentColorRamp.length === 256);
-        importExportMenu.getMenuItemById ('export-amp').enabled = (currentColorRamp !== null) && (currentColorRamp.length === 256);
-        importExportMenu.getMenuItemById ('export-lut').enabled = (currentColorRamp !== null) && (currentColorRamp.length === 256);
-        pullDownMenus.popup (event.currentTarget, importExportMenu);
+        pullDownMenus.popup (event.currentTarget, importMenu);
+    }
+);
+//
+let exportMenu =
+remote.Menu.buildFromTemplate
+(
+    [
+        { label: "Color Ramp (.json)...", click: () => { webContents.send ('export-color-ramp', 'json'); } },
+        { label: "Color Ramp (.tsv)...", click: () => { webContents.send ('export-color-ramp', 'tsv'); } },
+        { type: 'separator' },
+        { label: "Color Table (.act)...", click: () => { webContents.send ('export-color-table'); } },
+        { label: "Curves Map (.amp)...", click: () => { webContents.send ('export-curves-map'); } },
+        { label: "Lookup Table (.lut)...", click: () => { webContents.send ('export-lookup-table'); } }
+    ]
+);
+//
+exportMenuButton.addEventListener
+(
+    'click',
+    (event) =>
+    {
+        pullDownMenus.popup (event.currentTarget, exportMenu);
     }
 );
 //
@@ -962,6 +1016,7 @@ function exportColorRamp (fileType)
             `Export color ramp data file (.${fileType}):`,
             [ { name: `Color ramp data file (*.${fileType})`, extensions: [ fileType ] } ],
             formulaName.value ? path.join (defaultColorRampFolderPath, `${formulaName.value}.${fileType}`) : defaultColorRampFolderPath,
+            'utf8',
             (filePath) =>
             {
                 defaultColorRampFolderPath = path.dirname (filePath);
@@ -973,7 +1028,7 @@ function exportColorRamp (fileType)
 //
 function exportColorTable ()
 {
-    if (currentColorRamp && (currentColorRamp.length === 256))
+    if (currentColorRamp256)
     {
         fileDialogs.saveBinaryFile
         (
@@ -983,7 +1038,7 @@ function exportColorTable ()
             (filePath) =>
             {
                 defaultColorRampFolderPath = path.dirname (filePath);
-                return colorRampToData (currentColorRamp, true);
+                return colorRampToData (currentColorRamp256, true);
             }
         );
     }
@@ -991,7 +1046,7 @@ function exportColorTable ()
 //
 function exportCurvesMap ()
 {
-    if (currentColorRamp && (currentColorRamp.length === 256))
+    if (currentColorRamp256)
     {
         fileDialogs.saveBinaryFile
         (
@@ -1001,7 +1056,7 @@ function exportCurvesMap ()
             (filePath) =>
             {
                 defaultColorRampFolderPath = path.dirname (filePath);
-                return colorRampToData (currentColorRamp, false);
+                return colorRampToData (currentColorRamp256, false);
             }
         );
     }
@@ -1009,7 +1064,7 @@ function exportCurvesMap ()
 //
 function exportLookupTable ()
 {
-    if (currentColorRamp && (currentColorRamp.length === 256))
+    if (currentColorRamp256)
     {
         fileDialogs.saveBinaryFile
         (
@@ -1019,7 +1074,7 @@ function exportLookupTable ()
             (filePath) =>
             {
                 defaultColorRampFolderPath = path.dirname (filePath);
-                return colorRampToData (currentColorRamp, false);
+                return colorRampToData (currentColorRamp256, false);
             }
         );
     }
@@ -1110,7 +1165,7 @@ function updateCurvesMapPreview ()
     {
         curvesMapPreview.firstChild.remove ();
     }
-    curvesMapPreview.appendChild (createCurvesMap (currentColorRamp, currentGridUnitCount));
+    curvesMapPreview.appendChild (createCurvesMap (currentColorRamp256, currentGridUnitCount));
 }
 //
 function updateLinearGradientPreview ()
@@ -1119,16 +1174,63 @@ function updateLinearGradientPreview ()
     {
         linearGradientPreview.firstChild.remove ();
     }
-    linearGradientPreview.appendChild (createLinearGradient (currentColorRamp, currentContinuousGradient));
+    linearGradientPreview.appendChild (createLinearGradient (currentColorRamp256, currentContinuousGradient));
 }
 //
-function updateColorTablePreview ()
+if (Object.keys (testImages).length > 0)
 {
-    while (colorTablePreview.firstChild)
+    let option;
+    option = document.createElement ('option');
+    option.textContent = "──────";
+    option.disabled = true;
+    specificSelect.appendChild (option);
+    for (let testImage in testImages)
     {
-        colorTablePreview.firstChild.remove ();
+        option = document.createElement ('option');
+        option.textContent = testImage;
+        specificSelect.appendChild (option)
     }
-    colorTablePreview.appendChild (createColorTable (currentColorRamp));
+}
+specificSelect.value = prefs.specificSelect;
+if (specificSelect.selectedIndex < 0) // -1: no element is selected
+{
+    specificSelect.selectedIndex = 0;
+}
+specificSelect.addEventListener ('input', () => { updateSpecificPreview (); });
+//
+function updateSpecificPreview ()
+{
+    if (specificSelect.value)
+    {
+        if (currentColorRamp256)
+        {
+            function updateTestImage (dataURL)
+            {
+                while (specificPreview.firstChild)
+                {
+                    specificPreview.firstChild.remove ();
+                }
+                specificPreview.appendChild (createTestImage (dataURL, previewImageSize));
+            }
+            mapColorRamp (currentColorRamp256, testImages[specificSelect.value].previewDataURL, updateTestImage);
+        }
+        else
+        {
+            while (specificPreview.firstChild)
+            {
+                specificPreview.firstChild.remove ();
+            }
+            specificPreview.appendChild (createTestImage (null, previewImageSize));
+        }
+    }
+    else
+    {
+        while (specificPreview.firstChild)
+        {
+            specificPreview.firstChild.remove ();
+        }
+        specificPreview.appendChild (createColorTable (currentColorRamp256));
+    }
 }
 //
 function updatePreviews ()
@@ -1136,12 +1238,12 @@ function updatePreviews ()
     updateColorRampList ();
     updateCurvesMapPreview ();
     updateLinearGradientPreview ();
-    updateColorTablePreview ();
+    updateSpecificPreview ();
 }
 //
 updatePreviews ();
 //
-let defaultSVGFolderPath = prefs.defaultSVGFolderPath;
+let defaultPreviewFolderPath = prefs.defaultPreviewFolderPath;
 //
 function saveSVG (svg, defaultFilename)
 {
@@ -1149,48 +1251,60 @@ function saveSVG (svg, defaultFilename)
     (
         "Save SVG file:",
         [ { name: "SVG file (*.svg)", extensions: [ 'svg' ] } ],
-        path.join (defaultSVGFolderPath, `${defaultFilename}.svg`),
+        path.join (defaultPreviewFolderPath, `${defaultFilename}.svg`),
+        'utf8',
         (filePath) =>
         {
-            defaultSVGFolderPath = path.dirname (filePath);
+            defaultPreviewFolderPath = path.dirname (filePath);
             return svg;
+        }
+    );
+}
+//
+function savePNG (png, defaultFilename)
+{
+    fileDialogs.saveTextFile
+    (
+        "Save PNG file:",
+        [ { name: "PNG file (*.png)", extensions: [ 'png' ] } ],
+        path.join (defaultPreviewFolderPath, `${defaultFilename}.png`),
+        'base64',
+        (filePath) =>
+        {
+            defaultPreviewFolderPath = path.dirname (filePath);
+            return png;
         }
     );
 }
 //
 function saveCurvesMapSVG (menuItem)
 {
-    saveSVG (serializer.serializeToString (createCurvesMap (currentColorRamp, currentGridUnitCount, appComment)), "curves-map");
+    saveSVG (serializer.serializeToString (createCurvesMap (currentColorRamp256, currentGridUnitCount, appComment)), "curves-map-preview");
 }
 //
-let setGridUnitCount = (menuItem) => { currentGridUnitCount = parseInt (menuItem.id); updateCurvesMapPreview ();};
+let setGridUnitCount = (menuItem) => { currentGridUnitCount = menuItem.id; updateCurvesMapPreview ();};
 //
 let curvesMapMenuTemplate =
 [
-    {
-        label: "Curves Map Preview",
-        enabled: false
-    },
-    {
-        type: "separator"
-    },
+    { label: "Curves Map - Preview", enabled: false },
+    { type: 'separator' },
     {
         label: "Grid Units",
         submenu:
         [
-            { label: "4 × 4", id: "4", type: 'radio', click: setGridUnitCount },
-            { label: "6 × 6", id: "6", type: 'radio', click: setGridUnitCount },
-            { label: "8 × 8", id: "8", type: 'radio', click: setGridUnitCount },
-            { label: "10 × 10", id: "10", type: 'radio', click: setGridUnitCount },
-            { label: "12 × 12", id: "12", type: 'radio', click: setGridUnitCount }
+            { label: "4 × 4", id: 4, type: 'radio', click: setGridUnitCount },
+            { label: "6 × 6", id: 6, type: 'radio', click: setGridUnitCount },
+            { label: "8 × 8", id: 8, type: 'radio', click: setGridUnitCount },
+            { label: "10 × 10", id: 10, type: 'radio', click: setGridUnitCount },
+            { label: "12 × 12", id: 12, type: 'radio', click: setGridUnitCount }
         ]
     },
-    {
-        label: "Save as SVG...", click: saveCurvesMapSVG
-    }
+    { label: "Save as SVG...", click: saveCurvesMapSVG },
+    { type: 'separator' },
+    { label: "Enlarged Preview......", click: (menuItem) => openEnlargedWindow ('enlarge-curves-map') }
 ];
 let curvesMapContextualMenu = remote.Menu.buildFromTemplate (curvesMapMenuTemplate);
-let currentGridUnitMenuItem = curvesMapContextualMenu.getMenuItemById (currentGridUnitCount.toString ());
+let currentGridUnitMenuItem = curvesMapContextualMenu.getMenuItemById (currentGridUnitCount);
 if (currentGridUnitMenuItem)
 {
     currentGridUnitMenuItem.checked = true;
@@ -1210,22 +1324,30 @@ curvesMapPreview.addEventListener
     }
 );
 //
+curvesMapPreview.addEventListener
+(
+    'dblclick',
+    (event) =>
+    {
+        if (currentColorRamp)
+        {
+            event.preventDefault ();
+            openEnlargedWindow ('enlarge-curves-map');
+        }
+    }
+);
+//
 function saveLinearGradientSVG (menuItem)
 {
-    saveSVG (serializer.serializeToString (createLinearGradient (currentColorRamp, currentContinuousGradient, appComment)), "linear-gradient");
+    saveSVG (serializer.serializeToString (createLinearGradient (currentColorRamp256, currentContinuousGradient, appComment)), "linear-gradient-preview");
 }
 //
 let setContinuousGradient = (menuItem) => { currentContinuousGradient = menuItem.id; updateLinearGradientPreview ();};
 //
 let linearGradientMenuTemplate =
 [
-    {
-        label: "Linear Gradient Preview",
-        enabled: false
-    },
-    {
-        type: "separator"
-    },
+    { label: "Linear Gradient - Preview", enabled: false },
+    { type: 'separator' },
     {
         label: "Gradient",
         submenu:
@@ -1234,9 +1356,9 @@ let linearGradientMenuTemplate =
             { label: "Continuous", id: true, type: 'radio', click: setContinuousGradient }
         ]
     },
-    {
-        label: "Save as SVG...", click: saveLinearGradientSVG
-    }
+    { label: "Save as SVG...", click: saveLinearGradientSVG },
+    { type: 'separator' },
+    { label: "Enlarged Preview......", click: (menuItem) => openEnlargedWindow ('enlarge-linear-gradient') }
 ];
 let linearGradientContextualMenu = remote.Menu.buildFromTemplate (linearGradientMenuTemplate);
 let currentContinuousGradientMenuItem = linearGradientContextualMenu.getMenuItemById (currentContinuousGradient);
@@ -1259,27 +1381,64 @@ linearGradientPreview.addEventListener
     }
 );
 //
+linearGradientPreview.addEventListener
+(
+    'dblclick',
+    (event) =>
+    {
+        if (currentColorRamp)
+        {
+            event.preventDefault ();
+            openEnlargedWindow ('enlarge-linear-gradient');
+        }
+    }
+);
+//
 function saveColorTableSVG (menuItem)
 {
-    saveSVG (serializer.serializeToString (createColorTable (currentColorRamp, appComment)), "color-table");
+    saveSVG (serializer.serializeToString (createColorTable (currentColorRamp256, appComment)), "color-table-preview");
 }
 //
 let colorTableMenuTemplate =
 [
-    {
-        label: "Color Table Preview",
-        enabled: false
-    },
-    {
-        type: "separator"
-    },
-    {
-        label: "Save as SVG...", click: saveColorTableSVG
-    }
+    { label: "Color Table - Preview", enabled: false },
+    { type: 'separator' },
+    { label: "Save as SVG...", click: saveColorTableSVG },
+    { type: 'separator' },
+    { label: "Enlarged Preview......", click: (menuItem) => openEnlargedWindow ('enlarge-color-table') }
 ];
 let colorTableMenuContextualMenu = remote.Menu.buildFromTemplate (colorTableMenuTemplate);
 //
-colorTablePreview.addEventListener
+function saveTestImageSVG (menuItem)
+{
+    function updateTestImage (dataURL)
+    {
+        saveSVG (serializer.serializeToString (createTestImage (dataURL, previewImageSize, appComment)), "test-image-preview");
+    }
+    mapColorRamp (currentColorRamp256, testImages[specificSelect.value].dataURL, updateTestImage);
+}
+//
+function exportTestImagePNG (menuItem)
+{
+    function updateTestImage (dataURL)
+    {
+        savePNG (dataURL.replace ('data:image/png;base64,', ''), `${specificSelect.value} | ${formulaName.value}`);
+    }
+    mapColorRamp (currentColorRamp256, testImages[specificSelect.value].dataURL, updateTestImage);
+}
+//
+let testImageMenuTemplate =
+[
+    { label: "Test Image - Preview", enabled: false },
+    { type: 'separator' },
+    { label: "Save as SVG...", click: saveTestImageSVG },
+    { label: "Export as PNG...", click: exportTestImagePNG },
+    { type: 'separator' },
+    { label: "Enlarged Preview......", click: (menuItem) => openEnlargedWindow ('enlarge-test-image') }
+];
+let testImageMenuContextualMenu = remote.Menu.buildFromTemplate (testImageMenuTemplate);
+//
+specificPreview.addEventListener
 (
     'contextmenu',
     (event) =>
@@ -1288,10 +1447,91 @@ colorTablePreview.addEventListener
         {
             event.preventDefault ();
             let factor = webFrame.getZoomFactor ();
-            colorTableMenuContextualMenu.popup ({ x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+            if (specificSelect.value)
+            {
+                testImageMenuContextualMenu.popup ({ x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+            }
+            else
+            {
+                colorTableMenuContextualMenu.popup ({ x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+            }
         }
     }
 );
+//
+specificPreview.addEventListener
+(
+    'dblclick',
+    (event) =>
+    {
+        if (currentColorRamp)
+        {
+            event.preventDefault ();
+            openEnlargedWindow (specificSelect.value ? 'enlarge-test-image' : 'enlarge-color-table');
+        }
+    }
+);
+//
+const enlargedString = "Enlarged Preview";
+//
+let enlargedWindow = null;
+//
+function openEnlargedWindow (action)
+{
+    let browserWindow = getCurrentWindow ();
+    if (browserWindow)
+    {
+        if (!enlargedWindow)
+        {
+            enlargedWindow = new BrowserWindow
+            (
+                {
+                    title: `${enlargedString} | ${appName}`,
+                    width: 720,
+                    height: 720,
+                    fullscreenable: false,
+                    resizable: false,
+                    parent: browserWindow,
+                    modal: true,
+                    show: false,
+                    webPreferences:
+                    {
+                        devTools: false,
+                        nodeIntegration: true,
+                        enableRemoteModule: true
+                    }
+                }
+            );
+            if (process.platform !== 'darwin')
+            {
+                enlargedWindow.removeMenu ();
+            }
+            enlargedWindow.loadFile (path.join (__dirname, '..', 'enlarged', 'index.html'));
+            let svgs = [ ];
+            switch (action)
+            {
+                case 'enlarge-curves-map':
+                case 'enlarge-linear-gradient':
+                    svgs.push (serializer.serializeToString (createCurvesMap (currentColorRamp256, currentGridUnitCount)));
+                    svgs.push (serializer.serializeToString (createLinearGradient (currentColorRamp256, currentContinuousGradient)));
+                    break;
+                case 'enlarge-color-table':
+                    svgs.push (serializer.serializeToString (createColorTable (currentColorRamp256)));
+                    break;
+                case 'enlarge-test-image':
+                    function updateTestImage (dataURL)
+                    {
+                        svgs.push (serializer.serializeToString (createTestImage (dataURL, previewImageSize)));
+                    }
+                    mapColorRamp (currentColorRamp256, testImages[specificSelect.value].dataURL, updateTestImage);
+                    break;
+            }
+            enlargedWindow.webContents.on ('dom-ready', () => { enlargedWindow.webContents.send ('display-enlarged-svgs', svgs); });
+            enlargedWindow.once ('ready-to-show', () => { enlargedWindow.show (); });
+            enlargedWindow.on ('close', () => { enlargedWindow = null; });
+        }
+    }
+}
 //
 window.addEventListener // *Not* document.addEventListener
 (
@@ -1309,8 +1549,9 @@ window.addEventListener // *Not* document.addEventListener
             reverseCheckbox: reverseCheckbox.checked,
             gridUnitCount: currentGridUnitCount,
             continuousGradient: currentContinuousGradient,
+            specificSelect: specificSelect.value,
             defaultFormulaFolderPath: defaultFormulaFolderPath,
-            defaultSVGFolderPath: defaultSVGFolderPath,
+            defaultPreviewFolderPath: defaultPreviewFolderPath,
             defaultColorRampFolderPath: defaultColorRampFolderPath
         };
         rendererStorage.set (prefs);

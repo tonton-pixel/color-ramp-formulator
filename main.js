@@ -68,38 +68,41 @@ else
     //
     function showLicense (menuItem, browserWindow, event)
     {
-        if (!licenseWindow)
+        if (browserWindow)
         {
-            licenseWindow = new BrowserWindow
-            (
-                {
-                    title: `License | ${appName}`,
-                    width: 384,
-                    height: (process.platform !== 'darwin') ? 480 : 540,
-                    minimizable: false,
-                    maximizable: false,
-                    resizable: false,
-                    fullscreenable: false,
-                    parent: browserWindow,
-                    modal: true,
-                    show: false,
-                    webPreferences:
-                    {
-                        devTools: false
-                    }
-                }
-            );
-            if (process.platform !== 'darwin')
+            if (!licenseWindow)
             {
-                licenseWindow.removeMenu ();
+                licenseWindow = new BrowserWindow
+                (
+                    {
+                        title: `License | ${appName}`,
+                        width: 384,
+                        height: (process.platform !== 'darwin') ? 480 : 540,
+                        minimizable: false,
+                        maximizable: false,
+                        resizable: false,
+                        fullscreenable: false,
+                        parent: browserWindow,
+                        modal: true,
+                        show: false,
+                        webPreferences:
+                        {
+                            devTools: false
+                        }
+                    }
+                );
+                if (process.platform !== 'darwin')
+                {
+                    licenseWindow.removeMenu ();
+                }
+                licenseWindow.loadFile (path.join (__dirname, 'license-index.html'));
+                licenseWindow.once ('ready-to-show', () => { licenseWindow.show (); });
+                licenseWindow.on ('close', () => { licenseWindow = null; });
             }
-            licenseWindow.loadFile (path.join (__dirname, 'license-index.html'));
-            licenseWindow.once ('ready-to-show', () => { licenseWindow.show (); });
-            licenseWindow.on ('close', () => { licenseWindow = null; });
-        }
-        else
-        {
-            licenseWindow.show ();
+            else
+            {
+                licenseWindow.show ();
+            }
         }
     }
     //
@@ -151,40 +154,43 @@ else
     //
     function showSystemInfo (menuItem, browserWindow, event)
     {
-        if (!systemInfoWindow)
+        if (browserWindow)
         {
-            systemInfoWindow = new BrowserWindow
-            (
-                {
-                    title: `System Info | ${appName}`,
-                    width: 480,
-                    height: (process.platform !== 'darwin') ? 640 : 675,
-                    minimizable: false,
-                    maximizable: false,
-                    resizable: false,
-                    fullscreenable: false,
-                    parent: browserWindow,
-                    modal: true,
-                    show: false,
-                    webPreferences:
-                    {
-                        devTools: false
-                    }
-                }
-            );
-            if (process.platform !== 'darwin')
+            if (!systemInfoWindow)
             {
-                systemInfoWindow.removeMenu ();
+                systemInfoWindow = new BrowserWindow
+                (
+                    {
+                        title: `System Info | ${appName}`,
+                        width: 480,
+                        height: (process.platform !== 'darwin') ? 640 : 675,
+                        minimizable: false,
+                        maximizable: false,
+                        resizable: false,
+                        fullscreenable: false,
+                        parent: browserWindow,
+                        modal: true,
+                        show: false,
+                        webPreferences:
+                        {
+                            devTools: false
+                        }
+                    }
+                );
+                if (process.platform !== 'darwin')
+                {
+                    systemInfoWindow.removeMenu ();
+                }
+                systemInfoWindow.loadFile (path.join (__dirname, 'system-info-index.html'));
+                const script = `document.body.querySelector ('.system-info').value = ${JSON.stringify (getSystemInfo ())};`;
+                systemInfoWindow.webContents.on ('dom-ready', () => { systemInfoWindow.webContents.executeJavaScript (script); });
+                systemInfoWindow.once ('ready-to-show', () => { systemInfoWindow.show (); });
+                systemInfoWindow.on ('close', () => { systemInfoWindow = null; });
             }
-            systemInfoWindow.loadFile (path.join (__dirname, 'system-info-index.html'));
-            const script = `document.body.querySelector ('.system-info').value = ${JSON.stringify (getSystemInfo ())};`;
-            systemInfoWindow.webContents.on ('dom-ready', () => { systemInfoWindow.webContents.executeJavaScript (script); });
-            systemInfoWindow.once ('ready-to-show', () => { systemInfoWindow.show (); });
-            systemInfoWindow.on ('close', () => { systemInfoWindow = null; });
-        }
-        else
-        {
-            systemInfoWindow.show ();
+            else
+            {
+                systemInfoWindow.show ();
+            }
         }
     }
     //
@@ -282,9 +288,9 @@ else
                     { label: "Color Ramp (.json)...", click: () => { mainWindow.webContents.send ('export-color-ramp', 'json'); } },
                     { label: "Color Ramp (.tsv)...", click: () => { mainWindow.webContents.send ('export-color-ramp', 'tsv'); } },
                     { type: 'separator' },
-                    { label: "Color Table (.act)...", id: 'export-act', click: () => { mainWindow.webContents.send ('export-color-table'); } },
-                    { label: "Curves Map (.amp)...", id: 'export-amp', click: () => { mainWindow.webContents.send ('export-curves-map'); } },
-                    { label: "Lookup Table (.lut)...", id: 'export-lut', click: () => { mainWindow.webContents.send ('export-lookup-table'); } }
+                    { label: "Color Table (.act)...", click: () => { mainWindow.webContents.send ('export-color-table'); } },
+                    { label: "Curves Map (.amp)...", click: () => { mainWindow.webContents.send ('export-curves-map'); } },
+                    { label: "Lookup Table (.lut)...", click: () => { mainWindow.webContents.send ('export-lookup-table'); } }
                 ]
             }
         ]
@@ -398,13 +404,10 @@ else
         //
         ipcMain.on
         (
-            'enable-export-menu',
-            (event, enabled, enabled256) =>
+            'enable-output-menus',
+            (event, enabled) =>
             {
                 menu.getMenuItemById ('export').enabled = enabled;
-                menu.getMenuItemById ('export-act').enabled = enabled256;
-                menu.getMenuItemById ('export-amp').enabled = enabled256;
-                menu.getMenuItemById ('export-lut').enabled = enabled256;
                 Menu.setApplicationMenu (menu); // Shouldn't be necessary, but...
             }
         );

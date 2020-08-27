@@ -44,19 +44,23 @@
             <h2 id="description">Description</h2>
             <p><strong>Color Ramp Formulator</strong> is a desktop application used to generate algorithmically-defined color ramps, making use of <a href="#formula-format">formulas</a>, such as:</p>
             <pre class="formula">cubehelix_color (t, 0, 0.55, 2, 1)</pre>
-            <p>The result is a <strong>color ramp</strong>, which is defined as an ordered set of 256 RGB colors, and the data it represents can be displayed as a list, or previewed in three different ways:</p>
+            <p>The result is a <strong>color ramp</strong>, which is defined as an ordered set of 256 RGB colors, and the data it represents can be displayed as a list, or previewed in different ways:</p>
             <ul>
                 <li>as a <strong>curves map</strong>:</li>
             </ul>
-            <p><img src="curves-map-preview.svg" alt="Curves Map Preview image"></p>
+            <p><img src="curves-map-preview.svg" alt="Curves Map Preview"></p>
             <ul>
                 <li>as a <strong>linear gradient</strong>:</li>
             </ul>
-            <p><img src="linear-gradient-preview.svg" alt="Linear Gradient Preview image"></p>
+            <p><img src="linear-gradient-preview.svg" alt="Linear Gradient Preview"></p>
             <ul>
                 <li>as a <strong>color table</strong>:</li>
             </ul>
-            <p><img src="color-table-preview.svg" alt="Color Table Preview image"></p>
+            <p><img src="color-table-preview.svg" alt="Color Table Preview"></p>
+            <ul>
+                <li>as a <strong>test image</strong>:</li>
+            </ul>
+            <p><img src="test-image-preview.svg" alt="Test Image Preview"></p>
             <h2 id="color-models">Color models</h2>
             <p>A color ramp can be calculated from a <a href="#formula-format">formula</a> making use of helper functions supporting several color models among:</p>
             <ul>
@@ -284,6 +288,11 @@
             <td>Returns a value in the interval [0.0, 1.0] for a parameter (t) in the same interval.<br><em>gain</em> defines a kind of contrast curve controlled by the parameter (g) in the interval ]0.0, 1.0[.<br>For (g) equal to 0.5, <em>gain</em> is the identity function.</td>
             </tr>
             <tr>
+            <td><strong>gamma</strong> (t, g)</td>
+            <td>t, g: numbers</td>
+            <td>Returns a value in the interval [0.0, 1.0] for a parameter (t) in the same interval.<br><em>gamma</em> applies a gamma correction to (t), making use of a simple exponentiation by (g).<br>For (g) equal to 1.0, <em>gamma</em> is the identity function.</td>
+            </tr>
+            <tr>
             <td><strong>interpolate</strong><br>(points, position, smoothness)</td>
             <td>points:&nbsp;array<br>position:&nbsp;number<br>smoothness:&nbsp;number</td>
             <td>Returns an interpolated value at (position) from an array of (points) in ascending order, each point being defined as an array of two numbers: [&nbsp;position, value&nbsp;].<br>The shape of the resulting interpolation curve is controlled by the optional parameter (smoothness) between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a smooth <em>pchip</em> interpolation.</td>
@@ -497,6 +506,11 @@
             <td>Returns an interpolated color at (location) from an array of (colors) evenly distributed within (bounds), according to (color_model) among: <code>"rgb"</code>, <code>"lab"</code>, <code>"xyz"</code>, <code>"ycbcr"</code>, <code>"hsv"</code>, <code>"hsb"</code>, <code>hwb"</code>, <code>"hsl"</code>, <code>"hcl"</code>, <code>"lch"</code>, or <code>"cubehelix"</code>.<br>A hue mode is also appended as a suffix to the hue-based color models, among: <code>"-inc"</code> (or <code>"-asc"</code>), <code>"-dec"</code> (or <code>"-desc"</code>), <code>"-near"</code> (or <code>"-short"</code>), <code>"-far"</code> (or <code>"-long"</code>).<br>The (smoothness) parameter is an optional value between 0 (by default) and 100: a value of 0 implies a linear interpolation, while 100 indicates a <em>pchip</em> interpolation; alternatively, an array of three such values can be passed to independently control the smoothness of each component of the color model.</td>
             </tr>
             <tr>
+            <td><strong>average_colors</strong><br>(color1, color2)</td>
+            <td>color1:&nbsp;array of 3 numbers, or string<br>color2:&nbsp;array of 3 numbers, or string</td>
+            <td>Returns a perceptually averaged color between (color1) and (color2).</td>
+            </tr>
+            <tr>
             <td><strong>discrete_colors</strong><br>(colors, bounds, location, average)</td>
             <td>colors:&nbsp;array<br>bounds:&nbsp;array<br>location:&nbsp;number<br>average:&nbsp;boolean</td>
             <td>Returns a color at (location) within (bounds) from an array of (colors). The last optional parameter (average), false by default, allows more visually equal ranges by generating extra transitions between consecutive colors.</td>
@@ -512,12 +526,17 @@
             <td>Returns a color corresponding to the wavelength of light (w) expressed in nanometers, visible to the human eye from around <code>380</code> to <code>780</code>.</td>
             </tr>
             <tr>
+            <td><strong>temperature_color</strong> (k)</td>
+            <td>k:&nbsp;number</td>
+            <td>Returns a color corresponding to the color temperature (k), expressed in Kelvin (K) units; accuracy is best between <code>1000</code> and <code>40000</code>&nbsp;K.</td>
+            </tr>
+            <tr>
             <td><strong>transform_color</strong><br>(color, hue_shift, saturation_multiplier, lightness_multiplier)</td>
             <td>color:&nbsp;array of 3 numbers, or string<br>hue_shift:&nbsp;number<br>saturation_multiplier:&nbsp;number<br>lightness_multiplier:&nbsp;number</td>
-            <td>Returns a <em>transformed</em> color of (color), according to <em>differential</em> HSL parameters: (hue_shift), (saturation_multiplier), (lightness_multiplier). All parameters beyond (color) are optional, with default values provided: <code>0</code>, <code>1</code>, and <code>1</code>, respectively.<br>The parameter (hue_shift) is expressed in degrees.</td>
+            <td>Returns a modified color of (color), according to the <em>differential</em> HSL parameters: (hue_shift), (saturation_multiplier), (lightness_multiplier). All parameters beyond (color) are optional, with default values provided: <code>0</code>, <code>1</code>, and <code>1</code>, respectively.<br>The parameter (hue_shift) is expressed in degrees.</td>
             </tr>
             </table>
-            <p>When calling the functions <em>interpolate_colors</em>, <em>distribute_colors</em>, <em>discrete_colors</em>, and <em>transform_color</em>, each RGB color can be defined in several ways:</p>
+            <p>When calling the functions <em>interpolate_colors</em>, <em>distribute_colors</em>, <em>average_colors</em>, <em>discrete_colors</em>, <em>transform_color</em>, each RGB color can be defined in several ways:</p>
             <ul>
             <li>as a RGB color array; ex: <code>[&nbsp;0, 255, 0&nbsp;]</code>,</li>
             <li>as a color hex string in HTML/CSS hexadecimal notation; ex: <code>"#00FF00"</code> or <code>"#0F0"</code>,</li>
@@ -560,14 +579,13 @@
                 <li><a href="https://uxplanet.org/designing-systematic-colors-b5d2605b15c">Designing Systematic Colors - UX
                         Planet</a></li>
                 <li><a href="https://gka.github.io/chroma.js/">chroma.js api docs!</a></li>
-                <li><a href="http://www.physics.sfasu.edu/astro/color/spectra.html">Approximate RGB values for Visible
-                        Wavelengths</a></li>
                 <li><a href="http://wwwvis.informatik.uni-stuttgart.de/~weiskopf/publications/vis09_blending.pdf">Hue-Preserving
                         Color Blending (PDF)</a></li>
                 <li><a href="https://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/">Perceptual rainbow
                         palette – the method | MyCarta</a></li>
                 <li><a href="https://mycarta.wordpress.com/2014/10/24/colormap-compromise/">Colormap compromise | MyCarta</a></li>
                 <li><a href="https://bl.ocks.org/mbostock/310c99e53880faec2434">A Less-Angry Rainbow - bl.ocks.org</a></li>
+                <li><a href="https://bl.ocks.org/mbostock/3289530">Heightmap - bl.ocks.org</a></li>
                 <li><a href="https://www.kennethmoreland.com/color-advice/">Color Map Advice for Scientific Visualization</a></li>
                 <li><a href="https://www.kennethmoreland.com/color-maps/">Diverging Color Maps for Scientific Visualization</a></li>
                 <li><a href="http://www.kennethmoreland.com/color-maps/ColorMapsExpanded.pdf">Diverging Color Maps for Scientific
@@ -576,6 +594,9 @@
                                 Perceptually Uniform Color Maps (PDF)</a></li>
                 <li><a href="http://vrl.cs.brown.edu/color/pdf/colorgorical.pdf">Colorgorical: Creating discriminable and preferable
                                 color palettes for information visualization (PDF)</a></li>
+                <li><a href="https://wildsilicon.com/blog/2018/cyclical-colormaps/">Constructing a cyclical colormap</a></li>
+                <li><a href="https://arxiv.org/pdf/1509.03700.pdf">Good Colour Maps:  How to Design Them (PDF)</a></li>
+                <li><a href="https://kwstat.github.io/pals/reference/pal.sineramp.html">Show a colormap with a sineramp</a></li>
             </ul>
             <ul>
                 <li><a
@@ -590,6 +611,13 @@
                 <li><a href="http://applied-r.com/color-ramp-functions/">R Graphics: Color Ramp Functions | Applied R Code</a></li>
                 <li><a href="http://applied-r.com/r-graphics-heat-colors/">R Graphics: Heat Colors | Applied R Code</a></li>
                 <li><a href="https://beesbuzz.biz/code/16-hsv-color-transforms">Code: Affine HSV color manipulation</a></li>
+            </ul>
+            <ul>
+                <li><a href="https://tannerhelland.com/2012/09/18/convert-temperature-rgb-algorithm-code.html">How to Convert
+                                Temperature (K) to RGB: Algorithm and Sample Code</a></li>
+                <li><a href="https://www.zombieprototypes.com/?p=210">Color Temperature conversion of Homestar.io – ZombiePrototypes</a></li>
+                <li><a href="http://www.physics.sfasu.edu/astro/color/spectra.html">Approximate RGB values for Visible
+                        Wavelengths</a></li>
             </ul>
             <ul>
                 <li><a href="https://github.com/Jabher/cubic-spline">GitHub - Jabher/cubic-spline</a></li>
@@ -744,6 +772,8 @@
                 <li><a href="https://www.researchgate.net/publication/268813843_Color_Coding_for_Data_Visualization">Color Coding
                         for Data Visualization</a></li>
                 <li><a href="https://peterkovesi.com/projects/colourmaps/">CET Perceptually Uniform Colour Maps</a></li>
+                <li><a href="https://peterkovesi.com/projects/colourmaps/colourmaptestimage.html">CET Perceptually Uniform Colour Maps:
+                                The Test Image</a></li>
                 <li><a href="https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html">Overview of the ‘pals’
                         package</a></li>
                 <li><a href="https://mycarta.wordpress.com/2012/05/29/the-rainbow-is-dead-long-live-the-rainbow-series-outline/">The
@@ -780,7 +810,7 @@
                         restrictive JS sandbox | Licencia para Hackear</a></li>
             </ul>
             <hr>
-            <p>© Copyright 2020 Michel MARIANI.</p>
+            <p>© Copyright 2020 Michel Mariani.</p>
         </main>
     </body>
 </html>

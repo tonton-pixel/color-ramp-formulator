@@ -45,7 +45,7 @@ module.exports.loadTextFile = function (prompt, filters, defaultPath, encoding, 
     );
 }
 //
-module.exports.saveTextFile = function (prompt, filters, defaultPath, callback)
+module.exports.saveTextFile = function (prompt, filters, defaultPath, encoding, callback)
 {
     dialog.showSaveDialog
     (
@@ -68,6 +68,7 @@ module.exports.saveTextFile = function (prompt, filters, defaultPath, callback)
                 (
                     filePath,
                     callback (filePath),
+                    encoding,
                     (err) =>
                     {
                         if (err)

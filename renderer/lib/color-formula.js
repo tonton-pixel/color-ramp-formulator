@@ -82,6 +82,12 @@ function gain (t, g)
     return t < 0.5 ? bias (2 * t, g) / 2 : 1 - (bias ((2 * (1 - t)), g) / 2);
 }
 //
+function gamma (t, g)
+{
+    t = limit (t, 0, 1);
+    return t ** g;
+}
+//
 // Shape-preserving PCHIP (Piecewise Cubic Hermite Interpolation Polynomial)
 // Based on:
 // <http://www.mathworks.fr/moler/interp.pdf> (previous link)
@@ -923,6 +929,19 @@ function map (n, start1, stop1, start2, stop2, withinBounds)
     }
 }
 //
+function average_colors (color1, color2)
+{
+    let xyz1 = colorUtils.rgbToXyz (colorUtils.colorToRgb (color1));
+    let xyz2 = colorUtils.rgbToXyz (colorUtils.colorToRgb (color2));
+    let averageXyz =
+    [
+        (xyz1[0] + xyz2[0]) / 2,
+        (xyz1[1] + xyz2[1]) / 2,
+        (xyz1[2] + xyz2[2]) / 2
+    ]
+    return colorUtils.xyzToRgb (averageXyz);
+}
+//
 function discrete_colors (colors, bounds, location, average)
 {
     let rgb;
@@ -932,15 +951,9 @@ function discrete_colors (colors, bounds, location, average)
         let highIndex = Math.floor ((map (location, bounds[0], bounds[1], 0, 255) + 0.75) * colors.length / 256);
         if (lowIndex !== highIndex)
         {
-            let lowXyz = colorUtils.rgbToXyz (colorUtils.colorToRgb (colors[constrain (lowIndex, 0, colors.length - 1)]));
-            let highXyz = colorUtils.rgbToXyz (colorUtils.colorToRgb (colors[constrain (highIndex, 0, colors.length - 1)]));
-            let averageXyz =
-            [
-                (lowXyz[0] + highXyz[0]) / 2,
-                (lowXyz[1] + highXyz[1]) / 2,
-                (lowXyz[2] + highXyz[2]) / 2
-            ]
-            rgb = colorUtils.xyzToRgb (averageXyz);
+            lowRgb = colorUtils.colorToRgb (colors[constrain (lowIndex, 0, colors.length - 1)]);
+            highRgb = colorUtils.colorToRgb (colors[constrain (highIndex, 0, colors.length - 1)]);
+            rgb = average_colors (lowRgb, highRgb);
         }
         else
         {
@@ -986,43 +999,43 @@ function cubehelix_color (t, start = 0.5, rotations = -1.5, saturation = 1, gamm
     return rgb;
 }
 //
-function wavelength_color (w)
+function wavelength_color (wavelength)
 {
     let red_t;
     let green_t;
     let blue_t;
     //
-    if ((w >= 380) && (w <= 440))
+    if ((wavelength >= 380) && (wavelength <= 440))
     {
-        red_t = (440 - w) / (440 - 380);
+        red_t = (440 - wavelength) / (440 - 380);
         green_t = 0;
         blue_t = 1;
     }
-    else if ((w >= 440) && (w <= 490))
+    else if ((wavelength >= 440) && (wavelength <= 490))
     {
         red_t = 0;
-        green_t = (w - 440) / (490 - 440);
+        green_t = (wavelength - 440) / (490 - 440);
         blue_t = 1;
     }
-    else if ((w >= 490) && (w <= 510))
+    else if ((wavelength >= 490) && (wavelength <= 510))
     {
         red_t = 0;
         green_t = 1;
-        blue_t = (510 - w) / (510 - 490);
+        blue_t = (510 - wavelength) / (510 - 490);
     }
-    else if ((w >= 510) && (w <= 580))
+    else if ((wavelength >= 510) && (wavelength <= 580))
     {
-        red_t = (w - 510) / (580 - 510);
+        red_t = (wavelength - 510) / (580 - 510);
         green_t = 1;
         blue_t = 0;
     }
-    else if ((w >= 580) && (w <= 645))
+    else if ((wavelength >= 580) && (wavelength <= 645))
     {
         red_t = 1;
-        green_t = (645 - w) / (645 - 580);
+        green_t = (645 - wavelength) / (645 - 580);
         blue_t = 0;
     }
-    else if ((w >= 645) && (w <= 780))
+    else if ((wavelength >= 645) && (wavelength <= 780))
     {
         red_t = 1;
         green_t = 0;
@@ -1037,17 +1050,17 @@ function wavelength_color (w)
     //
     let factor;
     //
-    if ((w >= 380) && (w <= 420))
+    if ((wavelength >= 380) && (wavelength <= 420))
     {
-        factor = 0.3 + (0.7 * (w - 380) / (420 - 380));
+        factor = 0.3 + (0.7 * (wavelength - 380) / (420 - 380));
     }
-    else if ((w >= 420) && (w <= 700))
+    else if ((wavelength >= 420) && (wavelength <= 700))
     {
         factor = 1;
     }
-    else if ((w >= 700) && (w <= 780))
+    else if ((wavelength >= 700) && (wavelength <= 780))
     {
-        factor = 0.3 + (0.7 * (780 - w) / (780 - 700));
+        factor = 0.3 + (0.7 * (780 - wavelength) / (780 - 700));
     }
     else
     {
@@ -1062,6 +1075,68 @@ function wavelength_color (w)
     //
     return [ red, green, blue ];
 }
+//
+// https://tannerhelland.com/2012/09/18/convert-temperature-rgb-algorithm-code.html
+// https://github.com/neilbartlett/color-temperature/blob/master/index.js
+// http://www.zombieprototypes.com/?p=210
+//
+function temperature_color (kelvin, legacy)
+{
+    let red;
+    let green;
+    let blue;
+    let k = kelvin / 100;
+    if (legacy)
+    {
+        red = (k <= 66) ?
+                    255 :
+                    329.698727446 * (Math.pow (k - 60, -0.1332047592));
+        //
+        green = (k <= 66) ?
+                    (99.4708025861 * Math.log (k)) - 161.1195681661 :
+                    288.1221695283 * Math.pow (k - 60, -0.0755148492);
+        //
+        blue = (k < 66) ?
+                    (k <= 19) ?
+                        0 :
+                        (138.5177312231 * Math.log (k - 10)) - 305.0447927307 :
+                    255;
+    }
+    else
+    {
+        if (k < 66)
+        {
+            red = 255;
+            //
+            green = k - 2;
+            green = -155.25485562709179 + (-0.44596950469579133 * green) + (104.49216199393888 * Math.log (green));
+            //
+            if (k <= 20)
+            {
+                blue = 0;
+            }
+            else
+            {
+                blue = k - 10;
+                blue = -254.76935184120902 + (0.8274096064007395 * blue) + (115.67994401066147 * Math.log (blue));
+            }
+        }
+        else
+        {
+            red = k - 55;
+            red = 351.97690566805693 + (0.114206453784165 * red) + (-40.25366309332127 * Math.log (red));
+            //
+            green = k - 50;
+            green = 325.4494125711974 + (0.07943456536662342 * green) + (-28.0852963507957 * Math.log (green));
+            //
+            blue = 255;
+        }
+    }
+    red = constrain (red, 0, 255);
+    green = constrain (green, 0, 255);
+    blue = constrain (blue, 0, 255);
+    return [ red, green, blue ];
+ }
 //
 function transform_color (rgb, hue_shift = 0, saturation_multiplier = 1, lightness_multiplier = 1, legacy = false)
 {
@@ -1129,6 +1204,7 @@ const functions =
     'cubic',
     'distribute',
     'gain',
+    'gamma',
     'interpolate',
     'lerp',
     'linear',
@@ -1167,9 +1243,11 @@ const functions =
     //
     'interpolate_colors',
     'distribute_colors',
+    'average_colors',
     'discrete_colors',
     'cubehelix_color',
     'wavelength_color',
+    'temperature_color',
     'transform_color',
     //
     'rgb_color_t',
@@ -1264,6 +1342,7 @@ module.exports = function (formula)
             cubic,
             distribute,
             gain,
+            gamma,
             interpolate,
             lerp,
             linear,
@@ -1302,9 +1381,11 @@ module.exports = function (formula)
             //
             interpolate_colors,
             distribute_colors,
+            average_colors,
             discrete_colors,
             cubehelix_color,
             wavelength_color,
+            temperature_color,
             transform_color,
             //
             rgb_color_t,

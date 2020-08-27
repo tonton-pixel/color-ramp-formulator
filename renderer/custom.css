@@ -116,30 +116,29 @@ body
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+}
+
+.interface-color-ramp
+{
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.interface-formula
+{
     margin-top: 8px;
     margin-bottom: 8px;
 }
 
-.dummy
-{
-    width: 48px;
-}
-
-.calculate-button
-{
-}
-
-.import-export-menu-button
+.import-menu-button,
+.export-menu-button
 {
     user-select: none;
     white-space: nowrap;
 }
 
-.import-export-menu-button svg.gear
+.calculate-button
 {
-    width: 1em;
-    height: 1em;
-    vertical-align: bottom;
 }
 
 .color-ramp-list
@@ -238,13 +237,19 @@ body
 
 .preview-area div
 {
-    margin-bottom: -4px;
+    margin: 12px 0;
     padding: 0;
+}
+
+.preview-area div:first-of-type,
+.preview-area div:last-of-type
+{
+    margin: 0;
 }
 
 .preview-area svg
 {
-    margin: 8px 0;
+    margin: 0;
     box-shadow: 1px 1px 4px #AAAAAA;
 }
 
@@ -253,7 +258,14 @@ body
     box-shadow: none;
 }
 
-.preview-area svg.disabled > rect
+.preview-area svg.disabled > .frame
 {
     stroke: lightgray;
+}
+
+.specific-select
+{
+    margin: -2px auto 12px auto;
+    width: fit-content;
+    font-size: 12px;
 }

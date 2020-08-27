@@ -39,9 +39,9 @@
                     <label class="checkbox"><input class="reverse" type="checkbox">&nbsp;Reverse</label>
                 </div>
                 <div class="interface-formula">
-                    <span class="dummy">&nbsp;</span>
+                    <button class="pull-down-menu import-menu-button" type="button">Import</button>
                     <button class="calculate-button" type="button">Calculate</button>
-                    <button class="pull-down-menu import-export-menu-button" type="button"><svg class="gear"><use href="images/actions.svg#gear"></use></svg></button>
+                    <button class="pull-down-menu export-menu-button" type="button" disabled>Export</button>
                 </div>
                 <div class="color-ramp-list"></div>
             </div>
@@ -49,7 +49,10 @@
                 <div class="preview-area">
                     <div class="curves-map-preview"></div>
                     <div class="linear-gradient-preview"></div>
-                    <div class="color-table-preview"></div>
+                    <select class="specific-select" disabled>
+                        <option value="">Color Table</option>
+                    </select>
+                    <div class="specific-preview"></div>
                 </div>
             </div>
         </section>
