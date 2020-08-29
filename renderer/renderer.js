@@ -8,6 +8,7 @@ const path = require ('path');
 const appName = app.name;
 const appVersion = app.getVersion ();
 //
+const mainWindow = getCurrentWindow ();
 const webContents = getCurrentWebContents ();
 //
 const settings = getGlobal ('settings');
@@ -372,6 +373,7 @@ const defaultPrefs =
     gridUnitCount: 8,
     continuousGradient: false,
     specificSelect: "",
+    verticalColorTable: false,
     defaultFormulaFolderPath: appDefaultFolderPath,
     defaultPreviewFolderPath: appDefaultFolderPath,
     defaultColorRampFolderPath: appDefaultFolderPath
@@ -427,6 +429,8 @@ function setFormulaFields (name, formula, steps, reverse)
 {
     formulaName.value = name;
     formulaString.value = formula;
+    formulaString.scrollTop = 0;
+    formulaString.scrollLeft = 0;
     stepsCheckbox.checked = steps;
     if (steps)
     {
@@ -461,7 +465,6 @@ let examplesMenu = exampleMenus.makeMenu
     {
         let colorRamp = JSON.parse (example.string).colorRamp;
         setFormulaFields (colorRamp.name, colorRamp.formula, colorRamp.steps, colorRamp.reverse);
-        formulaString.scrollTop = 0;
         calculateButton.click ();
     }
 );
@@ -494,7 +497,6 @@ loadButton.addEventListener
                 {
                     let colorRamp = JSON.parse (text.replace (/^\uFEFF/, "")).colorRamp;
                     setFormulaFields (colorRamp.name, colorRamp.formula, colorRamp.steps, colorRamp.reverse);
-                    formulaString.scrollTop = 0;
                     calculateButton.click ();
                 }
                 catch (e)
@@ -717,8 +719,6 @@ calculateButton.addEventListener
         }
     }
 );
-//
-ipcRenderer.on ('calculate', (event, args) => { calculateButton.click (); });
 //
 let importMenu =
 remote.Menu.buildFromTemplate
@@ -1152,6 +1152,7 @@ function updateColorRampList ()
         colorRampList.firstChild.remove ();
     }
     colorRampList.scrollTop = 0;
+    colorRampList.scrollLeft = 0;
     colorRampList.appendChild (createColorRampList (currentColorRamp, currentErrorString));
 }
 //
@@ -1176,6 +1177,8 @@ function updateLinearGradientPreview ()
     }
     linearGradientPreview.appendChild (createLinearGradient (currentColorRamp256, currentContinuousGradient));
 }
+//
+let currentVerticalColorTable = prefs.verticalColorTable;
 //
 if (Object.keys (testImages).length > 0)
 {
@@ -1210,7 +1213,7 @@ function updateSpecificPreview ()
                 {
                     specificPreview.firstChild.remove ();
                 }
-                specificPreview.appendChild (createTestImage (dataURL, previewImageSize));
+                specificPreview.appendChild (createTestImage (dataURL));
             }
             mapColorRamp (currentColorRamp256, testImages[specificSelect.value].previewDataURL, updateTestImage);
         }
@@ -1220,7 +1223,7 @@ function updateSpecificPreview ()
             {
                 specificPreview.firstChild.remove ();
             }
-            specificPreview.appendChild (createTestImage (null, previewImageSize));
+            specificPreview.appendChild (createTestImage (null));
         }
     }
     else
@@ -1229,7 +1232,7 @@ function updateSpecificPreview ()
         {
             specificPreview.firstChild.remove ();
         }
-        specificPreview.appendChild (createColorTable (currentColorRamp256));
+        specificPreview.appendChild (createColorTable (currentColorRamp256, currentVerticalColorTable));
     }
 }
 //
@@ -1301,7 +1304,7 @@ let curvesMapMenuTemplate =
     },
     { label: "Save as SVG...", click: saveCurvesMapSVG },
     { type: 'separator' },
-    { label: "Enlarged Preview......", click: (menuItem) => openEnlargedWindow ('enlarge-curves-map') }
+    { label: "Enlarged Preview...", click: (menuItem) => openEnlargedWindow ('enlarge-curves-map') }
 ];
 let curvesMapContextualMenu = remote.Menu.buildFromTemplate (curvesMapMenuTemplate);
 let currentGridUnitMenuItem = curvesMapContextualMenu.getMenuItemById (currentGridUnitCount);
@@ -1358,7 +1361,7 @@ let linearGradientMenuTemplate =
     },
     { label: "Save as SVG...", click: saveLinearGradientSVG },
     { type: 'separator' },
-    { label: "Enlarged Preview......", click: (menuItem) => openEnlargedWindow ('enlarge-linear-gradient') }
+    { label: "Enlarged Preview...", click: (menuItem) => openEnlargedWindow ('enlarge-linear-gradient') }
 ];
 let linearGradientContextualMenu = remote.Menu.buildFromTemplate (linearGradientMenuTemplate);
 let currentContinuousGradientMenuItem = linearGradientContextualMenu.getMenuItemById (currentContinuousGradient);
@@ -1396,24 +1399,39 @@ linearGradientPreview.addEventListener
 //
 function saveColorTableSVG (menuItem)
 {
-    saveSVG (serializer.serializeToString (createColorTable (currentColorRamp256, appComment)), "color-table-preview");
+    saveSVG (serializer.serializeToString (createColorTable (currentColorRamp256, currentVerticalColorTable, appComment)), "color-table-preview");
 }
+//
+let setVerticalColorTable = (menuItem) => { currentVerticalColorTable = menuItem.id; updateSpecificPreview ();};
 //
 let colorTableMenuTemplate =
 [
     { label: "Color Table - Preview", enabled: false },
     { type: 'separator' },
+    {
+        label: "Layout",
+        submenu:
+        [
+            { label: "Horizontal", id: false, type: 'radio', click: setVerticalColorTable },
+            { label: "Vertical", id: true, type: 'radio', click: setVerticalColorTable }
+        ]
+    },
     { label: "Save as SVG...", click: saveColorTableSVG },
     { type: 'separator' },
-    { label: "Enlarged Preview......", click: (menuItem) => openEnlargedWindow ('enlarge-color-table') }
+    { label: "Enlarged Preview...", click: (menuItem) => openEnlargedWindow ('enlarge-color-table') }
 ];
 let colorTableMenuContextualMenu = remote.Menu.buildFromTemplate (colorTableMenuTemplate);
+let currentVerticalColorTableMenuItem = colorTableMenuContextualMenu.getMenuItemById (currentVerticalColorTable);
+if (currentVerticalColorTableMenuItem)
+{
+    currentVerticalColorTableMenuItem.checked = true;
+}
 //
 function saveTestImageSVG (menuItem)
 {
     function updateTestImage (dataURL)
     {
-        saveSVG (serializer.serializeToString (createTestImage (dataURL, previewImageSize, appComment)), "test-image-preview");
+        saveSVG (serializer.serializeToString (createTestImage (dataURL, appComment)), "test-image-preview");
     }
     mapColorRamp (currentColorRamp256, testImages[specificSelect.value].dataURL, updateTestImage);
 }
@@ -1434,7 +1452,7 @@ let testImageMenuTemplate =
     { label: "Save as SVG...", click: saveTestImageSVG },
     { label: "Export as PNG...", click: exportTestImagePNG },
     { type: 'separator' },
-    { label: "Enlarged Preview......", click: (menuItem) => openEnlargedWindow ('enlarge-test-image') }
+    { label: "Enlarged Preview...", click: (menuItem) => openEnlargedWindow ('enlarge-test-image') }
 ];
 let testImageMenuContextualMenu = remote.Menu.buildFromTemplate (testImageMenuTemplate);
 //
@@ -1478,58 +1496,60 @@ let enlargedWindow = null;
 //
 function openEnlargedWindow (action)
 {
-    let browserWindow = getCurrentWindow ();
-    if (browserWindow)
+    if (!enlargedWindow)
     {
-        if (!enlargedWindow)
-        {
-            enlargedWindow = new BrowserWindow
-            (
+        enlargedWindow = new BrowserWindow
+        (
+            {
+                title: `${enlargedString} | ${appName}`,
+                width: 720,
+                height: 720,
+                fullscreenable: false,
+                resizable: false,
+                parent: mainWindow,
+                modal: true,
+                show: false,
+                webPreferences:
                 {
-                    title: `${enlargedString} | ${appName}`,
-                    width: 720,
-                    height: 720,
-                    fullscreenable: false,
-                    resizable: false,
-                    parent: browserWindow,
-                    modal: true,
-                    show: false,
-                    webPreferences:
-                    {
-                        devTools: false,
-                        nodeIntegration: true,
-                        enableRemoteModule: true
-                    }
+                    devTools: false,
+                    nodeIntegration: true,
+                    enableRemoteModule: true
                 }
-            );
-            if (process.platform !== 'darwin')
-            {
-                enlargedWindow.removeMenu ();
             }
-            enlargedWindow.loadFile (path.join (__dirname, '..', 'enlarged', 'index.html'));
-            let svgs = [ ];
-            switch (action)
-            {
-                case 'enlarge-curves-map':
-                case 'enlarge-linear-gradient':
-                    svgs.push (serializer.serializeToString (createCurvesMap (currentColorRamp256, currentGridUnitCount)));
-                    svgs.push (serializer.serializeToString (createLinearGradient (currentColorRamp256, currentContinuousGradient)));
-                    break;
-                case 'enlarge-color-table':
-                    svgs.push (serializer.serializeToString (createColorTable (currentColorRamp256)));
-                    break;
-                case 'enlarge-test-image':
-                    function updateTestImage (dataURL)
-                    {
-                        svgs.push (serializer.serializeToString (createTestImage (dataURL, previewImageSize)));
-                    }
-                    mapColorRamp (currentColorRamp256, testImages[specificSelect.value].dataURL, updateTestImage);
-                    break;
-            }
-            enlargedWindow.webContents.on ('dom-ready', () => { enlargedWindow.webContents.send ('display-enlarged-svgs', svgs); });
-            enlargedWindow.once ('ready-to-show', () => { enlargedWindow.show (); });
-            enlargedWindow.on ('close', () => { enlargedWindow = null; });
+        );
+        if (process.platform !== 'darwin')
+        {
+            enlargedWindow.removeMenu ();
         }
+        let svgs = [ ];
+        switch (action)
+        {
+            case 'enlarge-curves-map':
+            case 'enlarge-linear-gradient':
+                svgs.push (serializer.serializeToString (createCurvesMap (currentColorRamp256, currentGridUnitCount)));
+                svgs.push (serializer.serializeToString (createLinearGradient (currentColorRamp256, currentContinuousGradient)));
+                break;
+            case 'enlarge-color-table':
+                svgs.push (serializer.serializeToString (createColorTable (currentColorRamp256, currentVerticalColorTable)));
+                break;
+            case 'enlarge-test-image':
+                function updateTestImage (dataURL)
+                {
+                    svgs.push (serializer.serializeToString (createTestImage (dataURL)));
+                }
+                mapColorRamp (currentColorRamp256, testImages[specificSelect.value].dataURL, updateTestImage);
+                break;
+        }
+        enlargedWindow.loadFile (path.join (__dirname, '..', 'enlarged', 'index.html'))
+        .then
+        (
+            () =>
+            {
+                enlargedWindow.webContents.send ('display-enlarged-svgs', svgs);
+                enlargedWindow.show ();
+            }
+        );
+        enlargedWindow.on ('close', () => { enlargedWindow = null; });
     }
 }
 //
@@ -1550,6 +1570,7 @@ window.addEventListener // *Not* document.addEventListener
             gridUnitCount: currentGridUnitCount,
             continuousGradient: currentContinuousGradient,
             specificSelect: specificSelect.value,
+            verticalColorTable: currentVerticalColorTable,
             defaultFormulaFolderPath: defaultFormulaFolderPath,
             defaultPreviewFolderPath: defaultPreviewFolderPath,
             defaultColorRampFolderPath: defaultColorRampFolderPath

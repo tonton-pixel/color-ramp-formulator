@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.1.0
+
+- Added choice between horizontal and vertical layout in the color table contextual menu.
+- Fixed resetting formula field scroll to left as well as top.
+- Refactored preview code.
+- Updated `Electron` to version `10.1.0`.
+
 ## 2.0.0
 
 - Added test image preview (grayscale mapping of color ramp) as an supplement to color table preview.

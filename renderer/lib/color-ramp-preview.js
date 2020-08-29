@@ -33,12 +33,10 @@ const whiteHex = '#000000';  // Should be '#FFFFFF'!
 
 module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
 {
-    const curvesWidth = 256;
-    const curvesHeight = 256;
+    const curvesSize = 256;
     const border = 1;
     const gap = 1;
-    const frameWidth = border + gap + curvesWidth + gap + border;
-    const frameHeight = border + gap + curvesHeight + gap + border;
+    const frameSize = border + gap + curvesSize + gap + border;
     const gridColor = "#EBEBEB";
     //
     let level = 0;
@@ -46,9 +44,9 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
     //
     const xmlns = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS (xmlns, 'svg');
-    svg.setAttributeNS (null, 'viewBox', `0 0 ${frameWidth} ${frameHeight}`);
-    svg.setAttributeNS (null, 'width', frameWidth);
-    svg.setAttributeNS (null, 'height', frameHeight);
+    svg.setAttributeNS (null, 'viewBox', `0 0 ${frameSize} ${frameSize}`);
+    svg.setAttributeNS (null, 'width', frameSize);
+    svg.setAttributeNS (null, 'height', frameSize);
     //
     level++;
     //
@@ -61,8 +59,8 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
     //
     let frame = document.createElementNS (xmlns, 'rect');
     frame.setAttributeNS (null, 'class', 'frame');
-    frame.setAttributeNS (null, 'width', frameWidth);
-    frame.setAttributeNS (null, 'height', frameHeight);
+    frame.setAttributeNS (null, 'width', frameSize);
+    frame.setAttributeNS (null, 'height', frameSize);
     frame.setAttributeNS (null, 'stroke', 'gray');
     frame.setAttributeNS (null, 'stroke-width', border + gap);
     frame.setAttributeNS (null, 'fill', 'white');
@@ -98,8 +96,8 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 let rect = document.createElementNS (xmlns, 'rect');
                 rect.setAttributeNS (null, 'class', 'horizontal-grid');
                 rect.setAttributeNS (null, 'x', border);
-                rect.setAttributeNS (null, 'y', border + (curvesHeight / gridUnitCount * row));
-                rect.setAttributeNS (null, 'width', border + curvesWidth + border);
+                rect.setAttributeNS (null, 'y', border + (curvesSize / gridUnitCount * row));
+                rect.setAttributeNS (null, 'width', border + curvesSize + border);
                 rect.setAttributeNS (null, 'height', 2);
                 rect.setAttributeNS (null, 'fill', gridColor);
                 grid.appendChild (document.createTextNode ("\n"));
@@ -110,10 +108,10 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
             {
                 let rect = document.createElementNS (xmlns, 'rect');
                 rect.setAttributeNS (null, 'class', 'vertical-grid');
-                rect.setAttributeNS (null, 'x', border + (curvesWidth / gridUnitCount * column));
+                rect.setAttributeNS (null, 'x', border + (curvesSize / gridUnitCount * column));
                 rect.setAttributeNS (null, 'y', border);
                 rect.setAttributeNS (null, 'width', 2);
-                rect.setAttributeNS (null, 'height', border + curvesHeight + border);
+                rect.setAttributeNS (null, 'height', border + curvesSize + border);
                 rect.setAttributeNS (null, 'fill', gridColor);
                 grid.appendChild (document.createTextNode ("\n"));
                 grid.appendChild (document.createTextNode (indentation.repeat (level)));
@@ -141,7 +139,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 let rect = document.createElementNS (xmlns, 'rect');
                 rect.setAttributeNS (null, 'class', 'value');
                 rect.setAttributeNS (null, 'x', border + gap + index);
-                rect.setAttributeNS (null, 'y', border + curvesHeight - redValue);
+                rect.setAttributeNS (null, 'y', border + curvesSize - redValue);
                 rect.setAttributeNS (null, 'width', 1);
                 rect.setAttributeNS (null, 'height', 1);
                 rect.setAttributeNS (null, 'fill', whiteHex);
@@ -155,7 +153,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 let redRect = document.createElementNS (xmlns, 'rect');
                 redRect.setAttributeNS (null, 'class', 'value');
                 redRect.setAttributeNS (null, 'x', border + gap + index);
-                redRect.setAttributeNS (null, 'y', border + curvesHeight - redValue);
+                redRect.setAttributeNS (null, 'y', border + curvesSize - redValue);
                 redRect.setAttributeNS (null, 'width', 1);
                 redRect.setAttributeNS (null, 'height', 1);
                 color = (redValue === greenValue) ? yellowHex : ((redValue === blueValue) ? magentaHex : redHex);
@@ -166,7 +164,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 let greenRect = document.createElementNS (xmlns, 'rect');
                 greenRect.setAttributeNS (null, 'class', 'value');
                 greenRect.setAttributeNS (null, 'x', border + gap + index);
-                greenRect.setAttributeNS (null, 'y', border + curvesHeight - greenValue);
+                greenRect.setAttributeNS (null, 'y', border + curvesSize - greenValue);
                 greenRect.setAttributeNS (null, 'width', 1);
                 greenRect.setAttributeNS (null, 'height', 1);
                 color = (greenValue === redValue) ? yellowHex : ((greenValue === blueValue) ? cyanHex : greenHex);
@@ -177,7 +175,7 @@ module.exports.createCurvesMap = function (colorRamp, gridUnitCount, comment)
                 let blueRect = document.createElementNS (xmlns, 'rect');
                 blueRect.setAttributeNS (null, 'class', 'value');
                 blueRect.setAttributeNS (null, 'x', border + gap + index);
-                blueRect.setAttributeNS (null, 'y', border + curvesHeight - blueValue);
+                blueRect.setAttributeNS (null, 'y', border + curvesSize - blueValue);
                 blueRect.setAttributeNS (null, 'width', 1);
                 blueRect.setAttributeNS (null, 'height', 1);
                 color = (blueValue === redValue) ? magentaHex : ((blueValue === greenValue) ? cyanHex : blueHex);
@@ -338,27 +336,24 @@ module.exports.createLinearGradient = function (colorRamp, continuousGradient, c
     return svg;
 };
 //
-module.exports.createColorTable = function (colorRamp, comment)
+module.exports.createColorTable = function (colorRamp, vertical, comment)
 {
     const rows = 16;
     const columns = 16;
-    const clutWidth = 256;
-    const clutHeight = 256;
+    const clutSize = 256;
     const border = 1;
     const gap = 1;
-    const frameWidth = border + gap + clutWidth + gap + border;
-    const frameHeight = border + gap + clutHeight + gap + border;
-    const cellWidth = 14;
-    const cellHeight = 14;
+    const frameSize = border + gap + clutSize + gap + border;
+    const cellSize = 14;
     //
     let level = 0;
     let indentation = "    ";
     //
     const xmlns = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS (xmlns, 'svg');
-    svg.setAttributeNS (null, 'viewBox', `0 0 ${frameWidth} ${frameHeight}`);
-    svg.setAttributeNS (null, 'width', frameWidth);
-    svg.setAttributeNS (null, 'height', frameHeight);
+    svg.setAttributeNS (null, 'viewBox', `0 0 ${frameSize} ${frameSize}`);
+    svg.setAttributeNS (null, 'width', frameSize);
+    svg.setAttributeNS (null, 'height', frameSize);
     //
     level++;
     //
@@ -371,8 +366,8 @@ module.exports.createColorTable = function (colorRamp, comment)
     //
     let frame = document.createElementNS (xmlns, 'rect');
     frame.setAttributeNS (null, 'class', 'frame');
-    frame.setAttributeNS (null, 'width', frameWidth);
-    frame.setAttributeNS (null, 'height', frameHeight);
+    frame.setAttributeNS (null, 'width', frameSize);
+    frame.setAttributeNS (null, 'height', frameSize);
     frame.setAttributeNS (null, 'stroke', 'gray');
     frame.setAttributeNS (null, 'stroke-width', border + gap);
     frame.setAttributeNS (null, 'fill', 'white');
@@ -401,10 +396,18 @@ module.exports.createColorTable = function (colorRamp, comment)
             {
                 let rect = document.createElementNS (xmlns, 'rect');
                 rect.setAttributeNS (null, 'class', 'color');
-                rect.setAttributeNS (null, 'x', border + border + gap + column * (border + gap + cellWidth));
-                rect.setAttributeNS (null, 'y', border + border + gap + row * (border + gap + cellHeight));
-                rect.setAttributeNS (null, 'width', cellWidth);
-                rect.setAttributeNS (null, 'height', cellHeight);
+                if (vertical)
+                {
+                    rect.setAttributeNS (null, 'x', border + border + gap + row * (border + gap + cellSize));
+                    rect.setAttributeNS (null, 'y', border + border + gap + column * (border + gap + cellSize));
+                }
+                else
+                {
+                    rect.setAttributeNS (null, 'x', border + border + gap + column * (border + gap + cellSize));
+                    rect.setAttributeNS (null, 'y', border + border + gap + row * (border + gap + cellSize));
+                }
+                rect.setAttributeNS (null, 'width', cellSize);
+                rect.setAttributeNS (null, 'height', cellSize);
                 rect.setAttributeNS (null, 'fill', colorTable[colorIndex]);
                 let title = document.createElementNS (xmlns, 'title');
                 title.textContent = `[${colorIndex}]\xA0:\xA0${hexToRgb (colorTable[colorIndex])}\xA0or\xA0${colorTable[colorIndex]}`;
@@ -434,21 +437,21 @@ module.exports.createColorTable = function (colorRamp, comment)
     return svg;
 };
 //
-module.exports.createTestImage = function (dataURL, size, comment)
+module.exports.createTestImage = function (dataURL, comment)
 {
     const border = 1;
     const gap = 1;
-    const frameWidth = border + gap + size + gap + border;
-    const frameHeight = border + gap + size + gap + border;
+    const imageSize = 256;
+    const frameSize = border + gap + imageSize + gap + border;
     //
     let level = 0;
     let indentation = "    ";
     //
     const xmlns = "http://www.w3.org/2000/svg";
     let svg = document.createElementNS (xmlns, 'svg');
-    svg.setAttributeNS (null, 'viewBox', `0 0 ${frameWidth} ${frameHeight}`);
-    svg.setAttributeNS (null, 'width', frameWidth);
-    svg.setAttributeNS (null, 'height', frameHeight);
+    svg.setAttributeNS (null, 'viewBox', `0 0 ${frameSize} ${frameSize}`);
+    svg.setAttributeNS (null, 'width', frameSize);
+    svg.setAttributeNS (null, 'height', frameSize);
     //
     level++;
     //
@@ -461,8 +464,8 @@ module.exports.createTestImage = function (dataURL, size, comment)
     //
     let frame = document.createElementNS (xmlns, 'rect');
     frame.setAttributeNS (null, 'class', 'frame');
-    frame.setAttributeNS (null, 'width', frameWidth);
-    frame.setAttributeNS (null, 'height', frameHeight);
+    frame.setAttributeNS (null, 'width', frameSize);
+    frame.setAttributeNS (null, 'height', frameSize);
     frame.setAttributeNS (null, 'stroke', 'gray');
     frame.setAttributeNS (null, 'stroke-width', border + gap);
     frame.setAttributeNS (null, 'fill', 'white');
@@ -478,8 +481,8 @@ module.exports.createTestImage = function (dataURL, size, comment)
         image.setAttributeNS (null, 'class', 'image');
         image.setAttributeNS (null, 'x', 2);
         image.setAttributeNS (null, 'y', 2);
-        image.setAttributeNS (null, 'width', size);
-        image.setAttributeNS (null, 'height', size);
+        image.setAttributeNS (null, 'width', imageSize);
+        image.setAttributeNS (null, 'height', imageSize);
         image.setAttributeNS (null, 'href', dataURL);
         svg.appendChild (document.createTextNode ("\n"));
         svg.appendChild (document.createTextNode (indentation.repeat (level)));

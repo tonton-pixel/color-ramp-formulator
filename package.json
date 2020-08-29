@@ -1,7 +1,7 @@
 {
     "name": "color-ramp-formulator",
     "productName": "Color Ramp Formulator",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "Algorithmically-defined color ramps generator, making use of formulas.",
     "main": "main.js",
     "scripts": {
@@ -17,10 +17,12 @@
         "color",
         "color ramp",
         "color table",
+        "color temperature",
         "cubehelix",
         "curves map",
         "electron",
         "formula",
+        "gamma",
         "generator",
         "grayscale",
         "hsl",
@@ -31,6 +33,7 @@
         "lch",
         "linear gradient",
         "rgb",
+        "test image",
         "wavelength",
         "xyz",
         "ycbcr"
@@ -46,7 +49,7 @@
         "esprima": "^4.0.1"
     },
     "devDependencies": {
-        "electron": "^9.2.1",
+        "electron": "^10.1.0",
         "electron-packager": "^15.1.0"
     }
 }
