@@ -29,8 +29,8 @@ const { createCurvesMap, createLinearGradient, createColorTable, createTestImage
 const mapColorRamp = require ('./lib/map-color-ramp.js');
 //
 const previewImageSize = 256;
-const pixelRatio = window.devicePixelRatio || 1;
-const previewSizeOptions = { width: previewImageSize * pixelRatio, height: previewImageSize * pixelRatio };
+const pixelRatio = Math.max (window.devicePixelRatio, 1.5); // Leave room for zoom factor up to 144%
+const previewSizeOptions = { width: previewImageSize * pixelRatio, height: previewImageSize * pixelRatio, quality: 'better' };
 //
 let testImages = { };
 //
@@ -1318,11 +1318,14 @@ curvesMapPreview.addEventListener
     'contextmenu',
     (event) =>
     {
-        if (currentColorRamp)
+        if (BrowserWindow.getFocusedWindow () === mainWindow)   // Should not be necessary...
         {
-            event.preventDefault ();
-            let factor = webFrame.getZoomFactor ();
-            curvesMapContextualMenu.popup ({ x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+            if (currentColorRamp)
+            {
+                event.preventDefault ();
+                let factor = webFrame.getZoomFactor ();
+                curvesMapContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+            }
         }
     }
 );
@@ -1375,11 +1378,14 @@ linearGradientPreview.addEventListener
     'contextmenu',
     (event) =>
     {
-        if (currentColorRamp)
+        if (BrowserWindow.getFocusedWindow () === mainWindow)   // Should not be necessary...
         {
-            event.preventDefault ();
-            let factor = webFrame.getZoomFactor ();
-            linearGradientContextualMenu.popup ({ x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+            if (currentColorRamp)
+            {
+                event.preventDefault ();
+                let factor = webFrame.getZoomFactor ();
+                linearGradientContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+            }
         }
     }
 );
@@ -1461,17 +1467,20 @@ specificPreview.addEventListener
     'contextmenu',
     (event) =>
     {
-        if (currentColorRamp)
+        if (BrowserWindow.getFocusedWindow () === mainWindow)   // Should not be necessary...
         {
-            event.preventDefault ();
-            let factor = webFrame.getZoomFactor ();
-            if (specificSelect.value)
+            if (currentColorRamp)
             {
-                testImageMenuContextualMenu.popup ({ x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
-            }
-            else
-            {
-                colorTableMenuContextualMenu.popup ({ x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                event.preventDefault ();
+                let factor = webFrame.getZoomFactor ();
+                if (specificSelect.value)
+                {
+                    testImageMenuContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                }
+                else
+                {
+                    colorTableMenuContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                }
             }
         }
     }

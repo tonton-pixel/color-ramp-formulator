@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.2.0
+
+- Added new test image: `Sinusoidal`.
+- Improved quality of downsized previews.
+- Updated `Electron` to version `10.1.1`.
+
 ## 2.1.0
 
 - Added choice between horizontal and vertical layout in the color table contextual menu.

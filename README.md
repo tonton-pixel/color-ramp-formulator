@@ -10,6 +10,8 @@ This application is built with [Electron](https://www.electronjs.org/), and work
 
 <img src="screenshots/color-ramp-formulator-heightmap.png" width="960" alt="Color Ramp Formulator (Heightmap) screenshot">
 
+<img src="screenshots/color-ramp-formulator-sinusoidal.png" width="960" alt="Color Ramp Formulator (Sinusoidal) screenshot">
+
 ## Examples
 
 ### CubeHelix (Destiny)
