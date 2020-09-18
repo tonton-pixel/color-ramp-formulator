@@ -68,7 +68,7 @@ else
     //
     function showLicense (menuItem, browserWindow, event)
     {
-        if (browserWindow)
+        if (browserWindow === mainWindow)
         {
             if (!licenseWindow)
             {
@@ -154,7 +154,7 @@ else
     //
     function showSystemInfo (menuItem, browserWindow, event)
     {
-        if (browserWindow)
+        if (browserWindow === mainWindow)
         {
             if (!systemInfoWindow)
             {
@@ -290,7 +290,9 @@ else
                     { type: 'separator' },
                     { label: "Color Table (.act)...", click: () => { mainWindow.webContents.send ('export-color-table'); } },
                     { label: "Curves Map (.amp)...", click: () => { mainWindow.webContents.send ('export-curves-map'); } },
-                    { label: "Lookup Table (.lut)...", click: () => { mainWindow.webContents.send ('export-lookup-table'); } }
+                    { label: "Lookup Table (.lut)...", click: () => { mainWindow.webContents.send ('export-lookup-table'); } },
+                    { type: 'separator' },
+                    { label: "Gradient (.grd)...", click: () => { mainWindow.webContents.send ('export-gradient'); } }
                 ]
             }
         ]

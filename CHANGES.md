@@ -2,6 +2,14 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.3.0
+
+- Implemented export to Photoshop gradient file format (.grd).
+- Added automatic calculation at start-up time.
+- Restricted display of modal dialogs over main window only.
+- Fixed clearing previews of empty formula.
+- Updated `Electron` to version `10.1.2`.
+
 ## 2.2.0
 
 - Added new test image: `Sinusoidal`.
@@ -17,7 +25,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## 2.0.0
 
-- Added test image preview (grayscale mapping of color ramp) as an supplement to color table preview.
+- Added test image preview (grayscale mapping of color ramp) as a supplement to color table preview.
 - Added support for enlarged previews in pop-up dialog window (via double-click or contextual menu).
 - Darkened green (and consequently yellow and cyan) component pixels for better visibility in the curves map preview.
 - Disjoined import and export menu buttons.
