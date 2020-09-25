@@ -2,6 +2,11 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.4.0
+
+- Added new test image: `Uniformity`, useful to evaluate perceptual contrast.
+- Refactored code to generate gradient file data from color ramp, and moved it to a separate module.
+
 ## 2.3.0
 
 - Implemented export to Photoshop gradient file format (.grd).
