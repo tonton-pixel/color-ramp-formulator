@@ -269,3 +269,10 @@ body
     width: fit-content;
     font-size: 12px;
 }
+
+.curves-map-preview,
+.linear-gradient-preview,
+.specific-preview
+{
+    cursor: context-menu;
+}

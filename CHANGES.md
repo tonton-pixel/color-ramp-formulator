@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.5.0
+
+- Generated `Sinusoidal` and `Uniformity` test images dynamically at start-up time.
+- Added dynamically generated `Contrast` test image, based on Campbell-Robson CSF chart.
+- Updated `Electron` to version `10.1.3`.
+
 ## 2.4.0
 
 - Added new test image: `Uniformity`, useful to evaluate perceptual contrast.

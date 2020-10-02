@@ -28,15 +28,41 @@ const { createCurvesMap, createLinearGradient, createColorTable, createTestImage
 //
 const mapColorRamp = require ('./lib/map-color-ramp.js');
 //
+const imageSize = 1024;
+//
 const previewImageSize = 256;
 const pixelRatio = Math.max (window.devicePixelRatio, 1.5); // Leave room for zoom factor up to 144%
-const previewSizeOptions = { width: previewImageSize * pixelRatio, height: previewImageSize * pixelRatio, quality: 'better' };
 //
 let testImages = { };
 //
+const generateCSF = require ('./lib/generate-csf.js');
+testImages["Contrast"] =
+{
+    dataURL: generateCSF (imageSize),
+    previewDataURL: generateCSF (previewImageSize * pixelRatio)
+};
+//
+const generateSinusoidal = require ('./lib/generate-sinusoidal.js');
+testImages["Sinusoidal"] =
+{
+    dataURL: generateSinusoidal (imageSize),
+    previewDataURL: generateSinusoidal (previewImageSize * pixelRatio)
+};
+//
+const amplitude = 0.1;  // 0.05, 0.0625, 0.1 (default), 0.125
+const attenuation = 2;  // 0, 1, 2 (default)
+//
+const generateSineramp = require ('./lib/generate-sineramp.js');
+testImages["Uniformity"] = 
+{
+    dataURL: generateSineramp (imageSize, amplitude, attenuation),
+    previewDataURL: generateSineramp (previewImageSize * pixelRatio, amplitude, attenuation)
+};
+//
+const previewSizeOptions = { width: previewImageSize * pixelRatio, height: previewImageSize * pixelRatio, quality: 'better' };
+//
 let testImagesDirname = path.join (__dirname, 'test-images');
 let testImagesFilenames = fs.readdirSync (testImagesDirname);
-testImagesFilenames.sort ((a, b) => a.replace (/\.png$/i, "").localeCompare (b.replace (/\.png$/i, "")));
 for (let testImagesFilename of testImagesFilenames)
 {
     let pngFilename = testImagesFilename.match (/(.*)\.png$/i);
@@ -49,7 +75,6 @@ for (let testImagesFilename of testImagesFilenames)
             let pngNativeImage = nativeImage.createFromPath (pngPath);
             testImages[pngLabel] = 
             {
-                path: pngPath,
                 dataURL: pngNativeImage.toDataURL (),
                 previewDataURL: pngNativeImage.resize (previewSizeOptions).toDataURL ()
             }
@@ -1203,17 +1228,19 @@ function updateLinearGradientPreview ()
 //
 let currentVerticalColorTable = prefs.verticalColorTable;
 //
-if (Object.keys (testImages).length > 0)
+let imageLabels = Object.keys (testImages);
+if (imageLabels.length > 0)
 {
+    imageLabels.sort ((a, b) => a.localeCompare (b));
     let option;
     option = document.createElement ('option');
     option.textContent = "──────";
     option.disabled = true;
     specificSelect.appendChild (option);
-    for (let testImage in testImages)
+    for (let imageLabel of imageLabels)
     {
         option = document.createElement ('option');
-        option.textContent = testImage;
+        option.textContent = imageLabel;
         specificSelect.appendChild (option)
     }
 }
