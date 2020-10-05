@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.6.0
+
+- Refactored code generating `Contrast` test image.
+- Added new test image: `Radiograph`.
+- Added two new formula examples.
+
 ## 2.5.0
 
 - Generated `Sinusoidal` and `Uniformity` test images dynamically at start-up time.
