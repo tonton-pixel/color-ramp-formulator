@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.7.0
+
+- Used fixed size for preview images.
+- Added four new formula examples.
+- Removed use of Escape key to exit fullscreen mode.
+- Updated color reference links in documentation.
+
 ## 2.6.0
 
 - Refactored code generating `Contrast` test image.

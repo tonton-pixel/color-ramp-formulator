@@ -1,0 +1,7 @@
+{
+    "colorRamp":
+    {
+        "name": "Black Body (Interpolate)",
+        "formula": "interpolate_colors\n(\n    [\n        [ 0.00, [ 0, 0, 0 ] ],\n        [ 0.39, [ 178, 34, 34 ] ],\n        [ 0.58, [ 227, 105, 5 ] ],\n        [ 0.84, [ 238, 210, 20 ] ],\n        [ 1.00, [ 255, 255, 255 ] ]\n    ],\n    t,\n    \"rgb\", 100\n)"
+    }
+}

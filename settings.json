@@ -1,7 +1,7 @@
 {
     "accelerated": true,
     "hotKey": null,
-    "escapeExitsFullScreen": true,
+    "escapeExitsFullScreen": false,
     "developerFeatures": false,
     "smartZoom": false,
     "minZoomLevel": -2,

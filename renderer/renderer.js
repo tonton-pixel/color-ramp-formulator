@@ -29,9 +29,7 @@ const { createCurvesMap, createLinearGradient, createColorTable, createTestImage
 const mapColorRamp = require ('./lib/map-color-ramp.js');
 //
 const imageSize = 1024;
-//
-const previewImageSize = 256;
-const pixelRatio = Math.max (window.devicePixelRatio, 1.5); // Leave room for zoom factor up to 144%
+const previewImageSize = 512;
 //
 let testImages = { };
 //
@@ -39,14 +37,14 @@ const generateCSF = require ('./lib/generate-csf.js');
 testImages["Contrast"] =
 {
     dataURL: generateCSF (imageSize),
-    previewDataURL: generateCSF (previewImageSize * pixelRatio)
+    previewDataURL: generateCSF (previewImageSize)
 };
 //
 const generateSinusoidal = require ('./lib/generate-sinusoidal.js');
 testImages["Sinusoidal"] =
 {
     dataURL: generateSinusoidal (imageSize),
-    previewDataURL: generateSinusoidal (previewImageSize * pixelRatio)
+    previewDataURL: generateSinusoidal (previewImageSize)
 };
 //
 const amplitude = 0.1;  // 0.05, 0.0625, 0.1 (default), 0.125
@@ -56,10 +54,10 @@ const generateSineramp = require ('./lib/generate-sineramp.js');
 testImages["Uniformity"] = 
 {
     dataURL: generateSineramp (imageSize, amplitude, attenuation),
-    previewDataURL: generateSineramp (previewImageSize * pixelRatio, amplitude, attenuation)
+    previewDataURL: generateSineramp (previewImageSize, amplitude, attenuation)
 };
 //
-const previewSizeOptions = { width: previewImageSize * pixelRatio, height: previewImageSize * pixelRatio, quality: 'better' };
+const previewSizeOptions = { width: previewImageSize, height: previewImageSize, quality: 'better' };
 //
 let testImagesDirname = path.join (__dirname, 'test-images');
 let testImagesFilenames = fs.readdirSync (testImagesDirname);
