@@ -39,6 +39,9 @@ else
     const os = require ('os');
     const path = require ('path');
     //
+    // const extractString = "Extract Palette";
+    const applyString = "Apply Color Map";
+    //
     const appPackaged = app.isPackaged;
     //
     const appName = app.name;
@@ -312,6 +315,25 @@ else
             { role: 'togglefullscreen' }
         ]
     };
+    const imageMenu =
+    {
+        label: "Image",
+        submenu:
+        [
+            // {
+            //     label: `${extractString}...`,
+            //     accelerator: 'CommandOrControl+P',
+            //     click: () => { mainWindow.webContents.send ('extract-palette', extractString) }
+            // },
+            {
+                label: `${applyString}...`,
+                id: 'apply',
+                enabled: false,
+                accelerator: 'CommandOrControl+Y',
+                click: () => { mainWindow.webContents.send ('apply-color-map', applyString) }
+            }
+        ]
+    };
     const developerMenu =
     {
         label: "Developer",
@@ -390,6 +412,7 @@ else
     menuTemplate.push (fileMenu);
     menuTemplate.push (editMenu);
     menuTemplate.push (viewMenu);
+    menuTemplate.push (imageMenu);
     if ((!appPackaged) || settings.developerFeatures)
     {
         menuTemplate.push (developerMenu);
@@ -410,6 +433,7 @@ else
             (event, enabled) =>
             {
                 menu.getMenuItemById ('export').enabled = enabled;
+                menu.getMenuItemById ('apply').enabled = enabled;
                 Menu.setApplicationMenu (menu); // Shouldn't be necessary, but...
             }
         );
@@ -448,7 +472,11 @@ else
                 {
                     nodeIntegration: true,
                     enableRemoteModule: true,
-                    spellcheck: false
+                    spellcheck: false,
+                    defaultFontFamily:
+                    {
+                        standard: "Arial"   // Instead of "Times New Roman" by default
+                    }
                 }
             }
         );

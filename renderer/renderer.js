@@ -1,6 +1,6 @@
 //
 const { ipcRenderer, nativeImage, remote, shell, webFrame } = require ('electron');
-const { app, BrowserWindow, getCurrentWebContents, getCurrentWindow, getGlobal } = remote;
+const { app, BrowserWindow, clipboard, getCurrentWebContents, getCurrentWindow, getGlobal } = remote;
 //
 const fs = require ('fs');
 const path = require ('path');
@@ -1496,7 +1496,7 @@ function exportTestImagePNG (menuItem)
 {
     function updateTestImage (dataURL)
     {
-        savePNG (dataURL.replace ('data:image/png;base64,', ''), `${specificSelect.value} | ${formulaName.value}`);
+        savePNG (dataURL.replace ('data:image/png;base64,', ''), `${specificSelect.value} | ${formulaName.value || "<Unnamed>"}`);
     }
     mapColorRamp (currentColorRamp256, testImages[specificSelect.value].dataURL, updateTestImage);
 }
@@ -1603,10 +1603,60 @@ function openEnlargedWindow (action)
         (
             () => enlargedWindow.show ()
         );
-        enlargedWindow.webContents.on ('did-finish-load',  () => enlargedWindow.webContents.send ('display-enlarged-svgs', svgs));
+        enlargedWindow.webContents.on
+        (
+            'did-finish-load',
+            () => enlargedWindow.webContents.send ('display-enlarged-svgs', svgs)
+        );
         enlargedWindow.on ('close', () => { enlargedWindow = null; });
     }
 }
+//
+let applyWindow = null;
+//
+function applyColorMap (applyString)
+{
+    if (!applyWindow)
+    {
+        applyWindow = new BrowserWindow
+        (
+            {
+                title: `${applyString} | ${appName}`,
+                width: 540,
+                height: 720,
+                minWidth: 540,
+                minHeight: 720,
+                fullscreenable: false,
+                backgroundColor: settings.window.backgroundColor,
+                parent: mainWindow,
+                modal: true,
+                show: false,
+                webPreferences:
+                {
+                    nodeIntegration: true,
+                    enableRemoteModule: true
+                }
+            }
+        );
+        if (process.platform !== 'darwin')
+        {
+            applyWindow.removeMenu ();
+        }
+        applyWindow.loadFile (path.join (__dirname, 'apply', 'index.html'))
+        .then
+        (
+            () => applyWindow.show ()
+        );
+        applyWindow.webContents.on
+        (
+            'did-finish-load',
+            () => applyWindow.webContents.send ('apply-color-map', currentColorRamp256, formulaName.value || "<Unnamed>")
+        );
+        applyWindow.on ('close', () => { applyWindow = null; });
+    }
+}
+//
+ipcRenderer.on ('apply-color-map', (event, args) => { applyColorMap (args); });
 //
 window.addEventListener // *Not* document.addEventListener
 (
@@ -1654,9 +1704,41 @@ document.body.addEventListener
     }
 );
 //
+let currentLink;
+//
+let linkMenuTemplate =
+[
+    { label: "Copy Link", click: menuItem => clipboard.writeText (currentLink) }
+];
+let linkContextualMenu = remote.Menu.buildFromTemplate (linkMenuTemplate);
+//
+document.body.addEventListener
+(
+    'contextmenu',
+    (event) =>
+    {
+        if (BrowserWindow.getFocusedWindow () === mainWindow)   // Should not be necessary...
+        {
+            let aTag = event.target.closest ('a');
+            if (aTag)
+            {
+                let aUrl = aTag.getAttribute ('xlink:href') || aTag.getAttribute ('href');
+                if (aUrl && (aUrl.startsWith ("http://") || aUrl.startsWith ("https://")))
+                {
+                    event.preventDefault ();
+                    currentLink = aUrl;
+                    let factor = webFrame.getZoomFactor ();
+                    linkContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                }
+            }
+        }
+    }
+);
+//
 webContents.once
 (
-    'did-finish-load', (event) =>
+    'did-finish-load',
+    (event) =>
     {
         document.title = generateTitle ();
         section.classList.add ('is-shown');

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="file-interface">
+        <span class="button-group-left">
+            <button class="clear-button" type="button">Clear</button>
+            <button class="open-button" type="button">Open...</button>
+        </span>
+        <label class="grayscale-filter-label disabled" title="Grayscale pre-filtering">Grayscale:&nbsp;<select class="grayscale-filter-select" disabled></select></label>
+        <span class="button-group-right">
+            <button class="save-button" type="button" disabled>Save...</button>
+            <button class="close-button" type="button">Close</button>
+        </span>
+    </div>
+    <canvas class="canvas" hidden></canvas>
+    <script>require ('./index.js');</script>
+</body>
+</html>

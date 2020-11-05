@@ -92,8 +92,8 @@ body
 
 .formula-name
 {
-    font-family: system-ui, sans-serif;
-    font-size: 14px;
+    font-family: inherit;
+    font-size: 1em;
     padding: 0.125em 0.25em;
 }
 

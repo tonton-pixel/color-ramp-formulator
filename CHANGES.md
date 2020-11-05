@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.8.0
+
+- Added a new `Apply Color Map...` experimental feature, accessible from a new `Image` menu.
+- Forced proper Latin font `Segoe UI` as a substitute to `system-ui` on Windows.
+- Added context menu to external reference links, allowing copy of URL to clipboard; unused yet.
+- Updated `Electron` to version `10.1.5`.
+
 ## 2.7.0
 
 - Used fixed size for preview images.

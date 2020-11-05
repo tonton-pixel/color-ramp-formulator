@@ -206,7 +206,7 @@ npm start
 ### Packaging
 
 Several scripts are also defined in the `package.json` file to build OS-specific bundles of the application, using the simple yet powerful [Electron Packager](https://github.com/electron-userland/electron-packager) Node module.\
-For instance, running the following command (once the dependencies are installed) will create the `Color Ramp Formulator.app` version for macOS:
+For instance, running the following command (once the dependencies are installed) will create a `Color Ramp Formulator.app` version for macOS:
 
 ```bash
 # Build macOS (Darwin) application
