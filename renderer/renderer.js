@@ -399,7 +399,8 @@ const defaultPrefs =
     verticalColorTable: false,
     defaultFormulaFolderPath: appDefaultFolderPath,
     defaultPreviewFolderPath: appDefaultFolderPath,
-    defaultColorRampFolderPath: appDefaultFolderPath
+    defaultColorRampFolderPath: appDefaultFolderPath,
+    applyWindow: { width: 512, height: 512 }
 };
 let prefs = rendererStorage.get (defaultPrefs);
 //
@@ -1611,6 +1612,8 @@ function openEnlargedWindow (action)
         enlargedWindow.on ('close', () => { enlargedWindow = null; });
     }
 }
+let applyWidth = prefs.applyWindow.width;
+let applyHeight = prefs.applyWindow.height;
 //
 let applyWindow = null;
 //
@@ -1622,10 +1625,11 @@ function applyColorMap (applyString)
         (
             {
                 title: `${applyString} | ${appName}`,
-                width: 540,
-                height: 720,
-                minWidth: 540,
-                minHeight: 720,
+                useContentSize: true,
+                width: applyWidth,
+                height: applyHeight,
+                minWidth: defaultPrefs.applyWindow.width,
+                minHeight: defaultPrefs.applyWindow.height,
                 fullscreenable: false,
                 backgroundColor: settings.window.backgroundColor,
                 parent: mainWindow,
@@ -1652,7 +1656,15 @@ function applyColorMap (applyString)
             'did-finish-load',
             () => applyWindow.webContents.send ('apply-color-map', currentColorRamp256, formulaName.value || "<Unnamed>")
         );
-        applyWindow.on ('close', () => { applyWindow = null; });
+        applyWindow.on
+        (
+            'close',
+            () =>
+            {
+                [ applyWidth, applyHeight ] = applyWindow.getContentSize ();
+                applyWindow = null;
+            }
+        );
     }
 }
 //
@@ -1678,7 +1690,8 @@ window.addEventListener // *Not* document.addEventListener
             verticalColorTable: currentVerticalColorTable,
             defaultFormulaFolderPath: defaultFormulaFolderPath,
             defaultPreviewFolderPath: defaultPreviewFolderPath,
-            defaultColorRampFolderPath: defaultColorRampFolderPath
+            defaultColorRampFolderPath: defaultColorRampFolderPath,
+            applyWindow: { width: applyWidth, height: applyHeight }
         };
         rendererStorage.set (prefs);
     }

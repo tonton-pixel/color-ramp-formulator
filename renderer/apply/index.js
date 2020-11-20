@@ -19,6 +19,8 @@ const applyStorage = new Storage ('apply-preferences');
 //
 const settings = getGlobal ('settings');
 //
+const applyWindow = getCurrentWindow ();
+//
 const appDefaultFolderPath = app.getPath (settings.defaultFolder);
 //
 const defaultPrefs =
@@ -86,10 +88,10 @@ clearButton.addEventListener
     event =>
     {
         imagePath = null;
+        applyColorMap (imagePath, grayscaleFilterSelect.value);
         grayscaleFilterLabel.classList.add ('disabled');
         grayscaleFilterSelect.disabled = true;
         saveButton.disabled = true;
-        applyColorMap (imagePath, grayscaleFilterSelect.value);
     }
 );
 //
@@ -100,7 +102,7 @@ openButton.addEventListener
     {
         dialog.showOpenDialog
         (
-            getCurrentWindow (),
+            applyWindow,
             {
                 title: "Open image file (PNG or JPEG):",
                 message: "Open image file (PNG or JPEG):",
@@ -119,10 +121,10 @@ openButton.addEventListener
                 {
                     imagePath = result.filePaths[0];
                     defaultInputImageFolderPath = path.dirname (imagePath);
+                    applyColorMap (imagePath, grayscaleFilterSelect.value);
                     grayscaleFilterLabel.classList.remove ('disabled');
                     grayscaleFilterSelect.disabled = false;
                     saveButton.disabled = false;
-                    applyColorMap (imagePath, grayscaleFilterSelect.value);
                 }
             }
         );
@@ -138,7 +140,7 @@ saveButton.addEventListener
         let outputImagePath = path.join (defaultOutputImageFolderPath, `${name}.png`);
         dialog.showSaveDialog
         (
-            getCurrentWindow (),
+            applyWindow,
             {
                 title: "Save image file (PNG):",
                 message: "Save image file (PNG):",
@@ -184,7 +186,8 @@ let currentFormulaName;
 //
 function applyColorMap (imagePath, grayscaleFilter)
 {
-    if (imagePath && fs.existsSync (imagePath))
+    let isImage = imagePath && fs.existsSync (imagePath);
+    if (isImage)
     {
         let weights = grayscaleWeights[grayscaleFilter];
         let img = new Image ();
@@ -207,6 +210,7 @@ function applyColorMap (imagePath, grayscaleFilter)
                 d[i + 2] = rgb[2];
             }
             context.putImageData (image, 0, 0);
+            canvas.title = imagePath;
             canvas.hidden = false;
         };
         img.src = url.pathToFileURL (imagePath).href;
@@ -215,8 +219,10 @@ function applyColorMap (imagePath, grayscaleFilter)
     {
         canvas.width = 0;
         canvas.height = 0;
+        canvas.title = "";
         canvas.hidden = true;
     }
+    return isImage;
 }
 //
 ipcRenderer.on
@@ -228,10 +234,19 @@ ipcRenderer.on
         currentFormulaName = formulaName;
         if (imagePath)
         {
-            grayscaleFilterLabel.classList.remove ('disabled');
-            grayscaleFilterSelect.disabled = false;
-            saveButton.disabled = false;
-            applyColorMap (imagePath, grayscaleFilterSelect.value)
+            let isImage = applyColorMap (imagePath, grayscaleFilterSelect.value);
+            if (isImage)
+            {
+                grayscaleFilterLabel.classList.remove ('disabled');
+                grayscaleFilterSelect.disabled = false;
+                saveButton.disabled = false;
+            }
+            else
+            {
+                grayscaleFilterLabel.classList.add ('disabled');
+                grayscaleFilterSelect.disabled = true;
+                saveButton.disabled = true;
+            }
         }
     }
 );

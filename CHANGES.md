@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.9.0
+
+- Added persistence of `Apply Color Map...` modal window's width and height.
+- Added tooltip with image file pathname to the canvas element of the `Apply Color Map...` modal window.
+- Updated `Electron` to version `11.0.2`.
+
 ## 2.8.0
 
 - Added a new `Apply Color Map...` experimental feature, accessible from a new `Image` menu.
