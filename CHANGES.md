@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.10.0
+
+- Added more intermediate color pre-filters to the `Apply Color Map...` feature.
+- Updated `Electron` to version `11.0.3`.
+- Updated `Electron Packager` to version `15.2.0`.
+
 ## 2.9.0
 
 - Added persistence of `Apply Color Map...` modal window's width and height.

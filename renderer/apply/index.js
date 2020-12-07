@@ -43,11 +43,28 @@ const grayscaleWeights =
     // "Average": [ 0.333, 0.333, 0.333 ], // "Average", "All", "RGB", "Plain", "Basic", "Simple"
     "": null,
     "Red Filter": [ 1, 0, 0 ],
+    "Orange Filter": [ 0.75, 0.25, 0 ],
     "Yellow Filter": [ 0.5, 0.5, 0 ],
+    "Lime Filter": [ 0.25, 0.75, 0 ],
     "Green Filter": [ 0, 1, 0 ],
+    "Jade Filter": [ 0, 0.75, 0.25 ],
     "Cyan Filter": [ 0, 0.5, 0.5 ],
+    "Cobalt Filter": [ 0, 0.25, 0.75 ],
     "Blue Filter": [ 0, 0, 1 ],
-    "Magenta Filter": [ 0.5, 0, 0.5 ]
+    "Purple Filter": [ 0.25, 0, 0.75 ],
+    "Magenta Filter": [ 0.5, 0, 0.5 ],
+    "Cardinal Filter": [ 0.75, 0, 0.25 ]
+}
+//
+function getWeightsTooltip (weights)
+{
+    let tooltip =
+    [
+        `Red: ${(weights[0] * 100).toFixed (0)} %`,
+        `Green: ${(weights[1] * 100).toFixed (0)} %`,
+        `Blue: ${(weights[2] * 100).toFixed (0)} %`
+    ]
+    return tooltip.join ("\n");
 }
 //
 for (let grayscaleWeight in grayscaleWeights)
@@ -57,6 +74,7 @@ for (let grayscaleWeight in grayscaleWeights)
     if (grayscaleWeight)
     {
         option.textContent = grayscaleWeight;
+        option.title = getWeightsTooltip (grayscaleWeights[grayscaleWeight]);
     }
     else
     {
