@@ -112,7 +112,7 @@ td.wide-cell
 }
 span.code
 {
-    font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
+    font-family: Monaco, Menlo, "DejaVu Sans Mono", "Liberation Mono", "Noto Mono", "Ubuntu Mono", monospace;
     font-size: 13px;
     white-space: nowrap;
     padding: 1px 2px;
@@ -132,7 +132,7 @@ code, pre
 pre.formula
 {
     background-color: #F3F3F3;
-    font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
+    font-family: Monaco, Menlo, "DejaVu Sans Mono", "Liberation Mono", "Noto Mono", "Ubuntu Mono", monospace;
     font-size: 13px;
     line-height: 17px;
     border: 1px solid gray;
@@ -144,7 +144,7 @@ pre.formula
 }
 .info
 {
-    font-family: Monaco, "DejaVu Sans Mono", "Noto Mono", monospace;
+    font-family: Monaco, Menlo, "DejaVu Sans Mono", "Liberation Mono", "Noto Mono", "Ubuntu Mono", monospace;
     font-size: 14px;
     border: 1px dotted black;
     margin: 1em 0;

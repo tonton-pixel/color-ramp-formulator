@@ -6,7 +6,7 @@ body
     flex-direction: column;
     overflow-y: scroll;
     user-select: none;
-    font-family: system-ui, sans-serif;
+    font-family: "Segoe UI", system-ui, sans-serif;
     font-size: 14px;
 }
 

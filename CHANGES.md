@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.11.0
+
+- Used common CSS variables for font stacks.
+- Updated and expanded font stacks.
+- Updated `Electron` to version `11.2.0`.
+
 ## 2.10.0
 
 - Added more intermediate color pre-filters to the `Apply Color Map...` feature.

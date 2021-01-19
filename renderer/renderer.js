@@ -1571,6 +1571,7 @@ function openEnlargedWindow (action)
                 show: false,
                 webPreferences:
                 {
+                    contextIsolation: false,
                     nodeIntegration: true,
                     enableRemoteModule: true
                 }
@@ -1637,6 +1638,7 @@ function applyColorMap (applyString)
                 show: false,
                 webPreferences:
                 {
+                    contextIsolation: false,
                     nodeIntegration: true,
                     enableRemoteModule: true
                 }

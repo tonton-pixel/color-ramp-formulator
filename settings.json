@@ -19,7 +19,7 @@
     },
     "shortAppName": "App",
     "description": "Algorithmically-defined color ramps generator, making use of formulas.",
-    "copyright": "© 2020 Michel Mariani.",
+    "copyright": "© 2020-2021 Michel Mariani.",
     "electronApp":
     {
         "label": "Color Ramp Formulator | Apps | Electron",
