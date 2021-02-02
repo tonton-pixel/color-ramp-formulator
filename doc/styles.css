@@ -115,7 +115,7 @@ code, pre
 pre.formula
 {
     background-color: #F3F3F3;
-    font-family: Monaco, Menlo, "DejaVu Sans Mono", "Liberation Mono", "Noto Mono", "Ubuntu Mono", monospace;
+    font-family: "Segoe UI Mono", Monaco, Menlo, "DejaVu Sans Mono", "Liberation Mono", "Noto Mono", "Ubuntu Mono", monospace;
     font-size: 13px;
     line-height: 17px;
     border: 1px solid gray;
