@@ -35,5 +35,6 @@
         "label": "Latest Releases",
         "URL": "https://github.com/tonton-pixel/color-ramp-formulator/releases"
     },
-    "defaultFolder": "documents"
+    "defaultFolder": "documents",
+    "confirmQuit": false
 }

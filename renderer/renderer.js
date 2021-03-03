@@ -1,6 +1,6 @@
 //
 const { ipcRenderer, nativeImage, remote, shell, webFrame } = require ('electron');
-const { app, BrowserWindow, clipboard, getCurrentWebContents, getCurrentWindow, getGlobal } = remote;
+const { app, BrowserWindow, clipboard, getCurrentWebContents, getCurrentWindow, getGlobal, Menu } = remote;
 //
 const fs = require ('fs');
 const path = require ('path');
@@ -745,7 +745,7 @@ calculateButton.addEventListener
 );
 //
 let importMenu =
-remote.Menu.buildFromTemplate
+Menu.buildFromTemplate
 (
     [
         { label: "Color Ramp (.json)...", click: () => { webContents.send ('import-color-ramp', 'json'); } },
@@ -767,7 +767,7 @@ importMenuButton.addEventListener
 );
 //
 let exportMenu =
-remote.Menu.buildFromTemplate
+Menu.buildFromTemplate
 (
     [
         { label: "Color Ramp (.json)...", click: () => { webContents.send ('export-color-ramp', 'json'); } },
@@ -1357,7 +1357,7 @@ let curvesMapMenuTemplate =
     { type: 'separator' },
     { label: "Enlarged Preview...", click: (menuItem) => openEnlargedWindow ('enlarge-curves-map') }
 ];
-let curvesMapContextualMenu = remote.Menu.buildFromTemplate (curvesMapMenuTemplate);
+let curvesMapContextualMenu = Menu.buildFromTemplate (curvesMapMenuTemplate);
 let currentGridUnitMenuItem = curvesMapContextualMenu.getMenuItemById (currentGridUnitCount);
 if (currentGridUnitMenuItem)
 {
@@ -1417,7 +1417,7 @@ let linearGradientMenuTemplate =
     { type: 'separator' },
     { label: "Enlarged Preview...", click: (menuItem) => openEnlargedWindow ('enlarge-linear-gradient') }
 ];
-let linearGradientContextualMenu = remote.Menu.buildFromTemplate (linearGradientMenuTemplate);
+let linearGradientContextualMenu = Menu.buildFromTemplate (linearGradientMenuTemplate);
 let currentContinuousGradientMenuItem = linearGradientContextualMenu.getMenuItemById (currentContinuousGradient);
 if (currentContinuousGradientMenuItem)
 {
@@ -1477,7 +1477,7 @@ let colorTableMenuTemplate =
     { type: 'separator' },
     { label: "Enlarged Preview...", click: (menuItem) => openEnlargedWindow ('enlarge-color-table') }
 ];
-let colorTableMenuContextualMenu = remote.Menu.buildFromTemplate (colorTableMenuTemplate);
+let colorTableMenuContextualMenu = Menu.buildFromTemplate (colorTableMenuTemplate);
 let currentVerticalColorTableMenuItem = colorTableMenuContextualMenu.getMenuItemById (currentVerticalColorTable);
 if (currentVerticalColorTableMenuItem)
 {
@@ -1511,7 +1511,7 @@ let testImageMenuTemplate =
     { type: 'separator' },
     { label: "Enlarged Preview...", click: (menuItem) => openEnlargedWindow ('enlarge-test-image') }
 ];
-let testImageMenuContextualMenu = remote.Menu.buildFromTemplate (testImageMenuTemplate);
+let testImageMenuContextualMenu = Menu.buildFromTemplate (testImageMenuTemplate);
 //
 specificPreview.addEventListener
 (
@@ -1725,7 +1725,7 @@ let linkMenuTemplate =
 [
     { label: "Copy Link", click: menuItem => clipboard.writeText (currentLink) }
 ];
-let linkContextualMenu = remote.Menu.buildFromTemplate (linkMenuTemplate);
+let linkContextualMenu = Menu.buildFromTemplate (linkMenuTemplate);
 //
 document.body.addEventListener
 (
