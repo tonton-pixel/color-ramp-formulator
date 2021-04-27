@@ -1,15 +1,42 @@
 {
     "name": "color-ramp-formulator",
     "productName": "Color Ramp Formulator",
-    "version": "2.12.1",
+    "version": "2.12.2",
     "description": "Algorithmically-defined color ramps generator, making use of formulas.",
     "main": "main.js",
     "scripts": {
         "start": "electron .",
+        "build-mac": "electron-builder --macos",
         "build-darwin": "electron-packager . --asar.unpackDir=doc --out=build --platform=darwin --ignore=/~.* --ignore=^/screenshots --ignore=^/images --icon=icons/icon.icns --overwrite",
         "build-linux": "electron-packager . --asar.unpackDir=doc --out=build --platform=linux --ignore=/~.* --ignore=^/screenshots --ignore=^/images --icon=icons/icon.png --overwrite",
-        "build-mas": "electron-packager . --asar.unpackDir=doc --out=build --platform=mas --ignore=/~.* --ignore=^/screenshots --ignore=^/images --icon=icons/icon.icns --overwrite",
         "build-win32": "electron-packager . --asar.unpackDir=doc --out=build --platform=win32 --ignore=/~.* --ignore=^/screenshots --ignore=^/images --icon=icons/icon.ico --overwrite"
+    },
+    "build": {
+        "appId": "com.tonton-pixel.color-ramp-formulator",
+        "copyright": "Copyright © 2020-2021 ${author}.",
+        "directories": {
+            "output": "build",
+            "buildResources": "build-res"
+        },
+        "files": [
+            "!**/~*",
+            "!screenshots/*",
+            "!images/*"
+        ],
+        "asarUnpack": "doc",
+        "mac": {
+            "artifactName": "${name}-${os}-${version}.${ext}",
+            "category": "public.app-category.graphics-design",
+            "icon": "icons/icon.icns",
+            "target": "pkg"
+        },
+        "pkg": {
+            "license": "license-index.html",
+            "installLocation": "/Applications",
+            "allowAnywhere": true,
+            "isRelocatable": false,
+            "isVersionChecked": false
+        }
     },
     "keywords": [
         "algorithmic",
@@ -49,7 +76,8 @@
         "esprima": "^4.0.1"
     },
     "devDependencies": {
-        "electron": "^12.0.2",
+        "electron": "^12.0.5",
+        "electron-builder": "^22.10.5",
         "electron-packager": "^15.2.0"
     }
 }

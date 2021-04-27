@@ -1374,8 +1374,7 @@ curvesMapPreview.addEventListener
             if (currentColorRamp)
             {
                 event.preventDefault ();
-                let factor = webFrame.getZoomFactor ();
-                curvesMapContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                curvesMapContextualMenu.popup ({ window: mainWindow });
             }
         }
     }
@@ -1434,8 +1433,7 @@ linearGradientPreview.addEventListener
             if (currentColorRamp)
             {
                 event.preventDefault ();
-                let factor = webFrame.getZoomFactor ();
-                linearGradientContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                linearGradientContextualMenu.popup ({ window: mainWindow });
             }
         }
     }
@@ -1523,14 +1521,13 @@ specificPreview.addEventListener
             if (currentColorRamp)
             {
                 event.preventDefault ();
-                let factor = webFrame.getZoomFactor ();
                 if (specificSelect.value)
                 {
-                    testImageMenuContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                    testImageMenuContextualMenu.popup ({ window: mainWindow });
                 }
                 else
                 {
-                    colorTableMenuContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                    colorTableMenuContextualMenu.popup ({ window: mainWindow });
                 }
             }
         }
@@ -1742,8 +1739,7 @@ document.body.addEventListener
                 {
                     event.preventDefault ();
                     currentLink = aUrl;
-                    let factor = webFrame.getZoomFactor ();
-                    linkContextualMenu.popup ({ window: mainWindow, x: Math.round (event.x * factor), y: Math.round (event.y * factor) });
+                    linkContextualMenu.popup ({ window: mainWindow });
                 }
             }
         }
