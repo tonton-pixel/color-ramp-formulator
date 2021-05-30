@@ -1,7 +1,7 @@
 {
     "name": "color-ramp-formulator",
     "productName": "Color Ramp Formulator",
-    "version": "2.12.3",
+    "version": "2.12.4",
     "description": "Algorithmically-defined color ramps generator, making use of formulas.",
     "main": "main.js",
     "scripts": {
@@ -91,7 +91,7 @@
         "esprima": "^4.0.1"
     },
     "devDependencies": {
-        "electron": "^12.0.7",
+        "electron": "^13.0.1",
         "electron-builder": "22.10.5",
         "electron-packager": "^15.2.0"
     }
