@@ -7,8 +7,8 @@ const saveButton = document.body.querySelector ('.save-button');
 const closeButton = document.body.querySelector ('.close-button');
 const canvas = document.body.querySelector ('.canvas');
 //
-const { ipcRenderer, remote } = require ('electron');
-const { app, dialog, getCurrentWindow, getGlobal } = remote;
+const { ipcRenderer } = require ('electron');
+const { app, dialog, getCurrentWindow, getGlobal } = require ('@electron/remote');
 //
 const fs = require ('fs');
 const path = require ('path');

@@ -1,6 +1,6 @@
 //
-const { clipboard, ipcRenderer, nativeImage, remote, shell, webFrame } = require ('electron');
-const { app, BrowserWindow, getCurrentWebContents, getCurrentWindow, getGlobal, Menu } = remote;
+const { clipboard, ipcRenderer, nativeImage, shell, webFrame } = require ('electron');
+const { app, BrowserWindow, getCurrentWebContents, getCurrentWindow, getGlobal, Menu } = require ('@electron/remote');
 //
 const fs = require ('fs');
 const path = require ('path');
@@ -1569,8 +1569,7 @@ function openEnlargedWindow (action)
                 webPreferences:
                 {
                     contextIsolation: false,
-                    nodeIntegration: true,
-                    enableRemoteModule: true
+                    nodeIntegration: true
                 }
             }
         );
