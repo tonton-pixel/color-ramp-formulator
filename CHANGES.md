@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.14.0
+
+- Prepared for polynomial regression feature.
+- Updated `@electron/remote` module to version `1.2.0`.
+- Updated `Electron` to version `13.1.5`.
+
 ## 2.13.0
 
 - Used `@electron/remote` module.
